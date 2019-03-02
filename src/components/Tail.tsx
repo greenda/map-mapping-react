@@ -8,7 +8,7 @@ import { ItemTypes } from '../constants/item-types';
         return {...props};
         },
         endDrag(props: TailProps, monitor: DragSourceMonitor) {
-            console.log('endDrag ' + monitor.getDropResult().id);
+            props.addTailAction(props, monitor.getDropResult().id);
         },
     };
     
@@ -24,7 +24,8 @@ import { ItemTypes } from '../constants/item-types';
 
     export interface TailProps {
         id: string,
-        name: string,        
+        name: string,   
+        addTailAction: Function,     
     }
 
     interface CollectedProps {

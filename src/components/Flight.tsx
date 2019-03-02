@@ -16,7 +16,8 @@ interface CollectedProps {
 
 export interface FlightProps {
   id: string,
-  name: string,
+	name: string,
+	tail: { id: string; name: string }
 }
 
 const flightTarget = {
@@ -42,10 +43,10 @@ const collect: DropTargetCollector<CollectedProps> = (
 
 class Flight extends React.Component<FlightProps & CollectedProps> {
   public render() {
-    const { id, name, connectDropTarget, isOver, canDrop, children } = this.props
+    const { name, tail, connectDropTarget } = this.props
 
     return connectDropTarget(
-      <div className="flights__item">{name}</div>
+      <div className="flights__item">{name} {tail ? tail.id : null}</div>
     )
   }
 }
