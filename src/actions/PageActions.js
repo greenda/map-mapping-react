@@ -1,7 +1,5 @@
 
-export const pageActionTypes = {
-  ADD_TAIL: '[Tail] add tail in flight',
-}
+import { pageActionTypes } from '../constants/action-types'
 
 export function addTail(tail, flightId) {
   return {
@@ -9,3 +7,18 @@ export function addTail(tail, flightId) {
     payload: { tail, flightId },
   };
 }
+
+export function incrementTime(value) {
+  return {
+    type: pageActionTypes.INC_TIME,
+    payload: value,
+  }
+}
+
+export function decrementTime(value) {
+  return {
+    type: pageActionTypes.DEC_TIME,
+    payload: value,
+  }
+}
+

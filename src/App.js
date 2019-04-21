@@ -5,7 +5,8 @@ import { DragDropContextProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import  Tail from '../src/components/Tail';
 import Flight from '../src/components/Flight';
-import { addTail } from './/actions/PageActions';
+import { addTail } from './actions/pageActions';
+import Timeline from '../src/components/timeline/Timeline'
 
 class App extends Component {
   render() {
@@ -33,7 +34,9 @@ class App extends Component {
 
     return (
       <DragDropContextProvider backend={HTML5Backend}>
+      
        <h1>Map-mapping is here!</h1>
+       <Timeline />
         <div className="page__container">
           <div>
             <div className="tails__container">        

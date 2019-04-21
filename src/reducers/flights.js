@@ -1,4 +1,4 @@
-import { pageActionTypes } from '../actions/PageActions';
+import { pageActionTypes } from '../constants/action-types';
 
 const initialState = {
   flights: [
