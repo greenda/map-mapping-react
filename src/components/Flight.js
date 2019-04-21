@@ -1,38 +1,34 @@
 import * as React from 'react'
 import {
-	DropTarget,
-	DropTargetMonitor,
-	DropTargetConnector,
-	DropTargetCollector,
-	ConnectDropTarget,
+	DropTarget
 } from 'react-dnd';
 import { ItemTypes } from '../constants/item-types';
 
-interface CollectedProps {
-	isOver: boolean
-	canDrop: boolean
-	connectDropTarget: ConnectDropTarget
-}
+// interface CollectedProps {
+// 	isOver: boolean
+// 	canDrop: boolean
+// 	connectDropTarget: ConnectDropTarget
+// }
 
-export interface FlightProps {
-  id: string,
-	name: string,
-	tail: { id: string; name: string }
-}
+// export interface FlightProps {
+//   id: string,
+// 	name: string,
+// 	tail: { id: string; name: string }
+// }
 
 const flightTarget = {
 	// canDrop(props: FlightProps) {
 	// 	return canMoveKnight(props.x, props.y)
 	// },
 
-	drop(props: FlightProps, monitor: DropTargetMonitor) {
+	drop(props, monitor) {
     return { ...props };
 	},
 }
 
-const collect: DropTargetCollector<CollectedProps> = (
-	connect: DropTargetConnector,
-	monitor: DropTargetMonitor,
+const collect = (
+	connect,
+	monitor,
 ) => {
 	return {
 		connectDropTarget: connect.dropTarget(),
@@ -41,8 +37,8 @@ const collect: DropTargetCollector<CollectedProps> = (
 	}
 }
 
-class Flight extends React.Component<FlightProps & CollectedProps> {
-  public render() {
+class Flight extends React.Component {
+  render() {
     const { name, tail, connectDropTarget } = this.props
 
     return connectDropTarget(

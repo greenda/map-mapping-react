@@ -15,6 +15,7 @@ export function incrementTime(value) {
   }
 }
 
+// TODO нужна ли, если можно использовать increment(-1)
 export function decrementTime(value) {
   return {
     type: pageActionTypes.DEC_TIME,

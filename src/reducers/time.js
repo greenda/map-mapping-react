@@ -16,8 +16,13 @@ export function timeReducer(state = initialState, action) {
                 ...state,
                 currentTime: state.currentTime.add(payload, 'hour').clone()
             }
-        break;
-        case pageActionTypes.DEC_TIME: break;
+            break;
+        case pageActionTypes.DEC_TIME: 
+            state = {
+                ...state,
+                currentTime: state.currentTime.add(-1 * payload, 'hour').clone()
+            }
+            break;
         default: break;
     }
 

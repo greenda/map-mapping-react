@@ -1,19 +1,28 @@
 import { pageActionTypes } from '../constants/action-types';
+import moment from 'moment'
 
-const initialState = {
-  flights: [
+const initialState = [
     {
       id: 1,
       name: 'Flight 1',
       tail: null,
+      from: 1,
+      to: 2,
+      dateTakeOff: moment(new Date(2000, 1, 1, 8)),
+      dateLanding: moment(new Date(2000, 1, 1, 20)),
+      status: 'progress'
     },
     {
       id: 2,
       name: 'Flight 2',
       tail: { id: 10, name: 'name10'},
+      from: 1,
+      to: 3,
+      dateTakeOff: moment(new Date(2000, 1, 1, 11)),
+      dateLanding: moment(new Date(2000, 1, 1, 16)),
+      status: 'planed'
     }
   ]
-}
 
 export function flightsReducer(state = initialState, action) {
 

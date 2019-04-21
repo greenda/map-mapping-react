@@ -4,9 +4,10 @@ import { connect } from 'react-redux';
 import { DragDropContextProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import  Tail from '../src/components/Tail';
-import Flight from '../src/components/Flight';
+import Flight from './components/Flight';
 import { addTail } from './actions/pageActions';
 import Timeline from '../src/components/timeline/Timeline'
+import FlightList from '../src/components/flightList/FlightList'
 
 class App extends Component {
   render() {
@@ -14,29 +15,31 @@ class App extends Component {
     for(let i = 0; i < this.props.tails.tails.length; i++) {
       let item = this.props.tails.tails[i]
       array.push(
-        <Tail id={item.id} 
+        <Tail key={item.id} id={item.id} 
               name={item.name}
               addTailAction={this.props.addTailAction}>
         </Tail>
       );
     }
 
-    let flights = [];
-    for(let i = 0; i < this.props.flights.flights.length; i++) {
-      let item = this.props.flights.flights[i]
-      flights.push(
-        <Flight id={item.id}
-                name={item.name}
-                tail={item.tail}>
-        </Flight>
-      );
-    }
+    // let flights = [];
+    // for(let i = 0; i < this.props.flights.flights.length; i++) {
+    //   let item = this.props.flights.flights[i]
+    //   flights.push(
+    //     <Flight id={item.id}
+    //             name={item.name}
+    //             tail={item.tail}>
+    //     </Flight>
+    //   );
+    // }
 
     return (
       <DragDropContextProvider backend={HTML5Backend}>
       
        <h1>Map-mapping is here!</h1>
-       <Timeline />
+       <div className="timeline__container">
+        <Timeline />
+       </div>
         <div className="page__container">
           <div>
             <div className="tails__container">        
@@ -47,7 +50,7 @@ class App extends Component {
           <div>
             <div className="flights__container">        
               <h2 className="flights__header">Flights</h2>
-              {flights}
+              <FlightList />
             </div>
           </div>    
         </div>    
