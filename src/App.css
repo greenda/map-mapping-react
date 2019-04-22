@@ -91,3 +91,10 @@ h1 {
 .timeline__container {
   margin-left: 20px;
 }
+
+.map__container {
+  background: cadetblue;
+  border: solid 1px gray;
+  margin: 16px;
+  border-radius: 8px;
+}
