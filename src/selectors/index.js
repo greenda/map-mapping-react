@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect'
+import { getFlightInTime } from '../helpers/FlightHelper'
 
 export const currentTimeSelector = (state) => state.time.currentTime
 export const airportsSelector = (state) => state.airports
@@ -8,10 +9,7 @@ export const flightIdsSelector = (state) => Object.keys(state.flights).map(value
 
 export const airportByIdSelector = createSelector(
     airportsSelector,
-    (airports, id) => {
-        console.log('airportSelector')
-        return airports[id]
-    }
+    (airports, id) => airports[id]
 )
 
 export const flightByIdSelector = createSelector(
@@ -19,49 +17,17 @@ export const flightByIdSelector = createSelector(
     airportsSelector,
     flightsSelector,
     (_, { id }) => id,
-    (currentTime, airports, flights, id) => {
-        console.log('flightByIdSelector')
-        const flight = {...flights[id]}
-        flight.fromIata = airports[flight.from].iata
-        flight.toIata = airports[flight.to].iata
-        const { dateTakeOff, dateLanding } = flight
+    () => getFlightInTime,
+    (currentTime, airports, flights, id, getFlightInTime) => 
+        getFlightInTime({...flights[id]}, airports, currentTime)
+)
 
-        // TODO В утилиту
-        switch(true) {
-            case (!dateTakeOff):
-                flight.progress = 0
-                flight.status = 'not takeOff'
-                break
-            case (!dateLanding):
-                flight.progress = 0
-                flight.status = 'not landing' 
-                break   
-            case (currentTime < dateTakeOff):
-                flight.progress = 0
-                // TODO статусы константами
-                flight.status = 'planed'
-                break
-            case (currentTime.isSame(dateTakeOff)):
-                flight.progress = 0
-                flight.status = 'takeOff'
-                break  
-            case (currentTime.isSame(dateLanding)):
-                flight.progress = 100
-                flight.status = 'landing'
-                break      
-            case (currentTime > dateLanding):
-                flight.progress = 100
-                flight.status = 'done'
-                break
-            case (dateTakeOff < currentTime && currentTime < dateLanding):  
-                flight.progress = currentTime.diff(dateTakeOff) / 
-                    dateLanding.diff(dateTakeOff) * 100 
-                flight.status = 'in progress'    
-                break
-            default: break;
-        }
-
-        return flight
-    }
-
+export const flightsOnTime = createSelector(
+    currentTimeSelector,
+    airportsSelector,
+    flightsSelector,
+    () => getFlightInTime,
+    // TODO - присоединять аэропорты в другом селекторе
+    (currentTime, airports, flights, getFlightInTime) => 
+        flights.map(flight => getFlightInTime(flight, airports, currentTime))
 )
