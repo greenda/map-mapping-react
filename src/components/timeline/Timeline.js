@@ -13,7 +13,6 @@ function Timeline({ currentTime, incrementTime, decrementTime }) {
     const [ interval, setIntervalConst ] = useState()
     
     const startInterval = () => {
-        console.log('startInterval')
         const i = setInterval(() => incrementTime(1), 1000)
         setIntervalConst(i)
     }

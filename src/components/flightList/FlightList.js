@@ -5,7 +5,6 @@ import { flightIdsSelector } from '../../selectors/index'
 import Flight from './flight/Flight'
 
 export function FlightList({flightIds}) {
-    console.log('flightIds ' + flightIds)
     const flights = flightIds.map(value => (<div key={value}><Flight id={value}/></div>))
     return (
         <div>{flights}</div>

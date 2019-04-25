@@ -21,9 +21,13 @@ export function MapView({flights}) {
             // TODO в функцию
             const lineLenght = line2.getTotalLength()
             const aircraft = line2.getPointAtLength(Math.floor(flights[0].progress) / 100 * lineLenght)
-            svg.select('.aircraft').select('circle')
-                .attr('cx', () => aircraft.x )
-                .attr('cy', () => aircraft.y)
+            svg.select('.aircraft')
+               .select('circle')
+               .transition()
+               .duration(1000) 
+               .ease(d3.easeLinear)
+               .attr('cx', () => aircraft.x )
+               .attr('cy', () => aircraft.y)
         }
     }, [flights])
 
@@ -101,7 +105,7 @@ function showMapBackground(data) {
     
     const line2 = svg.select('.line2').node()
     const lineLenght = line2.getTotalLength()
-    const aircraft = line2.getPointAtLength(0.7 * lineLenght)
+    const aircraft = line2.getPointAtLength(0 * lineLenght)
 
     svg.append("g")
        .attr("class", "aircraft")

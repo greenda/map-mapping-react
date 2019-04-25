@@ -5,7 +5,6 @@ import { flightByIdSelector, flightProgressSelector } from '../../../selectors/i
 import './Flight.css'
 
 export function Flight({ flight }) {
-    console.log(flight)
     const { name, fromIata, toIata, dateTakeOff, dateLanding, status, progress = 40 } = flight
     // TODO - прогресс бар в отдельный компонент    
     return (
