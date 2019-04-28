@@ -1,25 +1,49 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes, { number, string } from 'prop-types'
-import { flightByIdSelector, flightProgressSelector } from '../../../selectors/index'
+import { flightByIdSelector } from '../../../selectors/index'
+import { DropTarget } from 'react-dnd';
+import { ItemTypes } from '../../../constants/item-types';
 import './Flight.css'
 
-export function Flight({ flight }) {
-    const { name, fromIata, toIata, dateTakeOff, dateLanding, status, progress = 40 } = flight
+export function Flight({ flight, connectDropTarget, isOver, canDrop }) {
+    const { name, from, to, dateTakeOff, dateLanding, status, progress, tail } = flight
     // TODO - прогресс бар в отдельный компонент    
-    return (
-        <div className="flight__container">
+    return connectDropTarget(
+        <div className={`flight__container ${isOver && canDrop ? 'enableDrop' : ''} ${isOver && !canDrop ? 'disableDrop' : ''}`}>
             <div className="flight__name">{name}</div>
-            <div>{fromIata}-{toIata}</div>
+            <div>{from.iata} - {to.iata}</div>
             <div>{dateTakeOff.format('YYYY-MM-DD HH:mm')}</div>
             <div>{dateLanding.format('YYYY-MM-DD HH:mm')}</div>
-            <div>{Math.floor(progress)}</div>
+            <div>Tail: {tail ? tail.name : null }</div>
+            <div>{progress >= 0 ? Math.floor(progress) : null}</div>            
             <div className="progressbar__container">
-                <div style={{ width: progress + '%' }} className="progressbar__bar"></div>
+                <div style={{ width: progress + '%', transition: 'width 1000ms ease-in'  }} className="progressbar__bar"></div>
             </div>
             <div>{status}</div>
         </div>
     )
+}
+
+const flightTarget = {
+	canDrop(props, monitor) {
+		return props.flight.fromId === monitor.getItem().airportId
+	},
+
+	drop(props, monitor) {
+        return { id: props.flight.id };
+    }
+}
+
+const collect = (
+	connect,
+	monitor,
+) => {
+	return {
+		connectDropTarget: connect.dropTarget(),
+		isOver: !!monitor.isOver(),
+		canDrop: !!monitor.canDrop(),
+	}
 }
 
 Flight.propTypes = {
@@ -37,9 +61,11 @@ Flight.propTypes = {
     })
 }
 
-export default connect(
-    (state, ownProps) => ({
-        flight: flightByIdSelector(state, ownProps),
-    })
-)(Flight)
-
+export default 
+    connect(
+        (state, ownProps) => ({
+            flight: flightByIdSelector(state, ownProps),
+        })
+)(
+    DropTarget(ItemTypes.TAIL, flightTarget, collect)(Flight)
+)

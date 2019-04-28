@@ -4,10 +4,12 @@ import { ItemTypes } from '../constants/item-types';
 
     const tailSource = {
         beginDrag(props) {
-        return {...props};
+            return {...props};
         },
         endDrag(props, monitor) {
-            props.addTailAction(props, monitor.getDropResult().id);
+            if (monitor.getDropResult() && monitor.getDropResult().id) {
+                props.addTailAction(props, monitor.getDropResult().id);
+            }
         },
     };
     
@@ -33,7 +35,8 @@ import { ItemTypes } from '../constants/item-types';
     //     isDragging?: boolean,
     // }
     
-  
+
+    // TODO в функцию и создать контейнер
     class Tail extends React.Component {
         render() {
             const { connectDragSource, isDragging } = this.props;

@@ -1,33 +1,50 @@
 import React, { useEffect, useState } from 'react'
 import * as d3 from 'd3'
 import { PropTypes } from 'prop-types'
+import './MapView.css'
+const width = 800
+const height = 400
 
 export function MapView({flights}) {
     const [isLoaded, setIsLoaded] = useState(false)
+    const [svg, setSvg] = useState()
+                
+    const projection = d3.geoEquirectangular()
+                        .scale(130)
+                        .translate( [width / 2, height / 2])
+    const path = d3.geoPath().projection(projection)
+    
     useEffect(() => {
         d3.json('world_countries.json')
         .then((countries) => {
-          showMapBackground(countries, flights)
-          setIsLoaded(true)
+            const svg = d3.select('#mapa')
+                .attr("width", width)
+                .attr("height", height)
+                .attr('fill', 'green')
+            showMapBackground(svg, path, countries)
+            updateLines(svg, path, projection, flights)
+            setIsLoaded(true)
+            setSvg(svg)
         })
         .catch(error => console.log(error))
     }, [])
     useEffect(() => {
         if (isLoaded) {
-            // TODO хранить svg в хуках
-            const svg = d3.select('#mapa')
+            updateLines(svg, path, projection, flights)
+        //     // TODO хранить svg в хуках
+        //     const svg = d3.select('#mapa')
 
-            const line2 = svg.select('.line2').node()
-            // TODO в функцию
-            const lineLenght = line2.getTotalLength()
-            const aircraft = line2.getPointAtLength(Math.floor(flights[0].progress) / 100 * lineLenght)
-            svg.select('.aircraft')
-               .select('circle')
-               .transition()
-               .duration(1000) 
-               .ease(d3.easeLinear)
-               .attr('cx', () => aircraft.x )
-               .attr('cy', () => aircraft.y)
+        //     const line2 = svg.select('.line2').node()
+        //     // TODO в функцию
+        //     const lineLenght = line2.getTotalLength()
+        //     const aircraft = line2.getPointAtLength(Math.floor(flights[0].progress) / 100 * lineLenght)
+        //     svg.select('.aircraft')
+        //        .select('circle')
+        //        .transition()
+        //        .duration(1000) 
+        //        .ease(d3.easeLinear)
+        //        .attr('cx', () => aircraft.x )
+        //        .attr('cy', () => aircraft.y)
         }
     }, [flights])
 
@@ -38,32 +55,20 @@ export function MapView({flights}) {
     )
 }
 
-MapView.propTypes = {
-    flights: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number,
-        name: PropTypes.string,
-        tail: PropTypes.shape({ id: PropTypes.number, name: PropTypes.string}),
-        fromIata: PropTypes.string,
-        toIata: PropTypes.string,
-        dateTakeOff: PropTypes.object,
-        dateLanding: PropTypes.object,
-        status: PropTypes.string,
-    }))
-}
+// MapView.propTypes = {
+//     flights: PropTypes.arrayOf(PropTypes.shape({
+//         id: PropTypes.number,
+//         name: PropTypes.string,
+//         tail: PropTypes.shape({ id: PropTypes.number, name: PropTypes.string}),
+//         fromIata: PropTypes.string,
+//         toIata: PropTypes.string,
+//         dateTakeOff: PropTypes.object,
+//         dateLanding: PropTypes.object,
+//         status: PropTypes.string,
+//     }))
+// }
 
-function showMapBackground(data) {
-    const width = 800
-    const height = 400
-    const svg = d3.select('#mapa')
-                  .attr("width", width)
-                  .attr("height", height)
-                  .attr('fill', 'green')
-                  .append('g')
-                  .attr('class', 'map')
-    const projection = d3.geoEquirectangular()
-                        .scale(130)
-                        .translate( [width / 2, height / 2])
-    const path = d3.geoPath().projection(projection)
+function showMapBackground(svg, path, data) {
     svg.append("g")
        .attr("class", "countries")
        .selectAll("path")
@@ -74,11 +79,38 @@ function showMapBackground(data) {
        .style('stroke', 'gray')
        .style('stroke-width', 0.5)
        .style('fill', 'white')
+    }
 
-    const points = [[3.22, 36.69], [77.96, 27.15], [18.6, -33.96]]
-
-    svg.selectAll('circle')
-       .data(points)
+  function updateLines(svg, path, projection, flights) {
+    const currentFlights = flights.filter(value => 0 <= value.progress && value.progress <= 100)
+    const lines = currentFlights.map(flight => getFlightLine(flight))
+    svg.select(".routes").remove()
+    svg.append("g")
+       .attr("class", "routes")
+       .append("g")
+       .attr("class", "routes__lines")
+       .selectAll("path")
+       .data(lines)
+       .enter()
+       .append("path")
+       .attr('id', d => d.id)
+       .attr('class', d => 'line' + d.id)
+       .attr("d", path)
+       .attr('fill', 'none')   
+       .attr('stroke', 'black') 
+    
+    const pointsMap = new Map()
+    currentFlights.forEach(value => {
+        pointsMap.set(value.from.id, value.from)
+        pointsMap.set(value.to.id, value.to)
+    })
+    
+    const points = Array.from(pointsMap.values())
+    svg.select(".routes")
+       .append("g")
+       .attr("class", "routes__airports")
+       .selectAll('circle')
+       .data(points.map(value => [value.longt, value.latt]))
        .enter()
        .append('circle')
        .attr('cx', (d) =>  projection(d)[0] )
@@ -87,39 +119,42 @@ function showMapBackground(data) {
        .attr('fill', '#ff9800')   
        .attr('stroke', 'black')
 
-    const lines = [
-      {"type": "LineString", "coordinates": [[3.22, 36.69], [77.96, 27.15]], "id": 1},
-      {"type": "LineString", "coordinates": [[3.22, 36.69], [18.6, -33.96]], "id": 2 }
-    ]
+    const lineNodes = svg.selectAll('.routes').selectAll('.routes__lines').selectAll('path').nodes()
+    const aircrafts = lineNodes.map(line => {
+        const id = +line.getAttribute('id')
+        const flight = flights.find(value => value.id = id)
+        const totalLenght = line.getTotalLength()
+        const aircraftPosition = line.getPointAtLength(flight.progress / 100 * totalLenght)
+        const aircraftPositionNext = line.getPointAtLength(flight.progressNext / 100 * totalLenght)
+        return [[aircraftPosition.x, aircraftPosition.y], [aircraftPositionNext.x, aircraftPositionNext.y]]
+    })
 
-    svg.append("g")
-       .attr("class", "lines")
-       .selectAll("path")
-       .data(lines)
-       .enter()
-       .append("path")
-       .attr('class', (d) => 'line' + d.id)
-       .attr("d", path)
-       .attr('fill', 'none')   
-       .attr('stroke', 'black') 
-    
-    const line2 = svg.select('.line2').node()
-    const lineLenght = line2.getTotalLength()
-    const aircraft = line2.getPointAtLength(0 * lineLenght)
 
-    svg.append("g")
-       .attr("class", "aircraft")
+    svg.select('.routes')
+       .append("g")
+       .attr("class", "routes__aircraft")
        .selectAll('circle')
-       .data([[aircraft.x, aircraft.y]])
+       .data(aircrafts)
        .enter()
        .append('circle')
-       .attr('cx', (d) => d[0] )
-       .attr('cy', (d) => d[1])
        .attr('r', '6px')
        .attr('fill', 'red')   
        .attr('stroke', 'black')
+       .attr('cx', (d) => d[0][0] )
+       .attr('cy', (d) => d[0][1])
+       .transition()
+       .duration(1000) 
+       .ease(d3.easeLinear)
+       .attr('cx', (d) => d[1][0] )
+       .attr('cy', (d) => d[1][1])     
   }
 
+  function getFlightLine(flight) {
+    return (flight.from && flight.to) ?
+        {type: 'LineString', 'id': flight.id,
+         'coordinates': [[flight.from.longt, flight.from.latt], 
+         [flight.to.longt, flight.to.latt]]} : {}
+  }
 // TODO для вращения символа
 // function translateAlong(path) {
 //     var l = path.getTotalLength();

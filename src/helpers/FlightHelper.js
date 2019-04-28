@@ -1,19 +1,21 @@
+// TODO сделать через inmutable
 export function getFlightInTime(flight, airports, currentTime ) {
-    flight.fromIata = airports[flight.from].iata
-    flight.toIata = airports[flight.to].iata
+    flight.from = {...airports[flight.fromId]}
+    flight.to = {...airports[flight.toId]}
     const { dateTakeOff, dateLanding } = flight
-
+    
     switch(true) {
         case (!dateTakeOff):
-            flight.progress = 0
+            flight.progress = -1
             flight.status = 'not takeOff'
             break
         case (!dateLanding):
+            flight.progress = -1
             flight.progress = 0
             flight.status = 'not landing' 
             break   
         case (currentTime < dateTakeOff):
-            flight.progress = 0
+            flight.progress = -1
             // TODO статусы константами
             flight.status = 'planed'
             break
@@ -26,12 +28,14 @@ export function getFlightInTime(flight, airports, currentTime ) {
             flight.status = 'landing'
             break      
         case (currentTime > dateLanding):
-            flight.progress = 100
+            flight.progress = 101
             flight.status = 'done'
             break
         case (dateTakeOff < currentTime && currentTime < dateLanding):  
             flight.progress = currentTime.diff(dateTakeOff) / 
                 dateLanding.diff(dateTakeOff) * 100 
+            flight.progressNext = currentTime.clone().add(1, 'hour').diff(dateTakeOff) / 
+                dateLanding.diff(dateTakeOff) * 100      
             flight.status = 'in progress'    
             break
         default: break;

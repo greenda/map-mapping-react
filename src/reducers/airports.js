@@ -12,6 +12,7 @@ const countries = {
 
 const initialState = {
     1: {
+        id: 1,
         name: 'Хуари Бумедьен',
         iata: 'ALG',
         countriesId: 1,
@@ -19,6 +20,7 @@ const initialState = {
         longt: 3.22,
     },
     2: {
+        id: 2,
         name: 'Агра Херия',
         iata: 'AGR',
         countriesId: 2,
@@ -26,6 +28,7 @@ const initialState = {
         longt: 77.96,
     },
     3: {
+        id: 3,
         name: 'Кейптаун',
         iata: 'CPT',
         countriesId: 3,

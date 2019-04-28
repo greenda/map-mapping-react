@@ -17,6 +17,7 @@ class App extends Component {
       array.push(
         <Tail key={item.id} id={item.id} 
               name={item.name}
+              airportId={item.airportId}
               addTailAction={this.props.addTailAction}>
         </Tail>
       );
