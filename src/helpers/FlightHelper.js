@@ -1,9 +1,12 @@
 // TODO сделать через inmutable
+import { MapActions } from '../constants/map-actions'
+
 export function getFlightInTime(flight, airports, currentTime ) {
     flight.from = {...airports[flight.fromId]}
     flight.to = {...airports[flight.toId]}
     const { dateTakeOff, dateLanding } = flight
-    
+    const oldProgress = flight.progress
+
     switch(true) {
         case (!dateTakeOff):
             flight.progress = -1
@@ -40,6 +43,18 @@ export function getFlightInTime(flight, airports, currentTime ) {
             break
         default: break;
     }
-
+    flight.mapAction = getMapAction(oldProgress, flight.progress)
     return flight
+}
+
+export function getMapAction(oldProgress, newProgress ) {
+    if (oldProgress !== newProgress) {
+        switch (true) {
+            case oldProgress === -1 && newProgress > -1:
+                return MapActions.ADD_FLIGHT
+            case oldProgress > -1 && newProgress > -1: 
+                return MapActions.CHANGE_PROGRESS       
+            default: return MapActions.NONE
+        }
+    }
 }

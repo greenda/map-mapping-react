@@ -6,6 +6,7 @@ const initialState = [
       id: 1,
       name: 'Flight 1',
       tail: null,
+      tailId: 1,
       fromId: 1,
       toId: 2,
       dateTakeOff: moment(new Date(2000, 1, 1, 8)),

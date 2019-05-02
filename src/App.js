@@ -12,8 +12,8 @@ import MapContainer from '../src/components/map/MapContainer'
 class App extends Component {
   render() {
     let array = [];
-    for(let i = 0; i < this.props.tails.tails.length; i++) {
-      let item = this.props.tails.tails[i]
+    for(let i = 0; i < this.props.tails.length; i++) {
+      let item = this.props.tails[i]
       array.push(
         <Tail key={item.id} id={item.id} 
               name={item.name}

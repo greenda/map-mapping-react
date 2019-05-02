@@ -1,13 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
 // TODO imports через @
-import { flightsOnTime } from '../../selectors/index'
+import { flightsOnTime, tailCoordinates } from '../../selectors/index'
 import MapView from './MapView'
 import { PropTypes } from 'prop-types'
 
-export function MapContainer({flights}) {
+export function MapContainer({flights, tails}) {
     return (
-        <MapView flights={flights}/>
+        <MapView flights={flights} tails={tails}/>
     )
 }
 
@@ -25,6 +25,7 @@ export function MapContainer({flights}) {
 // }
 
 export default connect((state) => ({
+    tails: tailCoordinates(state),
     flights: flightsOnTime(state),
 }))(MapContainer)
 

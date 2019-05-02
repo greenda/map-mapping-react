@@ -6,6 +6,7 @@ export const airportsSelector = (state) => state.airports
 export const airportIdsSelector = (state) => Object.keys(state.airports).map(value => +value)
 export const flightsSelector = (state) => state.flights
 export const flightIdsSelector = (state) => Object.keys(state.flights).map(value => +value)
+export const tailsSelector = (state) => state.tails
 
 export const airportByIdSelector = createSelector(
     airportsSelector,
@@ -30,4 +31,14 @@ export const flightsOnTime = createSelector(
     // TODO - присоединять аэропорты в другом селекторе
     (currentTime, airports, flights, getFlightInTime) => 
         flights.map(flight => getFlightInTime(flight, airports, currentTime))
+)
+
+export const tailCoordinates = createSelector(
+    tailsSelector,
+    airportsSelector,    
+    (tails, airports) => 
+        tails.map((tail) => {
+            const tailAirport = tail.airportId ? airports[tail.airportId] : null
+            return tail.coordinates = tailAirport ? { ...tail, coordinates: [tailAirport.longt, tailAirport.latt]} : {...tail}
+        })
 )
