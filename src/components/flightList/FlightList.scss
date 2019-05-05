@@ -1,0 +1,10 @@
+.flight-list-container {
+    & > .flight__container {
+        margin-bottom: 8px;
+    }
+
+    &:last-child {
+        margin-bottom: 0px;
+    }
+
+}

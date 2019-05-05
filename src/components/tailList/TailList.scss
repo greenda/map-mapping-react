@@ -1,0 +1,11 @@
+.tails-container {
+    display: flex;
+
+    & > div {
+        margin-right: 8px;
+    }
+
+    & > div:last-child {
+        margin-right: 0px;        
+    }
+}

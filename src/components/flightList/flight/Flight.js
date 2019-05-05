@@ -4,7 +4,7 @@ import PropTypes, { number, string } from 'prop-types'
 import { flightByIdSelector } from '../../../selectors/index'
 import { DropTarget } from 'react-dnd';
 import { ItemTypes } from '../../../constants/item-types';
-import './Flight.css'
+import './Flight.scss'
 
 export function Flight({ flight, connectDropTarget, isOver, canDrop }) {
     const { name, from, to, dateTakeOff, dateLanding, status, progress, tail } = flight
@@ -18,7 +18,7 @@ export function Flight({ flight, connectDropTarget, isOver, canDrop }) {
             <div>Tail: {tail ? tail.name : null }</div>
             <div>{progress >= 0 ? Math.floor(progress) : null}</div>            
             <div className="progressbar__container">
-                <div style={{ width: progress + '%', transition: 'width 1000ms ease-in'  }} className="progressbar__bar"></div>
+                <div style={{ left: -1 * (100 - progress) + '%', transition: 'left 1000ms ease-in'  }} className="progressbar__bar"></div>
             </div>
             <div>{status}</div>
         </div>

@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import './App.css';
+import './App.scss';
 import { connect } from 'react-redux';
 import { DragDropContextProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import  Tail from '../src/components/Tail';
+import  Tail from '../src/components/tailList/tail/Tail';
 import { addTail } from './actions/pageActions';
 import Timeline from '../src/components/timeline/Timeline'
 import FlightList from '../src/components/flightList/FlightList'
+import TailList from '../src/components/tailList/TailList'
 import MapContainer from '../src/components/map/MapContainer'
+import logo from '../src/assets/map-mapping-logo.svg'
 
 class App extends Component {
   render() {
@@ -25,8 +27,26 @@ class App extends Component {
   
     return (
       <DragDropContextProvider backend={HTML5Backend}>
-      
-       <h4>Map-mapping is here!</h4>
+        <div className="main-container">
+          <div className="main-container__column main-container__flight-column">
+            <div className="logo-container">
+              <img src={logo} alt="logo"></img>   
+            </div>
+            <div className="section-container tails-section">
+              <div className="section-container__header"><span>Tails</span></div>
+              <div className="section-container__content"><TailList /></div>
+            </div>
+            <div className="section-container flights-section">
+              <div className="section-container__header"><span>Flights</span></div>
+              <div className="section-container__content"><FlightList /></div>
+            </div>
+          </div>
+          <div className="main-container__column main-container__map-column">
+            <div><Timeline /></div>
+            <MapContainer />
+          </div>
+        </div>
+       {/* <h4>Map-mapping is here!</h4>
        <div className="timeline__container">
         <Timeline />
        </div>
@@ -46,7 +66,7 @@ class App extends Component {
           <div>           
             <MapContainer />
           </div> 
-        </div>    
+        </div>     */}
       </DragDropContextProvider>      
     );
   }
@@ -70,3 +90,4 @@ export default connect(
   mapStateToProps,
   mapDispatchProps,
 )(App);
+

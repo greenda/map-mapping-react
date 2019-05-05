@@ -1,0 +1,191 @@
+@import './common/styles/variables.scss';
+
+
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 40vmin;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+
+.tails__container {
+  width: 136px;
+  margin: 16px;
+  padding-bottom: 8px;
+  border: 1px solid #80808057;
+  border-radius: 8px;
+  height: 100%;
+}
+
+.tails__container h2 {
+  margin: 8px;
+}
+
+.flights__item {
+  width: 100px;
+  border-radius: 8px;
+  background: cadetblue;
+  padding: 8px;
+  color: white;
+  margin: 9px;
+  box-shadow: 1px 6px 9px rgba(0,0,0,0.5);
+  
+}
+
+.flights__container {
+    width: 170px;
+    margin: 16px;
+    padding-bottom: 8px;
+    border: 1px solid #80808057;
+    border-radius: 8px;
+    height: 100%;
+}
+
+.flights__container h2 {
+    margin: 8px;
+}
+
+.page__container {
+    display: flex; 
+}
+
+h1 {
+  margin-left: 20px;
+}
+
+.timeline__container {
+    margin-left: 20px;
+}
+
+.map__container {
+    background: $medium-color__blue;
+    border-radius: 8px;
+}
+
+.main-container {
+    width: 100%;
+    height: 100%;
+    background: $light-color;
+    position: absolute;
+    display: flex;
+    padding: $offset__large;
+    box-sizing: border-box;    
+
+    .logo-container {
+        height: 76px;
+        width: 220px;
+    }
+
+    &__column {
+        background: $white-color;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        border-radius: $border-radius__large;
+        box-sizing: border-box;
+        padding: $offset__medium;        
+
+        &:first-child {
+            margin-right: $offset__medium;
+        }   
+
+        & > .section-container {
+            margin-bottom: $offset__medium;
+        }
+
+        & > .section-container:last-child {
+            margin-bottom: 0px;
+        }
+    }
+
+    &__flight-column {
+        width: 400px;
+    }
+
+    &__map-column {
+        width: 100%;
+
+        & > .map__container {
+          margin-top: $offset__medium;
+        }
+    }
+}
+
+.section-container {
+    &__header {
+        border-radius: $border-radius__medium $border-radius__medium 0px 0px;
+        background: $medium-color__yellow;
+        padding: $offset__small;
+        font-size: $text-size__large;
+        font-family: monospace;
+        font-weight: bold;
+        color: $text-color__dark;
+    }
+    &__content {
+        height: 100%;
+        border-radius: 0px 0px $border-radius__medium $border-radius__medium;
+        border: solid 0.5px $medium-color__yellow;
+        border-top: 0px;
+        padding: $offset__small;
+        font-size: $text-size__medium;
+        font-family: monospace;
+    }
+}
+
+.tails-section {
+    & > div.section-container__content {
+        height: inherit;
+    }    
+}
+
+.flights-section {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+   
+
+    & > div.section-container__content {
+        padding: 0px;
+
+        overflow-y: scroll;
+        &::-webkit-scrollbar {
+            width: 0.8em;
+        }
+        
+        &::-webkit-scrollbar-thumb {
+          background-color: $medium-color__blue;
+          outline: 1px solid slategrey;
+          border: solid 1px $gray-color__1;
+          border-radius: $border-radius__medium;
+        }
+    }
+}

@@ -3,11 +3,12 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { flightIdsSelector } from '../../selectors/index'
 import Flight from './flight/Flight'
+import './FlightList.scss'
 
 export function FlightList({flightIds}) {
-    const flights = flightIds.map(value => (<div key={value}><Flight id={value}/></div>))
+    const flights = flightIds.map(value => (<Flight key={value} id={value}/>))
     return (
-        <div>{flights}</div>
+        <div className="flight-list-container">{flights}</div>
     )
 }
 

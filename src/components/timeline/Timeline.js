@@ -2,6 +2,7 @@ import React, { useState }  from 'react'
 import { connect } from 'react-redux'
 import { currentTimeSelector } from '../../selectors/index'
 import { incrementTime, decrementTime } from '../../actions/pageActions'
+import './Timeline.scss'
 
 // interface Props {
 //     currentTime: Moment;
@@ -22,14 +23,13 @@ function Timeline({ currentTime, incrementTime, decrementTime }) {
     }
 
     return (
-        <div>
-            <div>{currentTime.format('YYYY-MM-DD HH:mm')}</div>
-            <button onClick={() => incrementTime(1)}>+</button>
-            <button onClick={() => decrementTime(1)}>-</button>
-            <button disabled={interval} onClick={startInterval}>></button>
-            <button disabled={!interval} onClick={stopInterval}>||</button>
-        </div>
-        
+        <div className="timeline">
+            <div className="timeline__current-time">{currentTime.format('DD-MM-YYYY HH:mm')}</div>
+            <div className="timeline__button" onClick={() => incrementTime(1)}>+</div>
+            <div className="timeline__button" onClick={() => decrementTime(1)}>-</div>
+            <div className={`timeline__button ${interval ? 'disabled' : ''}`} onClick={startInterval}>></div>
+            <div className={`timeline__button ${!interval ? 'disabled' : ''}`} onClick={stopInterval}>||</div>
+        </div>        
     )
 }
 

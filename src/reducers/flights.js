@@ -22,6 +22,16 @@ const initialState = [
       dateTakeOff: moment(new Date(2000, 1, 1, 11)),
       dateLanding: moment(new Date(2000, 1, 1, 16)),
       status: 'planed'
+    },
+    {
+      id: 3,
+      name: 'Flight 3',
+      tail: { id: 10, name: 'name10'},
+      fromId: 3,
+      toId: 2,
+      dateTakeOff: moment(new Date(2000, 1, 1, 18)),
+      dateLanding: moment(new Date(2000, 1, 1, 24)),
+      status: 'planed'
     }
   ]
 
