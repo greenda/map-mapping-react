@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import PropTypes, { number, string } from 'prop-types'
 import { flightByIdSelector } from '../../../selectors/index'
@@ -7,22 +7,46 @@ import { ItemTypes } from '../../../constants/item-types';
 import './Flight.scss'
 
 export function Flight({ flight, connectDropTarget, isOver, canDrop }) {
-    const { name, from, to, dateTakeOff, dateLanding, status, progress, tail } = flight
+    const { name, from, to } = flight
+    const [expanded, setExpanded] = useState(false)
+
+    // TODO кастом хук
+    const toggleExpanded = () => {
+        setExpanded(!expanded)
+    }
+
     // TODO - прогресс бар в отдельный компонент    
     return connectDropTarget(
         <div className={`flight__container ${isOver && canDrop ? 'enableDrop' : ''} ${isOver && !canDrop ? 'disableDrop' : ''}`}>
-            <div className="flight__name">{name}</div>
-            <div>{from.iata} - {to.iata}</div>
-            <div>{dateTakeOff.format('YYYY-MM-DD HH:mm')}</div>
-            <div>{dateLanding.format('YYYY-MM-DD HH:mm')}</div>
-            <div>Tail: {tail ? tail.name : null }</div>
-            <div>{progress >= 0 ? Math.floor(progress) : null}</div>            
-            <div className="progressbar__container">
-                <div style={{ left: -1 * (100 - progress) + '%', transition: 'left 1000ms ease-in'  }} className="progressbar__bar"></div>
+            <div className="flight__header">
+                <div className="flight__name">{name}</div>
+                <div>{from.iata} - {to.iata}</div>
+                <div className="flight__expand-button" onClick={toggleExpanded}>{expanded ? '-' : '+'}</div>
             </div>
-            <div>{status}</div>
+            
+            {getDetails(expanded, flight)}
         </div>
     )
+}
+
+function getDetails(expanded, flight) {
+    if (expanded) {
+        const { dateTakeOff, dateLanding, status, progress, tail } = flight
+        return (
+            <div>
+                <div>{dateTakeOff.format('YYYY-MM-DD HH:mm')}</div>
+                <div>{dateLanding.format('YYYY-MM-DD HH:mm')}</div>
+                <div>Tail: {tail ? tail.name : null }</div>
+                <div>{progress >= 0 ? Math.floor(progress) : null}</div>            
+                <div className="progressbar__container">
+                    <div style={{ left: -1 * (100 - progress) + '%', transition: 'left 1000ms ease-in'  }} className="progressbar__bar"></div>
+                </div>
+                <div>{status}</div>
+            </div>
+            )
+    } else {
+        return (<div></div>)
+    }
 }
 
 const flightTarget = {
@@ -51,8 +75,8 @@ Flight.propTypes = {
         id: number, 
         name: string,
         tailId: number,
-        from: number,
-        to: number,
+        from: PropTypes.object,
+        to: PropTypes.object,
         fromIata: PropTypes.string,
         toIata: PropTypes.string,
         dateTakeOff: PropTypes.object,

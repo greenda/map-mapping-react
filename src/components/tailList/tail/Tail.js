@@ -5,11 +5,11 @@ import './Tail.scss'
 
 const tailSource = {
     beginDrag(props) {
-        return {...props};
+        return {...props.tail};
     },
     endDrag(props, monitor) {
         if (monitor.getDropResult() && monitor.getDropResult().id) {
-            props.addTailAction(props, monitor.getDropResult().id);
+            props.addTailAction(props.tail, monitor.getDropResult().id);
         }
     },
 };
@@ -26,10 +26,13 @@ const collect = (
 
 // TODO PropTypes
 
-export function Tail({tail, addTailAction, connectDragSource}) {
-    const { id, name, airportId } = tail
+export function Tail({tail, connectDragSource}) {
+    const { id, name, airport } = tail
     return connectDragSource(
-        <div className="tails__item" id={id}>{name} {airportId} </div>
+        <div className="tails__item" id={id}>
+            <span className="tails__item__name">{name}</span>
+            <span className="tails__item__airport"> {airport ? airport.iata : ''} </span>            
+        </div>
     )        
 }
 

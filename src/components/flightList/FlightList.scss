@@ -1,6 +1,11 @@
+@import '../../common/styles/variables.scss';
+
 .flight-list-container {
+    padding-top: $offset__small;
+    padding-left: $offset__small;
+
     & > .flight__container {
-        margin-bottom: 8px;
+        margin-bottom: $offset__small;
     }
 
     &:last-child {

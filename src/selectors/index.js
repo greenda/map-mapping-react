@@ -8,6 +8,12 @@ export const flightsSelector = (state) => state.flights
 export const flightIdsSelector = (state) => Object.keys(state.flights).map(value => +value)
 export const tailsSelector = (state) => state.tails
 
+export const tailsDetalsSelector = createSelector(
+    airportsSelector,
+    tailsSelector,
+    (airports, tails) => tails.map(tail => ({ ...tail, airport: tail.airportId ? airports[tail.airportId] : null }))
+)
+
 export const airportByIdSelector = createSelector(
     airportsSelector,
     (airports, id) => airports[id]
@@ -36,9 +42,23 @@ export const flightsOnTime = createSelector(
 export const tailCoordinates = createSelector(
     tailsSelector,
     airportsSelector,    
-    (tails, airports) => 
-        tails.map((tail) => {
-            const tailAirport = tail.airportId ? airports[tail.airportId] : null
-            return tail.coordinates = tailAirport ? { ...tail, coordinates: [tailAirport.longt, tailAirport.latt]} : {...tail}
+    flightsSelector,
+    currentTimeSelector,
+    (tails, airports, flights, _) => {
+        return tails.map((tail) => {
+            const filteredFlight = flights.filter(flight => flight.tailId === tail.id)
+            let tailAirport = tail.airportId ? airports[tail.airportId] : null
+            if (filteredFlight.length > 0) {
+                const sortedFlights = filteredFlight.sort((a, b) => a.dateLanding.diff(b.dateLanding))
+                const endFlight = sortedFlights[sortedFlights.length - 1]
+                switch (true) {
+                    case endFlight.progress <= 0: tailAirport = airports[endFlight.fromId]; break;
+                    case endFlight.progress >= 100: tailAirport = airports[endFlight.toId]; break;
+                    default: tailAirport = null;
+                }
+            }
+            
+            return tail.coordinates = tailAirport ? { ...tail, airport: tailAirport, airportId: tailAirport.id, coordinates: [tailAirport.longt, tailAirport.latt]} : {...tail}
         })
+    }
 )

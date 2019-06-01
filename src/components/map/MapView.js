@@ -1,14 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import * as d3 from 'd3'
-import { PropTypes } from 'prop-types'
-import { getMapAction } from '../../helpers/FlightHelper'
-import { MapActions } from '../../constants/map-actions'
 import './MapView.css'
-import aircraftIcon from '../../assets/aircraft-icon.svg'
 import aircraftIconRed from '../../assets/aircraft-icon__red.svg'
 import aircraftIconGray from '../../assets/aircraft-icon__gray.svg'
-import aircraftIconActive from '../../assets/aircraft-icon__active.svg'
-import aircraftIconInactive from '../../assets/aircraft-icon__inactive.svg'
 const width = 1100
 const height = 550
 const mediumColorYellow = '#dfc16d';
@@ -148,7 +142,7 @@ export function MapView({flights, tails, airports}) {
             
             // TODO onFlight в селектор
             return tailOnAir ? {...tailOnAir, coordinates: tailOnAir.coordinates, onFlight: true } : 
-                { ...tail, coordinates: projection(tail.coordinates), onFlight: false }
+                { ...tail, coordinates: projection(tail.coordinates), onFlight: false, angle: -90 }
         })
 
         svg.append("g")
@@ -162,7 +156,7 @@ export function MapView({flights, tails, airports}) {
            .attr('height', 30)
            .attr('x', d => d.coordinates[0] - 15)
            .attr('y', d => d.coordinates[1] - 15)
-           .attr('transform', d => `rotate(${d.angle ? d.angle : -90} ${d.coordinates[0]} ${d.coordinates[1]})`)
+           .attr('transform', d => `rotate(${d.angle}, ${d.coordinates[0]}, ${d.coordinates[1]})`)
     }
 
     function updateAircrafts(svg, path, projection, tails, flights) {
@@ -170,31 +164,46 @@ export function MapView({flights, tails, airports}) {
         const lineNodes = svg.selectAll('.routes').selectAll('.routes__lines').selectAll('path').nodes()
         const aircraftsOnAir = lineNodes.map(line => {
             const id = +line.getAttribute('id')
-            const flight = flights.find(value => value.id = id)
+            const flight = flights.find(value => value.id === id)
             const totalLenght = line.getTotalLength()
             const aircraftPosition = line.getPointAtLength(flight.progress / 100 * totalLenght)
-            const nextPosition = line.getPointAtLength(flight.progress + 1 / 100 * totalLenght)
-            const angle = Math.atan2(aircraftPosition.y - nextPosition.y, aircraftPosition.x - nextPosition.x) * 180 / Math.PI;
-            return { angle, id: flight.tailId, coordinates: [aircraftPosition.x, aircraftPosition.y] }
+            const prevPosition = flight.progress >= 1 ? 
+                line.getPointAtLength(flight.progress - 1 / 100 * totalLenght) : aircraftPosition
+            const prevAngle = Math.atan2(aircraftPosition.y - prevPosition.y, aircraftPosition.x - prevPosition.x) * 180 / Math.PI;
+            const changeState = (flight.progress === 100 || flight.progress === 0)
+            return { prevAngle, 
+                changeState,
+                angle: prevAngle,
+                id: flight.tailId,
+                coordinates: [aircraftPosition.x, aircraftPosition.y],
+                prevCoordinates: [prevPosition.x, prevPosition.y] }
         })
 
         // TODO зарефакторить этот момент
         const aircrafts = tails.map(tail => {
             const tailOnAir = aircraftsOnAir.find(tailOnAir => tailOnAir.id === tail.id) 
             // TODO onFlight в селектор
-            return tailOnAir ? {...tailOnAir, coordinates: tailOnAir.coordinates, onFlight: true } : 
-                { ...tail, coordinates: projection(tail.coordinates), onFlight: false }
+            return tailOnAir ?
+                { ...tailOnAir, coordinates: tailOnAir.coordinates, onFlight: true } : 
+                { ...tail, coordinates: projection(tail.coordinates), 
+                    prevCoordinates: projection(tail.coordinates), 
+                    onFlight: false, angle: -90, prevAngle: -90, changeState: true,
+                }
         })
+
+        svg.select('.routes__aircraft')
+           .selectAll('image').transition();
 
         svg.select('.routes__aircraft')
            .selectAll('image')
            .data(aircrafts)
+           .attr('xlink:href', d => d.onFlight ? aircraftIconRed : aircraftIconGray)
            .transition()
-           .duration(1000) 
-           .ease(d3.easeLinear)
+           .duration(d => d.onFlight && d.angle !== 0 && d.onFlight && !d.changeState ? 1000 : 0) 
+           .ease(d3.easeLinear)           
            .attr('x', d => d.coordinates[0] - 15)
            .attr('y', d => d.coordinates[1] - 15)
-           .attr('transform', d => `rotate(${d.angle ? d.angle : -90} ${d.coordinates[0]} ${d.coordinates[1]})`)            
+           .attr('transform', d => `rotate(${d.angle}, ${d.coordinates[0]}, ${d.coordinates[1]})`)
     }
 
   function getFlightLine(flight) {

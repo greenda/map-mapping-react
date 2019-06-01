@@ -128,7 +128,8 @@ h1 {
     }
 
     &__flight-column {
-        width: 400px;
+        min-width: 280px;
+        width: 280px;
     }
 
     &__map-column {

@@ -1,14 +1,38 @@
 @import '../../../common/styles/variables.scss';
 
-.flight__container {
-    background: $light-color;
-    padding: $offset__medium;
-}
+.flight {
+    &__container {
+        background: $light-color;
+        padding: $offset__medium;
+    }
 
-.flight__name {
-    font-size: 1em;
-    font-weight: bold;
-    color: $focus-color__red;
+    &__name {
+        font-size: 1em;
+        font-weight: bold;
+        color: $focus-color__red;
+    }
+
+    &__header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    &__expand-button {
+        margin-right: $offset__small;
+        margin-right: 4px;
+        background: $dark-color__red;
+        height: 20px;
+        width: 20px;
+        display: flex;
+        justify-content: center;
+        border-radius: 6px;
+        font-size: $text-size__small;
+        font-family: monospace;
+        font-weight: bold;
+        color: $white-color;
+        cursor: pointer;
+    }
 }
 
 .progressbar__container {

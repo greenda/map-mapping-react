@@ -16,7 +16,8 @@ const initialState = [
     {
       id: 2,
       name: 'Flight 2',
-      tail: { id: 10, name: 'name10'},
+      tail: null,
+      tailId: null,
       fromId: 1,
       toId: 3,
       dateTakeOff: moment(new Date(2000, 1, 1, 11)),
@@ -26,7 +27,7 @@ const initialState = [
     {
       id: 3,
       name: 'Flight 3',
-      tail: { id: 10, name: 'name10'},
+      tail: null,
       fromId: 3,
       toId: 2,
       dateTakeOff: moment(new Date(2000, 1, 1, 18)),
@@ -43,7 +44,8 @@ export function flightsReducer(state = initialState, action) {
       const flight = state.find(value => value.id === flightId);
 
       if (flight) {
-        flight.tail = tail;
+        flight.tail = tail
+        flight.tailId = tail.id
       }
       // TODO правильно оформить изменение массива
       return [...state]

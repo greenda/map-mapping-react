@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { tailsSelector } from '../../selectors/index'
+import { tailCoordinates } from '../../selectors/index'
 import { addTail } from '../../actions/pageActions'
 import Tail from './tail/Tail'
 import './TailList.scss'
@@ -31,7 +31,7 @@ TailList.propTypes = {
 
 export default connect(
     (state) => ({
-        tails: tailsSelector(state)
+        tails: tailCoordinates(state)
     }),
     { addTail }
 )(TailList)

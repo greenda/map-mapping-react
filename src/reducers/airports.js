@@ -1,14 +1,15 @@
-const countries = {
-    1: {
-        name: 'Алжир'
-    },
-    2: {
-        name: 'Индия'
-    },
-    3: {
-        name: 'ЮАР'
-    }
-}
+// TODO в отдельный редьюсер
+// const countries = {
+//     1: {
+//         name: 'Алжир'
+//     },
+//     2: {
+//         name: 'Индия'
+//     },
+//     3: {
+//         name: 'ЮАР'
+//     }
+// }
 
 const initialState = {
     1: {
