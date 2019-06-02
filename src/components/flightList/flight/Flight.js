@@ -7,7 +7,7 @@ import { ItemTypes } from '../../../constants/item-types';
 import './Flight.scss'
 
 export function Flight({ flight, connectDropTarget, isOver, canDrop }) {
-    const { name, from, to } = flight
+    const { name, from, to, progress } = flight
     const [expanded, setExpanded] = useState(false)
 
     // TODO кастом хук
@@ -17,7 +17,11 @@ export function Flight({ flight, connectDropTarget, isOver, canDrop }) {
 
     // TODO - прогресс бар в отдельный компонент    
     return connectDropTarget(
-        <div className={`flight__container ${isOver && canDrop ? 'enableDrop' : ''} ${isOver && !canDrop ? 'disableDrop' : ''}`}>
+        <div className={`flight__container 
+            ${isOver && canDrop ? 'enableDrop' : ''}
+            ${isOver && !canDrop ? 'disableDrop' : ''}
+            ${progress > 100 ? 'ended' : ''}`
+            }>
             <div className="flight__header">
                 <div className="flight__name">{name}</div>
                 <div>{from.iata} - {to.iata}</div>
@@ -49,9 +53,12 @@ function getDetails(expanded, flight) {
     }
 }
 
+// TODO debounce
 const flightTarget = {
 	canDrop(props, monitor) {
-		return props.flight.fromId === monitor.getItem().airportId
+        return props.flight.fromId === monitor.getItem().airportId 
+            && monitor.getItem().progress === -1
+            && props.flight.progress === -1
 	},
 
 	drop(props, monitor) {

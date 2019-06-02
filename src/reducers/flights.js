@@ -11,7 +11,8 @@ const initialState = [
       toId: 2,
       dateTakeOff: moment(new Date(2000, 1, 1, 8)),
       dateLanding: moment(new Date(2000, 1, 1, 20)),
-      status: 'progress'
+      status: 'progress',
+      progress: 16,
     },
     {
       id: 2,
@@ -22,7 +23,8 @@ const initialState = [
       toId: 3,
       dateTakeOff: moment(new Date(2000, 1, 1, 11)),
       dateLanding: moment(new Date(2000, 1, 1, 16)),
-      status: 'planed'
+      status: 'planed',
+      progress: -1,
     },
     {
       id: 3,
@@ -32,7 +34,8 @@ const initialState = [
       toId: 2,
       dateTakeOff: moment(new Date(2000, 1, 1, 18)),
       dateLanding: moment(new Date(2000, 1, 1, 24)),
-      status: 'planed'
+      status: 'planed',
+      progress: -1,
     }
   ]
 
