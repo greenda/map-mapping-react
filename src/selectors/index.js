@@ -2,11 +2,13 @@ import { createSelector } from 'reselect'
 import { getFlightInTime } from '../helpers/FlightHelper'
 
 export const currentTimeSelector = (state) => state.time.currentTime
-export const airportsSelector = (state) => state.airports
-export const airportIdsSelector = (state) => Object.keys(state.airports).map(value => +value)
-export const flightsSelector = (state) => state.flights
+export const airportsSelector = (state) => state.airports.items
+export const airportIdsSelector = (state) => Object.keys(state.airports.items).map(value => +value)
+export const flightsSelector = (state) => Object.values(state.flights)
+export const flightsObjectSelector = (state) => state.flights
 export const flightIdsSelector = (state) => Object.keys(state.flights).map(value => +value).reverse()
 export const tailsSelector = (state) => state.tails
+export const maxTimeSelector = (state) => state.time.maxTime
 
 export const tailsDetalsSelector = createSelector(
     airportsSelector,
@@ -22,7 +24,7 @@ export const airportByIdSelector = createSelector(
 export const flightByIdSelector = createSelector(
     currentTimeSelector,
     airportsSelector,
-    flightsSelector,
+    flightsObjectSelector,
     (_, { id }) => id,
     () => getFlightInTime,
     (currentTime, airports, flights, id, getFlightInTime) => 

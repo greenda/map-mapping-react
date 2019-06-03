@@ -3,7 +3,8 @@ import { pageActionTypes } from '../constants/action-types'
 import moment from 'moment'
 
 const initialState = {
-    currentTime: moment(new Date(2000, 1, 1, 10, 0))
+    currentTime: moment(new Date(2000, 1, 1, 10, 0)).utc(),
+    maxTime: moment(new Date(2000, 1, 1, 10, 0)).utc(),
 }
 
 export function timeReducer(state = initialState, action) {
@@ -12,9 +13,11 @@ export function timeReducer(state = initialState, action) {
     // TODO напрашивается inmuttable
     switch (type) {
         case pageActionTypes.INC_TIME: 
+            const newCurrentTime = state.currentTime.add(payload, 'hour').clone()
             state = {
                 ...state,
-                currentTime: state.currentTime.add(payload, 'hour').clone()
+                currentTime: newCurrentTime,
+                maxTime: newCurrentTime.diff(state.maxTime) > 0 ? newCurrentTime.clone() : state.maxTime,
             }
             break;
         case pageActionTypes.DEC_TIME: 

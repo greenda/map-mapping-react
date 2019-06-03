@@ -23,3 +23,10 @@ export function decrementTime(value) {
   }
 }
 
+export function generateFlights(maxTime, maxFlightId, airports) {
+  return {
+    type: pageActionTypes.GENERATE_FLIGHTS,
+    payload: { maxTime, maxFlightId, airports }
+  }
+}
+
