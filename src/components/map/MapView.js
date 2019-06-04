@@ -117,11 +117,23 @@ export function MapView({flights, tails, airports}) {
             .data(Object.values(airports).map(value => [value.longt, value.latt]))
             .enter()
             .append('circle')
-            .attr('cx', (d) =>  projection(d)[0] )
-            .attr('cy', (d) => projection(d)[1])
+            .attr('cx', d =>  projection(d)[0])
+            .attr('cy', d => projection(d)[1])
             .attr('r', '6px')
             .attr('fill', mediumColorYellow)   
             .attr('stroke', 'black')
+        
+        svg.select('.routes__airports')    
+           .selectAll('text')
+           .data(Object.values(airports))
+           .enter()
+           .append('text')
+           .attr('x', d => projection([d.longt, d.latt])[0] + 1)
+           .attr('y', d => projection([d.longt, d.latt])[1] + 25)
+           .attr('text-anchor', 'middle')
+           .style('fill', 'black')
+           .style('font-size', '14px')
+           .text(d => d.iata)
     }
 
     function initAircraft(svg, path, projection, tails, flights) {
@@ -133,7 +145,11 @@ export function MapView({flights, tails, airports}) {
             const aircraftPosition = line.getPointAtLength(flight.progress / 100 * totalLenght)
             const nextPosition = line.getPointAtLength(flight.progress + 1 / 100 * totalLenght)
             const angle = Math.atan2(aircraftPosition.y - nextPosition.y, aircraftPosition.x - nextPosition.x) * 180 / Math.PI;
-            return { angle, id: flight.tailId, coordinates: [aircraftPosition.x, aircraftPosition.y] }
+            return { angle, 
+                id: flight.tailId, 
+                coordinates: [aircraftPosition.x, aircraftPosition.y],
+                name: flight.tail ? flight.tail.name : '',
+            }
         })
 
         // TODO зарефакторить этот момент
@@ -157,6 +173,17 @@ export function MapView({flights, tails, airports}) {
            .attr('x', d => d.coordinates[0] - 15)
            .attr('y', d => d.coordinates[1] - 15)
            .attr('transform', d => `rotate(${d.angle}, ${d.coordinates[0]}, ${d.coordinates[1]})`)
+        
+        svg.select('.routes__aircraft')
+           .selectAll('text')
+           .data(aircrafts)
+           .enter()
+           .append('text')
+           .attr('x', d => d.coordinates[0])
+           .attr('y', d => d.coordinates[1] - 25)
+           .attr('text-anchor', 'middle')
+           .style('fill', 'black')
+           .text(d => d.name)
     }
 
     function updateAircrafts(svg, path, projection, tails, flights) {
@@ -175,6 +202,7 @@ export function MapView({flights, tails, airports}) {
                 changeState,
                 angle: prevAngle,
                 id: flight.tailId,
+                name: flight.tail ? flight.tail.name : '',
                 coordinates: [aircraftPosition.x, aircraftPosition.y],
                 prevCoordinates: [prevPosition.x, prevPosition.y] }
         })
@@ -204,6 +232,18 @@ export function MapView({flights, tails, airports}) {
            .attr('x', d => d.coordinates[0] - 15)
            .attr('y', d => d.coordinates[1] - 15)
            .attr('transform', d => `rotate(${d.angle}, ${d.coordinates[0]}, ${d.coordinates[1]})`)
+        
+        svg.select('.routes__aircraft')
+           .selectAll('text')
+           .data(aircrafts)
+           .transition()
+           .duration(d => d.onFlight && d.angle !== 0 && d.onFlight && !d.changeState ? 1000 : 0) 
+           .ease(d3.easeLinear)    
+           .attr('x', d => d.coordinates[0])
+           .attr('y', d => d.coordinates[1] - 25)
+           .attr('text-anchor', 'middle')
+           .style('fill', 'black')
+           .text(d => d.name)  
     }
 
   function getFlightLine(flight) {

@@ -14,8 +14,25 @@
 
     &__header {
         display: flex;
-        flex-direction: row;
-        justify-content: space-between;
+        flex-direction: column;
+        
+        &__row {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        .small-font {
+            font-size: $offset__medium-small;
+        }
+
+        .left {
+            justify-content: left;
+            & > div:last-child {
+                margin-left: $offset__medium;
+            }
+        }
+        
     }
 
     &__expand-button {

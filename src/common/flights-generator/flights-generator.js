@@ -1,6 +1,6 @@
 const maxHourOffset = 24
 const minHourOffset = 2
-const randomCoeff = 0
+const randomCoeff = 0.8
 
 export function generateFlights(maxTime, maxFlightId, airports) {
     if (Math.random() > randomCoeff) {

@@ -45,14 +45,14 @@ export function flightsReducer(state = initialState, action) {
   switch (type) {    
     case pageActionTypes.ADD_TAIL:
       const {tail, flightId} = action.payload;
-      const flight = state.find(value => value.id === flightId);
+      const flight = state[flightId];
 
       if (flight) {
         flight.tail = tail
         flight.tailId = tail.id
       }
       // TODO правильно оформить изменение массива
-      return [...state]
+      return {...state}
     case pageActionTypes.GENERATE_FLIGHTS:
       const { maxTime, maxFlightId, airports } = payload
       const newFlight = generateFlights(maxTime, maxFlightId, airports)

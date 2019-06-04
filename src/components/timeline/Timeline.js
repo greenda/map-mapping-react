@@ -24,7 +24,7 @@ function Timeline({ currentTime, incrementTime, decrementTime }) {
 
     return (
         <div className="timeline">
-            <div className="timeline__current-time">{currentTime.format('DD-MM-YYYY HH:mm')}</div>
+            <div className="timeline__current-time">{currentTime.format('DD.MM.YY HH:mm')}</div>
             <div className="timeline__button" onClick={() => incrementTime(1)}>+</div>
             <div className="timeline__button" onClick={() => decrementTime(1)}>-</div>
             <div className={`timeline__button ${interval ? 'disabled' : ''}`} onClick={startInterval}>></div>
