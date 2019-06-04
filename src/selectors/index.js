@@ -9,6 +9,9 @@ export const flightsObjectSelector = (state) => state.flights
 export const flightIdsSelector = (state) => Object.keys(state.flights).map(value => +value).reverse()
 export const tailsSelector = (state) => state.tails
 export const maxTimeSelector = (state) => state.time.maxTime
+export const ordersObjectSelector = (state) => state.orders.items
+export const ordersSelector = (state) => Object.values(state.orders.items)
+export const orderIdsSelector = (state) => Object.keys(state.orders.items).map(value => +value).reverse()
 
 export const flightsDetailSelector = createSelector(
     flightsSelector,
@@ -81,5 +84,16 @@ export const tailCoordinates = createSelector(
                 } 
                 : { ...tail, progress: flightProgress }
         })
+    }
+)
+
+export const orderByIdSelector = createSelector(
+    currentTimeSelector,
+    airportsSelector,
+    ordersObjectSelector,
+    (_, { id }) => id,
+    (currentTime, airports, orders, id) => {
+        console.log('orderByIdSelector')
+        return getFlightInTime({...orders[id]}, airports, currentTime) 
     }
 )

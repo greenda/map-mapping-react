@@ -1,6 +1,6 @@
 @import '../../../common/styles/variables.scss';
 
-.flight {
+.order {
     &__container {
         background: $light-color;
         padding: $offset__medium;
@@ -73,16 +73,6 @@
     box-sizing: border-box;
     background: rgb(255,255,255);
     background: repeating-linear-gradient(45deg, rgba(255,255,255,1) 0%, rgba(227,238,238,1) 10%, rgba(95,158,160,1) 11%, rgba(95,158,160,1) 20%, rgba(255,255,255,1) 21%, rgba(255,255,255,1) 30%, rgba(95,158,160,1) 31%, rgba(95,158,160,1) 40%, rgba(251,251,251,1) 41%, rgba(253,253,253,1) 50%, rgba(95,158,160,1) 51%, rgba(95,158,160,1) 60%, rgba(250,250,250,1) 61%, rgba(255,255,255,1) 70%, rgba(95,158,160,1) 71%, rgba(95,158,160,1) 80%, rgba(255,255,255,1) 81%, rgba(255,255,255,1) 90%, rgba(95,158,160,1) 91%, rgba(95,158,160,1) 100%);    
-}
-
-.enableDrop {
-    background: greenyellow;
-    border-color: greenyellow;
-}
-
-.disableDrop {
-    background: orangered;
-    border-color: orangered;
 }
 
 .ended {

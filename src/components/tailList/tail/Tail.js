@@ -5,7 +5,8 @@ import './Tail.scss'
 
 const tailSource = {
     beginDrag(props) {
-        return {...props.tail};
+        // TODO только нужные поля
+        return {tail: {...props.tail}, type: ItemTypes.TAIL};
     },
     endDrag(props, monitor) {
         if (monitor.getDropResult() && monitor.getDropResult().id) {

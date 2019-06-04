@@ -1,0 +1,11 @@
+@import '../../common/styles/variables.scss';
+
+.order-list-container {
+    & > .order__container {
+        margin-bottom: $offset__small;
+    }
+
+    &:last-child {
+        margin-bottom: 0px;
+    }
+}

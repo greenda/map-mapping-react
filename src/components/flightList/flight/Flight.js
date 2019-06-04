@@ -62,10 +62,17 @@ function getDetails(expanded, flight) {
 
 // TODO debounce
 const flightTarget = {
+    
 	canDrop(props, monitor) {
-        return props.flight.fromId === monitor.getItem().airportId 
-            && monitor.getItem().progress === -1
-            && props.flight.progress === -1
+        const dragItem = monitor.getItem()
+        if (dragItem.type === ItemTypes.TAIL) {
+            return (props.flight.fromId === dragItem.airportId 
+                && monitor.getItem().progress === -1
+                && props.flight.progress === -1)
+        } else if (dragItem.type === ItemTypes.ORDER) {
+            return true
+        }
+        return false
 	},
 
 	drop(props) {
@@ -105,5 +112,5 @@ export default
             flight: flightByIdSelector(state, ownProps),
         })
 )(
-    DropTarget(ItemTypes.TAIL, flightTarget, collect)(Flight)
+    DropTarget([ItemTypes.TAIL, ItemTypes.ORDER], flightTarget, collect)(Flight)
 )
