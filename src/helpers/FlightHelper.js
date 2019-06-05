@@ -1,7 +1,15 @@
 // TODO сделать через inmutable
 import { MapActions } from '../constants/map-actions'
 
-export function getFlightInTime(flight, airports, currentTime ) {
+export function getFlightInTime(flight, airports, orders, currentTime ) {
+    if (flight.orderId) {
+        const order = orders[flight.orderId]
+        flight.fromId = order.fromId
+        flight.toId = order.toId
+        flight.dateTakeOff = order.dateTakeOff
+        flight.dateLanding = order.dateLanding
+    }
+
     flight.from = {...airports[flight.fromId]}
     flight.to = {...airports[flight.toId]}
     const { dateTakeOff, dateLanding } = flight

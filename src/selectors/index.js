@@ -39,20 +39,22 @@ export const flightByIdSelector = createSelector(
     currentTimeSelector,
     airportsSelector,
     flightsObjectSelector,
+    ordersObjectSelector,
     (_, { id }) => id,
     () => getFlightInTime,
-    (currentTime, airports, flights, id, getFlightInTime) => 
-        getFlightInTime({...flights[id]}, airports, currentTime)
+    (currentTime, airports, flights, orders, id, getFlightInTime) => 
+        getFlightInTime({...flights[id]}, airports, orders, currentTime)
 )
 
 export const flightsOnTime = createSelector(
     currentTimeSelector,
     airportsSelector,
     flightsDetailSelector,
+    ordersObjectSelector,
     () => getFlightInTime,
     // TODO - присоединять аэропорты в другом селекторе
-    (currentTime, airports, flights, getFlightInTime) => 
-        flights.map(flight => getFlightInTime(flight, airports, currentTime))            
+    (currentTime, airports, flights, orders, getFlightInTime) => 
+        flights.map(flight => getFlightInTime(flight, airports, orders, currentTime))            
 )
 
 export const tailCoordinates = createSelector(
@@ -93,7 +95,6 @@ export const orderByIdSelector = createSelector(
     ordersObjectSelector,
     (_, { id }) => id,
     (currentTime, airports, orders, id) => {
-        console.log('orderByIdSelector')
-        return getFlightInTime({...orders[id]}, airports, currentTime) 
+        return getFlightInTime({...orders[id]}, airports, orders, currentTime) 
     }
 )

@@ -28,12 +28,13 @@ export function Flight({ flight, connectDropTarget, isOver, canDrop }) {
                     <div className="flight__expand-button" onClick={toggleExpanded}>{expanded ? '-' : '+'}</div>
                 </div>
                 <div className="flight__header__row left">
-                    <div>{from.iata} - {to.iata}</div>
+                    <div>{from.iata && to.iata ? `${from.iata} - ${to.iata}` : '' }</div>
                     <div>{tail ? tail.name : null }</div>
                 </div>
                 <div className="small-font">
                    
-                    <div>{dateTakeOff.format('DD.MM HH:mm')} - {dateLanding.format('DD.MM HH:mm')}</div>
+                    <div>{dateTakeOff && dateLanding ? 
+                        `${dateTakeOff.format('DD.MM HH:mm')} - ${dateLanding.format('DD.MM HH:mm')}` : ''}</div>
                 </div>
                 
             </div>
@@ -66,8 +67,8 @@ const flightTarget = {
 	canDrop(props, monitor) {
         const dragItem = monitor.getItem()
         if (dragItem.type === ItemTypes.TAIL) {
-            return (props.flight.fromId === dragItem.airportId 
-                && monitor.getItem().progress === -1
+            return (props.flight.fromId === dragItem.tail.airportId 
+                && dragItem.tail.progress === -1
                 && props.flight.progress === -1)
         } else if (dragItem.type === ItemTypes.ORDER) {
             return true

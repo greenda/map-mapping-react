@@ -30,3 +30,10 @@ export function generateFlights(maxTime, maxFlightId, airports) {
   }
 }
 
+export function addOrder(order, flightId) {
+  return {
+    type: pageActionTypes.ADD_ORDER,
+    payload: { order, flightId }
+  }
+}
+

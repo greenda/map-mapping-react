@@ -13,9 +13,9 @@ const orderSource = {
     },
     endDrag(props, monitor) {
         console.log('endDrop')
-        // if (monitor.getDropResult() && monitor.getDropResult().id) {
-        //     props.addTailAction(props.tail, monitor.getDropResult().id);
-        // }
+        if (monitor.getDropResult() && monitor.getDropResult().id) {
+            props.addOrder(props.order, monitor.getDropResult().id);
+        }
     },
 };
 
@@ -98,6 +98,7 @@ function getDetails(expanded, order) {
 // }
 
 // Order.propTypes = {
+//     addOrder
 //     flight: PropTypes.shape({ 
 //         id: number, 
 //         name: string,
@@ -116,7 +117,5 @@ export default
     connect(
         (state, ownProps) => ({
             order: orderByIdSelector(state, ownProps),
-        })
-)(
-    DragSource(ItemTypes.ORDER, orderSource, collect)(Order)
-)
+        }),
+    )(DragSource(ItemTypes.ORDER, orderSource, collect)(Order))
