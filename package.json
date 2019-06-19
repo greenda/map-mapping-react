@@ -3,7 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.0.2",
+    "@material-ui/icons": "^4.0.1",
     "d3": "^5.9.2",
+    "material-ui-datetimepicker": "^1.0.7",
+    "material-ui-icons": "^1.0.0-beta.36",
     "node-sass": "^4.12.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.1",

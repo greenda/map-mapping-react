@@ -1,0 +1,73 @@
+@import '../../../common/styles/variables.scss';
+
+.new-flight {
+    &__container {
+        background: $light-color;
+        padding: $offset__medium;
+    }
+
+    &__name {
+        font-size: 1em;
+        font-weight: bold;
+        color: $focus-color__red;
+    }
+
+    &__header {
+        display: flex;
+        flex-direction: column;
+        
+        &__row {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+
+            & > div > div > input {
+                padding: 0px;
+            }
+        }
+      
+        .small-font {
+            font-size: $offset__medium-small;
+        }
+
+        .left {
+            justify-content: left;
+            & > div:last-child {
+                margin-left: $offset__medium;
+            }
+        }       
+    }
+
+    &__control-buttons {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        margin-top: 8px;
+
+        & > button:first-child {
+            margin-right: $offset__small;
+        }
+    }
+}
+
+.bottom-offset {
+    margin-bottom: $offset__small;
+}
+
+.right-offset {
+    margin-right: $offset__small;
+
+    &__small {
+        margin-right: $offset__ultra-small;
+    }
+}
+
+.airport-selector {
+    border-color: #b7c6c6;
+    border-radius: 4px;
+    padding: 2px;
+}
+
+.MuiInputBase-input {
+    padding: 0px;
+}

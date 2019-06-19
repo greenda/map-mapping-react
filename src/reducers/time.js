@@ -3,8 +3,8 @@ import { pageActionTypes } from '../constants/action-types'
 import moment from 'moment'
 
 const initialState = {
-    currentTime: moment(new Date(2000, 1, 1, 10, 0)).utc(),
-    maxTime: moment(new Date(2000, 1, 1, 10, 0)).utc(),
+    currentTime: moment.utc('2000-01-01T10:00:00+00:00'),
+    maxTime: moment.utc('2000-01-01T10:00:00+00:00'),
 }
 
 export function timeReducer(state = initialState, action) {

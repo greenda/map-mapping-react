@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { flightIdsSelector, maxTimeSelector, airportIdsSelector } from '../../selectors/index'
+import { flightIdsSelector, maxTimeSelector, airportIdsSelector, airportsSelector } from '../../selectors/index'
 import Order from './order/Order'
 import { addOrder } from '../../actions/pageActions'
-import { generateFlights } from '../../actions/pageActions'
+import { generateOrders } from '../../actions/pageActions'
 import './OrderList.scss'
 
-export function OrderList({orderIds, maxTime, airports, generateFlights, addOrder}) {
-    // useEffect(() => {
-    //     generateFlights(maxTime, Math.max(...flightIds), airports)
-    // }, [maxTime])
+export function OrderList({orderIds, maxTime, airports, generateOrders, airportsIds, addOrder}) {
+    useEffect(() => {        
+        generateOrders(maxTime, Math.max(...orderIds), airportsIds)
+    }, [maxTime])
 
     const orders = orderIds.map(value => (<Order key={value} id={value} addOrder={addOrder}/>))
     return (
@@ -33,7 +33,10 @@ export function OrderList({orderIds, maxTime, airports, generateFlights, addOrde
 // )(FlightList)
 
 export default connect(
-    () => {},
-    { addOrder }
+    (state) => ({
+        maxTime: maxTimeSelector(state), 
+        airportsIds: airportIdsSelector(state),       
+    }),
+    { generateOrders, addOrder }
 )(OrderList)
 

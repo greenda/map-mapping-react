@@ -6,8 +6,8 @@ import { DropTarget } from 'react-dnd';
 import { ItemTypes } from '../../../constants/item-types';
 import './Flight.scss'
 
-export function Flight({ flight, connectDropTarget, isOver, canDrop }) {
-    const { name, from, to, progress, dateTakeOff, dateLanding, tail } = flight
+export function Flight({ flight, connectDropTarget, isOver, canDrop, onRemove }) {
+    const { id, name, from, to, progress, dateTakeOff, dateLanding, tail } = flight
     const [expanded, setExpanded] = useState(false)
 
     // TODO кастом хук
@@ -25,7 +25,10 @@ export function Flight({ flight, connectDropTarget, isOver, canDrop }) {
             <div className="flight__header">
                 <div className="flight__header__row">
                     <div className="flight__name">{name}</div>
-                    <div className="flight__expand-button" onClick={toggleExpanded}>{expanded ? '-' : '+'}</div>
+                    <div  className="flight__control-buttons">
+                        <div className="flight__expand-button" onClick={toggleExpanded}>{expanded ? '-' : '+'}</div>
+                        <div className="flight__expand-button" onClick={() => onRemove(id)}>x</div>
+                    </div>                    
                 </div>
                 <div className="flight__header__row left">
                     <div>{from.iata && to.iata ? `${from.iata} - ${to.iata}` : '' }</div>

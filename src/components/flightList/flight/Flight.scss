@@ -4,6 +4,7 @@
     &__container {
         background: $light-color;
         padding: $offset__medium;
+        padding-right: $offset__small;
     }
 
     &__name {
@@ -33,6 +34,11 @@
             }
         }
         
+    }
+
+    &__control-buttons {
+        display: flex;
+        flex-direction: row;
     }
 
     &__expand-button {

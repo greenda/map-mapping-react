@@ -5,7 +5,28 @@ export function addTail(tail, flightId) {
   return {
     type: pageActionTypes.ADD_TAIL,
     payload: { tail, flightId },
-  };
+  }
+}
+
+export function addFlight(flight, flightId) {
+  return {
+    type: pageActionTypes.ADD_FLIGHT,
+    payload: { flight, flightId },
+  }
+}
+
+export function addEmptyFlight(flightId) {
+  return {
+    type: pageActionTypes.ADD_EMPTY_FLIGHT,
+    payload: { flightId },
+  }
+}
+
+export function removeFlight(flightId) {
+  return {
+    type: pageActionTypes.REMOVE_FLIGHT,
+    payload: { flightId }
+  }
 }
 
 export function incrementTime(value) {
@@ -23,9 +44,9 @@ export function decrementTime(value) {
   }
 }
 
-export function generateFlights(maxTime, maxFlightId, airports) {
+export function generateOrders(maxTime, maxFlightId, airports) {
   return {
-    type: pageActionTypes.GENERATE_FLIGHTS,
+    type: pageActionTypes.GENERATE_ORDERS,
     payload: { maxTime, maxFlightId, airports }
   }
 }

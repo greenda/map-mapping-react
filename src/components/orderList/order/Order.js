@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import PropTypes, { number, string } from 'prop-types'
+// import PropTypes, { number, string } from 'prop-types'
 import { orderByIdSelector } from '../../../selectors/index'
 import { DragSource } from 'react-dnd';
 import { ItemTypes } from '../../../constants/item-types';

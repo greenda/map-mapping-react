@@ -2,7 +2,7 @@ import { createSelector } from 'reselect'
 import { getFlightInTime } from '../helpers/FlightHelper'
 
 export const currentTimeSelector = (state) => state.time.currentTime
-export const airportsSelector = (state) => state.airports.items
+export const airportsSelector = (state) => Object.values(state.airports.items)
 export const airportIdsSelector = (state) => Object.keys(state.airports.items).map(value => +value)
 export const flightsSelector = (state) => Object.values(state.flights)
 export const flightsObjectSelector = (state) => state.flights
@@ -27,12 +27,12 @@ export const flightsDetailSelector = createSelector(
 export const tailsDetalsSelector = createSelector(
     airportsSelector,
     tailsSelector,
-    (airports, tails) => tails.map(tail => ({ ...tail, airport: tail.airportId ? airports[tail.airportId] : null }))
+    (airports, tails) => tails.map(tail => ({ ...tail, airport: tail.airportId ? airports.find(value => value.id === tail.airportId) : null }))
 )
 
 export const airportByIdSelector = createSelector(
     airportsSelector,
-    (airports, id) => airports[id]
+    (airports, id) => airports.find(value => value.id === id)
 )
 
 export const flightByIdSelector = createSelector(
@@ -65,15 +65,15 @@ export const tailCoordinates = createSelector(
     (tails, airports, flights, _) => {
         return tails.map((tail) => {
             const filteredFlight = flights.filter(flight => flight.tailId === tail.id)
-            let tailAirport = tail.airportId ? airports[tail.airportId] : null
+            let tailAirport = tail.airportId ? airports.find(value => value.id === tail.airportId) : null
             let flightProgress = -1;
             if (filteredFlight.length > 0) {
                 const sortedFlights = filteredFlight.sort((a, b) => a.dateLanding.diff(b.dateLanding))
                 const endFlight = sortedFlights[sortedFlights.length - 1]
                 flightProgress = endFlight.progress 
                 switch (true) {
-                    case flightProgress <= 0: tailAirport = airports[endFlight.fromId]; break;
-                    case flightProgress >= 100: tailAirport = airports[endFlight.toId]; break;
+                    case flightProgress <= 0: tailAirport = airports.find(value => value.id === endFlight.fromId); break;
+                    case flightProgress >= 100: tailAirport = airports.find(value => value.id === endFlight.toId); break;
                     default: tailAirport = null;
                 }
             }
@@ -97,4 +97,9 @@ export const orderByIdSelector = createSelector(
     (currentTime, airports, orders, id) => {
         return getFlightInTime({...orders[id]}, airports, orders, currentTime) 
     }
+)
+
+export const maxFlightIdSelector = createSelector(
+    flightIdsSelector,
+    (ids) => Math.max(...ids)
 )

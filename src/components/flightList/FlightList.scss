@@ -4,12 +4,29 @@
     padding-top: $offset__small;
     padding-left: $offset__small;
 
-    & > .flight__container {
-        margin-bottom: $offset__small;
+    & > div > .flight__container {
+        margin-bottom: $offset__ultra-small;
     }
 
     &:last-child {
         margin-bottom: 0px;
     }
 
+    &__add-buttons {
+        margin: 0px 0px $offset__small 0px;
+        display: flex;
+        justify-content: space-between;
+        
+        & > input:first-child {
+            margin-right: $offset__small;
+        }
+    }
+}
+
+.add-button {
+    background-color: white;
+    padding: $offset__little $offset__ultra-small $offset__little $offset__ultra-small;
+    border-radius: $offset__ultra-small;
+    border: dashed #a5a5a5 $offset__little;
+    font-weight: bold;
 }

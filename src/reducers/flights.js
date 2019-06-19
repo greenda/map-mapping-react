@@ -1,5 +1,5 @@
 import { pageActionTypes } from '../constants/action-types';
-import { generateFlights } from '../common/flights-generator/flights-generator'
+// import { generateFlights } from '../common/flights-generator/flights-generator'
 import moment from 'moment'
 
 const initialState = {
@@ -8,33 +8,28 @@ const initialState = {
       name: 'Flight 1',
       tail: null,
       tailId: 1,
-      fromId: 1,
-      toId: 2,
-      dateTakeOff: moment(new Date(2000, 1, 1, 8)).utc(),
-      dateLanding: moment(new Date(2000, 1, 1, 20)).utc(),
       status: 'progress',
       progress: 16,
       orderId: 1,
     },    
-    2: {
-      id: 2,
-      name: 'Flight 2',
-      tail: null,
-      tailId: null,
-      fromId: null,
-      toId: null,
-      dateTakeOff: null,
-      dateLanding: null,
-      status: 'planned',
-      progress: -1,
-      orderId: null,
-    },    
+    // 2: {
+    //   id: 2,
+    //   name: 'Flight 2',
+    //   tail: null,
+    //   tailId: null,
+    //   fromId: null,
+    //   toId: null,
+    //   status: 'planned',
+    //   progress: -1,
+    //   orderId: null,
+    // },    
   }
 
 export function flightsReducer(state = initialState, action) {
   const { type, payload = {} } = action
   const { flightId } = payload
   const flight = flightId ? state[flightId] : {};
+  const newState =  {...state}
   switch (type) {    
     case pageActionTypes.ADD_TAIL:
       const {tail} = action.payload;      
@@ -55,16 +50,27 @@ export function flightsReducer(state = initialState, action) {
       }
 
       return {...state}
-    case pageActionTypes.GENERATE_FLIGHTS:
-      const { maxTime, maxFlightId, airports } = payload
-      const newFlight = generateFlights(maxTime, maxFlightId, airports)
-      const result = {...state}      
-      // TODO inmuttable
-      newFlight.forEach((value) => {
-        result[value.id] = value
-      })
-      
-      return result
+    case pageActionTypes.ADD_FLIGHT:
+      newState[flightId] = payload.flight
+      return newState     
+    case pageActionTypes.ADD_EMPTY_FLIGHT:
+      newState[flightId] = {
+        id: flightId,
+        name: 'Flight ' + flightId,
+        tail: null,
+        tailId: null,
+        fromId: null,
+        toId: null,
+        dateTakeOff: null,
+        dateLanding: null,
+        status: 'planned',
+        progress: -1,
+        orderId: null,
+      }
+      return newState
+    case pageActionTypes.REMOVE_FLIGHT:
+      delete newState[flightId]
+      return newState 
     default: return state;
   }
 }

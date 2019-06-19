@@ -153,13 +153,13 @@ export function MapView({flights, tails, airports}) {
         })
 
         // TODO зарефакторить этот момент
-        const aircrafts = tails.map(tail => {
+        const aircrafts = tails ? tails.map(tail => {
             const tailOnAir = aircraftsOnAir.find(tailOnAir => tailOnAir.id === tail.id) 
             
             // TODO onFlight в селектор
             return tailOnAir ? {...tailOnAir, coordinates: tailOnAir.coordinates, onFlight: true } : 
                 { ...tail, coordinates: projection(tail.coordinates), onFlight: false, angle: -90 }
-        })
+        }) : []
 
         svg.append("g")
            .attr("class", "routes__aircraft")

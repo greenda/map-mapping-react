@@ -10,8 +10,9 @@ export function getFlightInTime(flight, airports, orders, currentTime ) {
         flight.dateLanding = order.dateLanding
     }
 
-    flight.from = {...airports[flight.fromId]}
-    flight.to = {...airports[flight.toId]}
+    
+    flight.from = {...airports.find(value => value.id === flight.fromId)}
+    flight.to = {...airports.find(value => value.id === flight.toId)}
     const { dateTakeOff, dateLanding } = flight
     const oldProgress = flight.progress
 
