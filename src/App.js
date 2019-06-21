@@ -7,11 +7,11 @@ import FlightList from '../src/components/flightList/FlightList'
 import TailList from '../src/components/tailList/TailList'
 import OrderList from '../src/components/orderList/OrderList'
 import MapContainer from '../src/components/map/MapContainer'
-import { orderIdsSelector, flightIdsSelector, maxFlightIdSelector } from '../src/selectors/index'
+import { orderIdsSelector, flightIdsSelector, maxFlightIdSelector, flightsSelector } from '../src/selectors/index'
 import logo from '../src/assets/map-mapping-logo.svg'
 import './App.scss';
 // TODO flights Вынести на этот уровень, чтобы два раза не просчитывать
-function App ({ orderIds, flightIds, maxFlightId }) {
+function App ({ orderIds, flights, flightIds, maxFlightId }) {
   return (
     
       <div className="main-container">
@@ -33,7 +33,7 @@ function App ({ orderIds, flightIds, maxFlightId }) {
             </div>
           </div>
         <div className="main-container__column main-container__map-column">
-          <div><Timeline /></div>
+          <div><Timeline flights={flights} /></div>
           <MapContainer />
         </div>
       </div>
@@ -44,7 +44,8 @@ export default DragDropContext(HTML5Backend)(
     connect(
     (state) => ({
       orderIds: orderIdsSelector(state),
-      flightIds: flightIdsSelector(state),     
+      flightIds: flightIdsSelector(state),   
+      flights: flightsSelector(state),
       maxFlightId: maxFlightIdSelector(state),   
     })
   )(App)

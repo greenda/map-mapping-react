@@ -1,7 +1,7 @@
-import React, { useState }  from 'react'
+import React, { useState, useEffect }  from 'react'
 import { connect } from 'react-redux'
-import { currentTimeSelector } from '../../selectors/index'
-import { incrementTime, decrementTime } from '../../actions/pageActions'
+import { currentTimeSelector, currentBudgetSelector, maxTimeSelector } from '../../selectors/index'
+import { incrementTime, decrementTime, checkMoney } from '../../actions/pageActions'
 import './Timeline.scss'
 
 // interface Props {
@@ -10,9 +10,12 @@ import './Timeline.scss'
 //     decrementTime: Function,
 //  }
 
-function Timeline({ currentTime, incrementTime, decrementTime }) {
+function Timeline({ flights, maxTime, currentTime, incrementTime, decrementTime, currentBudget, checkMoney }) {
+    useEffect(() => {   
+        checkMoney(flights, maxTime, currentTime)
+    }, [maxTime])
     const [ interval, setIntervalConst ] = useState()
-    
+
     const startInterval = () => {
         const i = setInterval(() => incrementTime(1), 1000)
         setIntervalConst(i)
@@ -29,6 +32,7 @@ function Timeline({ currentTime, incrementTime, decrementTime }) {
             <div className="timeline__button" onClick={() => decrementTime(1)}>-</div>
             <div className={`timeline__button ${interval ? 'disabled' : ''}`} onClick={startInterval}>></div>
             <div className={`timeline__button ${!interval ? 'disabled' : ''}`} onClick={stopInterval}>||</div>
+            <div className="budget">{currentBudget}<span className="currency-sign">☼</span></div>
         </div>        
     )
 }
@@ -40,7 +44,10 @@ function Timeline({ currentTime, incrementTime, decrementTime }) {
 
 export default connect(
     (state) => ({
-        currentTime: currentTimeSelector(state)
+        // currentTime И maxTime вынести вверх
+        currentTime: currentTimeSelector(state),
+        currentBudget: currentBudgetSelector(state),
+        maxTime: maxTimeSelector(state),
     }),
-    { incrementTime, decrementTime }
+    { incrementTime, decrementTime, checkMoney }
 )(Timeline)

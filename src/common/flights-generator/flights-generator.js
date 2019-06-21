@@ -13,6 +13,8 @@ export function generateFlights(maxTime, maxFlightId, airports) {
         airportIds.splice(index, 1)
         index = Math.round(Math.random() * (airportIds.length - 1))
         const toId =  airportIds[index]
+        // TODO в зависимости от растояния + рандомная наценка
+        const pay = Math.round(Math.random() * 10000)
         return [ 
             {
                 id: maxFlightId + 1,
@@ -25,6 +27,7 @@ export function generateFlights(maxTime, maxFlightId, airports) {
                 dateLanding: startTime.clone().add(flightLenght, 'hours'),
                 status: 'planned',
                 progress: -1,
+                pay: pay,
             }
         ]
     }

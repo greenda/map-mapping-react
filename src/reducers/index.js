@@ -1,9 +1,10 @@
-import { combineReducers } from 'redux';
-import { ordersReducer } from './orders';
-import { tailsReducer } from './tiles';
-import { flightsReducer } from './flights';
-import { timeReducer } from './time';
+import { combineReducers } from 'redux'
+import { ordersReducer } from './orders'
+import { tailsReducer } from './tiles'
+import { flightsReducer } from './flights'
+import { timeReducer } from './time'
 import { airportsReducer } from './airports'
+import { moneyReducer } from './money'
 
 
 export const rootReducer = combineReducers({
@@ -12,4 +13,5 @@ export const rootReducer = combineReducers({
     flights: flightsReducer,
     time: timeReducer,
     airports: airportsReducer,
+    money: moneyReducer,
 });

@@ -58,3 +58,10 @@ export function addOrder(order, flightId) {
   }
 }
 
+export function checkMoney(flights, maxTime, currentTime) {
+  return {
+    type: pageActionTypes.CHECK_MONEY,
+    payload: { flights, maxTime, currentTime }
+  }
+}
+

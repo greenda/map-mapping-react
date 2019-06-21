@@ -54,6 +54,7 @@ export function flightsReducer(state = initialState, action) {
       newState[flightId] = payload.flight
       return newState     
     case pageActionTypes.ADD_EMPTY_FLIGHT:
+      // TODO вынести создание пустого в хелпер
       newState[flightId] = {
         id: flightId,
         name: 'Flight ' + flightId,
@@ -66,6 +67,7 @@ export function flightsReducer(state = initialState, action) {
         status: 'planned',
         progress: -1,
         orderId: null,
+        pay: 0,
       }
       return newState
     case pageActionTypes.REMOVE_FLIGHT:

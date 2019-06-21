@@ -12,7 +12,6 @@ const orderSource = {
         return {order: {...props.order}, type: ItemTypes.ORDER };
     },
     endDrag(props, monitor) {
-        console.log('endDrop')
         if (monitor.getDropResult() && monitor.getDropResult().id) {
             props.addOrder(props.order, monitor.getDropResult().id);
         }
@@ -29,7 +28,7 @@ const collect = (
 })
 
 export function Order({ order, connectDragSource }) {
-    const { name, from, to, progress, dateTakeOff, dateLanding, tail } = order
+    const { name, from, to, progress, dateTakeOff, dateLanding, pay } = order
     const [expanded, setExpanded] = useState(false)
 
     // TODO кастом хук
@@ -49,7 +48,7 @@ export function Order({ order, connectDragSource }) {
                 </div>
                 <div className="order__header__row left">
                     <div>{from.iata} - {to.iata}</div>
-                    <div>{tail ? tail.name : null }</div>
+                    <div>{pay}</div>
                 </div>
                 <div className="small-font">
                    

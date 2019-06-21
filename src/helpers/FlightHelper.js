@@ -2,14 +2,16 @@
 import { MapActions } from '../constants/map-actions'
 
 export function getFlightInTime(flight, airports, orders, currentTime ) {
+    flight.pay = 0
+
     if (flight.orderId) {
         const order = orders[flight.orderId]
         flight.fromId = order.fromId
         flight.toId = order.toId
         flight.dateTakeOff = order.dateTakeOff
         flight.dateLanding = order.dateLanding
+        flight.pay = order.pay
     }
-
     
     flight.from = {...airports.find(value => value.id === flight.fromId)}
     flight.to = {...airports.find(value => value.id === flight.toId)}

@@ -3,11 +3,11 @@
 .timeline {
     display: flex;
     align-items: center;
+    font-family: monospace;
+    font-size: $text-size__large;
 
     &__current-time {
         margin-right: $offset__medium;
-        font-family: monospace;
-        font-size: $text-size__large;
     }
 
     &__button {
@@ -21,8 +21,6 @@
         align-items: center;
         justify-content: center;
         border-radius: 6px;
-        font-size: $text-size__large;
-        font-family: monospace;
         font-weight: bold;
         color: $white-color;
         cursor: pointer;
@@ -33,8 +31,27 @@
         }
     }
 
+    & > div.budget {
+        margin-left: $offset__large;
+        display: flex;
+        align-items: center;
+        font-size: 1.3em;
+        height: 1.3em;
+        
+        & > span {
+            display: flex;
+            align-items: center;
+            margin-bottom: 4px;
+            height: 1em;
+        }
+    }
+
     .disabled {
         background: $dark-color__red;
         cursor: default;
     }    
+}
+
+.currency-sign {
+    font-size: 1.4em;
 }

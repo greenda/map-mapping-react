@@ -14,6 +14,7 @@ const initialState = {
           status: 'progress',
           progress: 16,
           orderId: 1,
+          pay: 2000,
         },    
         2: {
           id: 2,
@@ -24,6 +25,7 @@ const initialState = {
           dateLanding: moment.utc('2000-01-01T16:00:00+00:00'),
           status: 'planed',
           progress: -1,
+          pay: 3000,
           },
         3: {
           id: 3,
@@ -35,6 +37,7 @@ const initialState = {
           dateLanding: moment.utc('2000-01-01T24:00:00+00:00'),
           status: 'planed',
           progress: -1,
+          pay: 2300,
         }
     }
 }

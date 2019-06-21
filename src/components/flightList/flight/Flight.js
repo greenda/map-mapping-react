@@ -32,7 +32,7 @@ export function Flight({ flight, connectDropTarget, isOver, canDrop, onRemove })
                 </div>
                 <div className="flight__header__row left">
                     <div>{from.iata && to.iata ? `${from.iata} - ${to.iata}` : '' }</div>
-                    <div>{tail ? tail.name : null }</div>
+                    <div>{tail ? tail.name : null }</div>                    
                 </div>
                 <div className="small-font">
                    
@@ -49,9 +49,10 @@ export function Flight({ flight, connectDropTarget, isOver, canDrop, onRemove })
 
 function getDetails(expanded, flight) {
     if (expanded) {
-        const {  status, progress } = flight
+        const {  status, progress, pay } = flight
         return (
             <div>
+                <div>{pay}</div>
                 <div>{progress >= 0 ? Math.floor(progress) : null}</div>            
                 <div className="progressbar__container">
                     <div style={{ left: -1 * (100 - progress) + '%', transition: 'left 1000ms ease-in'  }} className="progressbar__bar"></div>

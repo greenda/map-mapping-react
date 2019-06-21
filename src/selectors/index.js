@@ -12,6 +12,7 @@ export const maxTimeSelector = (state) => state.time.maxTime
 export const ordersObjectSelector = (state) => state.orders.items
 export const ordersSelector = (state) => Object.values(state.orders.items)
 export const orderIdsSelector = (state) => Object.keys(state.orders.items).map(value => +value).reverse()
+export const currentBudgetSelector = (state) => state.money.currentBudget
 
 export const flightsDetailSelector = createSelector(
     flightsSelector,
