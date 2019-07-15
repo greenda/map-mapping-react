@@ -49,10 +49,11 @@ export function Flight({ flight, connectDropTarget, isOver, canDrop, onRemove })
 
 function getDetails(expanded, flight) {
     if (expanded) {
-        const {  status, progress, pay } = flight
+        const {  status, progress, pay, cost } = flight
         return (
             <div>
-                <div>{pay}</div>
+                <div>cost: {cost}</div>
+                <div>pay: {pay}</div>                
                 <div>{progress >= 0 ? Math.floor(progress) : null}</div>            
                 <div className="progressbar__container">
                     <div style={{ left: -1 * (100 - progress) + '%', transition: 'left 1000ms ease-in'  }} className="progressbar__bar"></div>

@@ -15,6 +15,7 @@ const initialState = {
           progress: 16,
           orderId: 1,
           pay: 2000,
+          cost: 1200,
         },    
         2: {
           id: 2,
@@ -26,6 +27,7 @@ const initialState = {
           status: 'planed',
           progress: -1,
           pay: 3000,
+          cost: 500,
           },
         3: {
           id: 3,
@@ -38,6 +40,7 @@ const initialState = {
           status: 'planed',
           progress: -1,
           pay: 2300,
+          cost: 600,
         }
     }
 }
@@ -48,9 +51,9 @@ export function ordersReducer(state = initialState, action) {
   const flight = flightId ? state[flightId] : {};
   switch (type) {  
     case pageActionTypes.GENERATE_ORDERS:
-      const { maxTime, maxFlightId, airports } = payload
+      const { maxTime, maxFlightId, airports, airportDistances } = payload
       // TODO переименовать в generateOrders
-      const newOrder = generateFlights(maxTime, maxFlightId, airports)
+      const newOrder = generateFlights(maxTime, maxFlightId, airports, airportDistances)
       const result = {...state}      
       // TODO inmuttable
       newOrder.forEach((value) => {

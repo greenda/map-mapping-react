@@ -44,10 +44,10 @@ export function decrementTime(value) {
   }
 }
 
-export function generateOrders(maxTime, maxFlightId, airports) {
+export function generateOrders(maxTime, maxFlightId, airports, airportDistances) {
   return {
     type: pageActionTypes.GENERATE_ORDERS,
-    payload: { maxTime, maxFlightId, airports }
+    payload: { maxTime, maxFlightId, airports, airportDistances }
   }
 }
 
@@ -58,10 +58,10 @@ export function addOrder(order, flightId) {
   }
 }
 
-export function checkMoney(flights, maxTime, currentTime) {
+export function checkMoney(flights, tails, maxTime, currentTime) {
   return {
     type: pageActionTypes.CHECK_MONEY,
-    payload: { flights, maxTime, currentTime }
+    payload: { flights, tails, maxTime, currentTime }
   }
 }
 

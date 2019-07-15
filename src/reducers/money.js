@@ -7,7 +7,7 @@ const initialState = {
 
 export function moneyReducer(state = initialState, action) {
     const { type, payload = {} } = action
-    const { flights, maxTime, currentTime } = payload
+    const { flights, maxTime, currentTime, tails } = payload
 
     switch (type) {  
         case pageActionTypes.CHECK_MONEY:
@@ -15,8 +15,15 @@ export function moneyReducer(state = initialState, action) {
                 let budget = state.currentBudget
                 flights.forEach(flight => {
                     if (flight.dateLanding.isSame(currentTime)) {
-                        console.log('pay')
-                        budget = budget + flight.pay
+                        console.log('pay by flight ' + (flight.pay - flight.cost))
+                        budget = budget + flight.pay - flight.cost
+                    }
+                })
+                
+                tails.forEach(tail => {
+                    if (tail.airport) {
+                        console.log('pay by airport ' + tail.airport.costOnHour)
+                        budget = budget - tail.airport.costOnHour
                     }
                 })
                 return {...state, currentBudget: budget }

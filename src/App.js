@@ -7,11 +7,11 @@ import FlightList from '../src/components/flightList/FlightList'
 import TailList from '../src/components/tailList/TailList'
 import OrderList from '../src/components/orderList/OrderList'
 import MapContainer from '../src/components/map/MapContainer'
-import { orderIdsSelector, flightIdsSelector, maxFlightIdSelector, flightsSelector } from '../src/selectors/index'
+import { orderIdsSelector, flightIdsSelector, maxFlightIdSelector, flightsSelector, tailCoordinates } from '../src/selectors/index'
 import logo from '../src/assets/map-mapping-logo.svg'
 import './App.scss';
 // TODO flights Вынести на этот уровень, чтобы два раза не просчитывать
-function App ({ orderIds, flights, flightIds, maxFlightId }) {
+function App ({ orderIds, flights, tails, flightIds, maxFlightId }) {
   return (
     
       <div className="main-container">
@@ -21,6 +21,7 @@ function App ({ orderIds, flights, flightIds, maxFlightId }) {
             </div>
             <div className="section-container tails-section">
               <div className="section-container__header"><span>Tails</span></div>
+              {/* TODO tails передавать с этого уровня */}
               <div className="section-container__content"><TailList /></div>
             </div>
             <div className="section-container flights-section">
@@ -33,7 +34,7 @@ function App ({ orderIds, flights, flightIds, maxFlightId }) {
             </div>
           </div>
         <div className="main-container__column main-container__map-column">
-          <div><Timeline flights={flights} /></div>
+          <div><Timeline flights={flights} tails={tails}/></div>
           <MapContainer />
         </div>
       </div>
@@ -46,7 +47,8 @@ export default DragDropContext(HTML5Backend)(
       orderIds: orderIdsSelector(state),
       flightIds: flightIdsSelector(state),   
       flights: flightsSelector(state),
-      maxFlightId: maxFlightIdSelector(state),   
+      maxFlightId: maxFlightIdSelector(state),  
+      tails: tailCoordinates(state),
     })
   )(App)
 );

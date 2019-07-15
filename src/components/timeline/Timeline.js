@@ -10,9 +10,9 @@ import './Timeline.scss'
 //     decrementTime: Function,
 //  }
 
-function Timeline({ flights, maxTime, currentTime, incrementTime, decrementTime, currentBudget, checkMoney }) {
+function Timeline({ flights, tails, maxTime, currentTime, incrementTime, decrementTime, currentBudget, checkMoney }) {
     useEffect(() => {   
-        checkMoney(flights, maxTime, currentTime)
+        checkMoney(flights, tails, maxTime, currentTime)
     }, [maxTime])
     const [ interval, setIntervalConst ] = useState()
 

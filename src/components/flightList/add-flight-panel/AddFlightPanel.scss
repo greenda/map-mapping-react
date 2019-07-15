@@ -12,6 +12,11 @@
         color: $focus-color__red;
     }
 
+    &__cost {
+        font-family: Arial;
+        font-size: 14px;
+    }
+    
     &__header {
         display: flex;
         flex-direction: column;
@@ -54,12 +59,17 @@
     margin-bottom: $offset__small;
 }
 
+
 .right-offset {
     margin-right: $offset__small;
 
     &__small {
         margin-right: $offset__ultra-small;
     }
+}
+
+.left-align {
+    justify-content: left;
 }
 
 .airport-selector {

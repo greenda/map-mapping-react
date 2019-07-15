@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { maxTimeSelector, airportsSelector } from '../../selectors/index'
+import { maxTimeSelector, airportsSelector, distanceBetweenAirportsSelector } from '../../selectors/index'
 import Flight from './flight/Flight'
 import AddFlightPanel from './add-flight-panel/AddFlightPanel'
 import { addFlight, addEmptyFlight, removeFlight } from '../../actions/pageActions'
 import './FlightList.scss'
 
-export function FlightList({flightIds, airports, maxFlightId, addFlight, addEmptyFlight, removeFlight}) {  
+export function FlightList({flightIds, airports, maxFlightId, maxTime, airportDistances, addFlight, addEmptyFlight, removeFlight}) {  
     const [isAddPanel, setIsAddPanel] = useState(false)
 
     const toogleIsAddPanel = () => {
@@ -34,6 +34,8 @@ export function FlightList({flightIds, airports, maxFlightId, addFlight, addEmpt
                     airports, 
                     addFlight, 
                     maxFlightId, 
+                    maxTime,
+                    airportDistances,
                     () => setIsAddPanel(false),
                     () => setIsAddPanel(false))
                   }
@@ -43,15 +45,18 @@ export function FlightList({flightIds, airports, maxFlightId, addFlight, addEmpt
     )
 }
 
-function getAddPanel(isAddPanel, airports, addFlight, maxFlightId, onCancelCallback, onSaveCallback) {
+function getAddPanel(isAddPanel, airports, addFlight, maxFlightId, 
+    maxTime, airportDistances, onCancelCallback, onSaveCallback) {
     if (isAddPanel) {
         return (
             <AddFlightPanel 
                 airports={airports} 
                 addFlight={addFlight} 
                 maxFlightId={maxFlightId}
+                maxTime={maxTime}
                 onCancel={onCancelCallback}
-                onSave={onSaveCallback} />
+                onSave={onSaveCallback} 
+                airportDistances={airportDistances}/>
         )
     } 
     return (<div></div>)
@@ -63,7 +68,9 @@ FlightList.propTypes = {
 
 export default connect(
     (state) => ({        
-        airports: airportsSelector(state),        
+        airports: airportsSelector(state),    
+        maxTime: maxTimeSelector(state),
+        airportDistances: distanceBetweenAirportsSelector(state),
     }),
     { addFlight, addEmptyFlight, removeFlight }
 )(FlightList)

@@ -13,6 +13,7 @@ export const ordersObjectSelector = (state) => state.orders.items
 export const ordersSelector = (state) => Object.values(state.orders.items)
 export const orderIdsSelector = (state) => Object.keys(state.orders.items).map(value => +value).reverse()
 export const currentBudgetSelector = (state) => state.money.currentBudget
+export const airportDistancesSelector = (state) => state.airports.distance
 
 export const flightsDetailSelector = createSelector(
     flightsSelector,
@@ -103,4 +104,14 @@ export const orderByIdSelector = createSelector(
 export const maxFlightIdSelector = createSelector(
     flightIdsSelector,
     (ids) => Math.max(...ids)
+)
+
+// TODO в часах
+export const distanceBetweenAirportsSelector = createSelector(
+    airportDistancesSelector,
+    (distances) => {
+        return (airport1Id, airport2Id) => {
+            return Math.round(distances[airport1Id][airport2Id] / 760)
+        }
+    }
 )

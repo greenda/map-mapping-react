@@ -4,7 +4,7 @@ import moment from 'moment'
 
 const initialState = {
     currentTime: moment.utc('2000-01-01T10:00:00+00:00'),
-    maxTime: moment.utc('2000-01-01T10:00:00+00:00'),
+    maxTime: moment.utc('2000-01-01T10:01:00+00:00'),
 }
 
 export function timeReducer(state = initialState, action) {

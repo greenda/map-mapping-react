@@ -28,7 +28,7 @@ const collect = (
 })
 
 export function Order({ order, connectDragSource }) {
-    const { name, from, to, progress, dateTakeOff, dateLanding, pay } = order
+    const { name, from, to, progress, dateTakeOff, dateLanding, pay, cost } = order
     const [expanded, setExpanded] = useState(false)
 
     // TODO кастом хук
@@ -48,7 +48,9 @@ export function Order({ order, connectDragSource }) {
                 </div>
                 <div className="order__header__row left">
                     <div>{from.iata} - {to.iata}</div>
-                    <div>{pay}</div>
+                </div>
+                <div className="order__header__row left">
+                    <div>cost: {cost}, pay: {pay}</div>
                 </div>
                 <div className="small-font">
                    

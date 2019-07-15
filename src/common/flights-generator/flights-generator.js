@@ -2,7 +2,7 @@ const maxHourOffset = 24
 const minHourOffset = 2
 const randomCoeff = 0.8
 
-export function generateFlights(maxTime, maxFlightId, airports) {
+export function generateFlights(maxTime, maxFlightId, airports, airportDistances) {
     if (Math.random() > randomCoeff) {
         const timeOffset = Math.round((Math.random() * (maxHourOffset - minHourOffset)  + minHourOffset))
         const flightLenght = 10
@@ -13,10 +13,13 @@ export function generateFlights(maxTime, maxFlightId, airports) {
         airportIds.splice(index, 1)
         index = Math.round(Math.random() * (airportIds.length - 1))
         const toId =  airportIds[index]
-        // TODO в зависимости от растояния + рандомная наценка
-        const pay = Math.round(Math.random() * 10000)
+        // TODO fuelCost в справочник
+        const cost = airportDistances(fromId, toId) * 100
+        const pay = cost + Math.round(1000 + Math.random() * 1000)
         return [ 
             {
+                pay,
+                cost,
                 id: maxFlightId + 1,
                 name: `Flight ${maxFlightId + 1}`,
                 tail: null,
@@ -27,7 +30,6 @@ export function generateFlights(maxTime, maxFlightId, airports) {
                 dateLanding: startTime.clone().add(flightLenght, 'hours'),
                 status: 'planned',
                 progress: -1,
-                pay: pay,
             }
         ]
     }
