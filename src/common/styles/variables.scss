@@ -23,4 +23,18 @@ $text-size__large: 1.5em;
 $text-size__medium: 1.2em;
 $text-size__small: 1em;
 
+@mixin scrollbar {
+
+    &::-webkit-scrollbar {
+        width: 0.8em;
+    }
+
+    &::-webkit-scrollbar-thumb {
+    background-color: $medium-color__blue;
+    outline: 1px solid slategrey;
+    border: solid 1px $gray-color__1;
+    border-radius: $border-radius__medium;
+    }
+}
+
 

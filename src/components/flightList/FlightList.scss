@@ -1,25 +1,36 @@
 @import '../../common/styles/variables.scss';
 
 .flight-list-container {
-    padding-top: $offset__small;
-    padding-left: $offset__small;
-
-    & > div > .flight__container {
-        margin-bottom: $offset__ultra-small;
-    }
-
-    &:last-child {
-        margin-bottom: 0px;
-    }
+    position: relative;
+    height: 100%;
+    padding-right: 0px;
 
     &__add-buttons {
-        margin: 0px 0px $offset__small 0px;
+        padding: $offset__small;
         display: flex;
         justify-content: space-between;
         
         & > input:first-child {
             margin-right: $offset__small;
         }
+    }
+
+    &__flights {
+        height: 80%;
+        overflow-y: auto;
+        @include scrollbar;
+
+        & > .flight__container {
+            margin-bottom: $offset__ultra-small;
+        }
+
+        &:last-child {
+            margin-bottom: 0px;
+        }
+    }
+
+    &__add-panel {
+        height: 80%;
     }
 }
 
