@@ -8,10 +8,10 @@ export function addTail(tail, flightId) {
   }
 }
 
-export function addFlight(flight, flightId) {
+export function addFlight(flight) {
   return {
     type: pageActionTypes.ADD_FLIGHT,
-    payload: { flight, flightId },
+    payload: { flight },
   }
 }
 

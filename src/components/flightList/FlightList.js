@@ -10,7 +10,7 @@ import {
 import Flight from './flight/Flight'
 import AddFlightPanel from './add-flight-panel/AddFlightPanel'
 import { addFlight, addEmptyFlight, removeFlight } from '../../actions/pageActions'
-import useToggler from '../../custom-hooks/toogle-open'
+import useToggler from '../../common/custom-hooks/toogle-open'
 import './FlightList.scss'
 
 export function FlightList({
@@ -23,6 +23,13 @@ export function FlightList({
     addEmptyFlight,
     removeFlight}) {      
     const { expanded: isAddPanel, setExpanded: setIsAddPanel } = useToggler()
+    const onSave = (newFlight) => {
+        addFlight(newFlight)
+        setIsAddPanel(false)
+    }
+    const onCancel = () => {
+        setIsAddPanel(false)
+    }
     
    
     return (
@@ -30,13 +37,13 @@ export function FlightList({
             {getAddButtons(isAddPanel, maxFlightId, addEmptyFlight, setIsAddPanel)}
             {getAddPanel(
                     isAddPanel, 
-                    airports, 
-                    addFlight, 
+                    airports,  
                     maxFlightId, 
                     maxTime,
                     airportDistances,
-                    () => setIsAddPanel(false),
-                    () => setIsAddPanel(false))}
+                    onSave,
+                    onCancel
+                    )}
             {getFlights(isAddPanel, flightIds, removeFlight)}     
         </div>
     )
@@ -73,14 +80,13 @@ function getFlights(isAddPanel, flightIds, removeFlight) {
     return (<div></div>)
 }
 
-function getAddPanel(isAddPanel, airports, addFlight, maxFlightId, 
-    maxTime, airportDistances, onCancelCallback, onSaveCallback) {
+function getAddPanel(isAddPanel, airports, maxFlightId, 
+    maxTime, airportDistances, onSaveCallback, onCancelCallback) {
     if (isAddPanel) {
         return (
             <div className="flight-list-container__add-panel">
                 <AddFlightPanel 
                     airports={airports} 
-                    addFlight={addFlight} 
                     maxFlightId={maxFlightId}
                     maxTime={maxTime}
                     onCancel={onCancelCallback}

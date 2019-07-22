@@ -15,14 +15,14 @@ export function moneyReducer(state = initialState, action) {
                 let budget = state.currentBudget
                 flights.forEach(flight => {
                     if (flight.dateLanding.isSame(currentTime)) {
-                        console.log('pay by flight ' + (flight.pay - flight.cost))
+                        // console.log('pay by flight ' + (flight.pay - flight.cost))
                         budget = budget + flight.pay - flight.cost
                     }
                 })
                 
                 tails.forEach(tail => {
                     if (tail.airport) {
-                        console.log('pay by airport ' + tail.airport.costOnHour)
+                        // console.log('pay by airport ' + tail.airport.costOnHour)
                         budget = budget - tail.airport.costOnHour
                     }
                 })

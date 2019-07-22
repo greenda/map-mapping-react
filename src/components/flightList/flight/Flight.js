@@ -4,7 +4,7 @@ import PropTypes, { number, string } from 'prop-types'
 import { ItemTypes } from '../../../constants/item-types';
 import { DropTarget } from 'react-dnd';
 import { flightByIdSelector } from '../../../selectors/index'
-import useToggler from '../../../custom-hooks/toogle-open'
+import useToggler from '../../../common/custom-hooks/toogle-open'
 import ProgressBar from './progress-bar/ProgressBar'
 import './Flight.scss'
 

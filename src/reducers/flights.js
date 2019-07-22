@@ -51,7 +51,7 @@ export function flightsReducer(state = initialState, action) {
 
       return {...state}
     case pageActionTypes.ADD_FLIGHT:
-      newState[flightId] = payload.flight
+      newState[payload.flight.id] = payload.flight
       return newState     
     case pageActionTypes.ADD_EMPTY_FLIGHT:
       // TODO вынести создание пустого в хелпер
