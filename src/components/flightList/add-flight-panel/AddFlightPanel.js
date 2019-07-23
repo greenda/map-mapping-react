@@ -22,57 +22,59 @@ export function AddFlightPanel({
     return (
         <form className="flight__container" onSubmit={hundleSubmit}>
             <div className="new-flight__header">
-                 <div className="new-flight__header__row">
-                     <div className="new-flight__name">{inputs.name}</div>
-                 </div>
-                 <div className="new-flight__header__row">
-                     <div className="new-flight__header__row right-offset">
-                     <span className="right-offset__small">from:</span> 
-                        {airportSelect('fromId', inputs, handleInputChange)}
+                <div className="new-flight__header__row">
+                    <div className="new-flight__name">{inputs.name}</div>
+                </div>
+                <div className="new-flight__header__row">
+                    <div className="new-flight__header__row right-offset">
+                    <span className="new-flight__label right-offset__large">from:</span> 
+                    {airportSelect('fromId', inputs, handleInputChange)}
+                </div>
+                    <div className="new-flight__header__row right-offset">
+                    <span className="new-flight__label">to:</span>
+                    {airportSelect('toId', inputs, handleInputChange)}
                     </div>
-                     <div className="new-flight__header__row right-offset">
-                     <span className="right-offset__small">to:</span>
-                        {airportSelect('toId', inputs, handleInputChange)}
-                     </div>
-                 </div>
-                 <div>takeOff:</div>
-                 <div className="new-flight__header__row bottom-offset">
-                     <TextField
-                         id="datetime-local"
-                         type="datetime-local"                         
-                         InputProps={{ 
-                             disableUnderline: true,
-                             style: {fontSize: 14} 
-                         }}
-                         name="dateTakeOff"
-                         value={inputs.dateTakeOff}
-                         onChange={handleInputChange}
-                     />                        
-                 </div>
-                 <div>landing</div>
-                 <div className="new-flight__header__row bottom-offset">
-                     <TextField
-                         id="datetime-local"
-                         type="datetime-local"
-                         className="date-input"
-                         InputProps={{ 
-                             disableUnderline: true,
-                             style: {fontSize: 14, padding: '0px'} 
-                         }}
-                         name="dateLanding"
-                         value={inputs.dateLanding}
-                         disabled
-                     />                        
-                 </div>
-                 <div className="new-flight__header__row left-align">
-                     <span>cost: </span>
-                     <span className="new-flight__cost">{inputs.cost}</span> 
-                 </div>
-                 <div className="new-flight__control-buttons">
-                     <input type="button" value="Cancel" onClick={hundleCancel}/>
-                     <input type="submit" value="Save"/>
-                 </div>                    
-             </div>
+                </div>
+                <div className="new-flight__header__row">
+                   <div className="new-flight__label">takeOff: </div>                  
+                    <TextField
+                        id="datetime-local"
+                        type="datetime-local"                         
+                        InputProps={{ 
+                            disableUnderline: true,
+                            style: {fontSize: 14} 
+                        }}
+                        name="dateTakeOff"
+                        value={inputs.dateTakeOff}
+                        onChange={handleInputChange}
+                    />                        
+                </div>                
+                <div className="new-flight__header__row">
+                        <div className="new-flight__label">landing:</div>
+                        <TextField
+                            id="datetime-local"
+                            type="datetime-local"
+                            className="date-input"
+                            InputProps={{ 
+                                disableUnderline: true,
+                                style: {fontSize: 14} 
+                            }}
+                            name="dateLanding"
+                            value={inputs.dateLanding}
+                            disabled
+                        />    
+                </div>
+                <div className="new-flight__header__row">
+                    <div>
+                        <span className="new-flight__label">cost: </span>
+                        <span className="new-flight__cost">{inputs.cost}</span> 
+                    </div>
+                </div>
+                <div className="new-flight__control-buttons">
+                    <input type="button" value="Cancel" onClick={hundleCancel}/>
+                    <input type="submit" value="Save"/>
+                </div>                    
+            </div>
         </form>
     )
 }

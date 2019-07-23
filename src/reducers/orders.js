@@ -47,8 +47,8 @@ const initialState = {
 
 export function ordersReducer(state = initialState, action) {
   const { type, payload = {} } = action
-  const { flightId } = payload
-  const flight = flightId ? state[flightId] : {};
+  // const { flightId } = payload
+  // const flight = flightId ? state[flightId] : {};
   switch (type) {  
     case pageActionTypes.GENERATE_ORDERS:
       const { maxTime, maxFlightId, airports, airportDistances } = payload

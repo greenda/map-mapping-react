@@ -1,6 +1,5 @@
 import { pageActionTypes } from '../constants/action-types';
 // import { generateFlights } from '../common/flights-generator/flights-generator'
-import moment from 'moment'
 
 const initialState = {
     1: {
@@ -12,6 +11,7 @@ const initialState = {
       progress: 16,
       orderId: 1,
     },    
+    // TODO где-то срабатывает isSame на null
     // 2: {
     //   id: 2,
     //   name: 'Flight 2',
