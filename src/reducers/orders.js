@@ -16,6 +16,7 @@ const initialState = {
           orderId: 1,
           pay: 2000,
           cost: 1200,
+          description: 'Груз кускуса с овощами для праздника Лори',
         },    
         2: {
           id: 2,
@@ -28,6 +29,7 @@ const initialState = {
           progress: -1,
           pay: 3000,
           cost: 500,
+          description: 'Груз сколопендр для семейного ужина в Бо–Кап',
           },
         3: {
           id: 3,
@@ -41,6 +43,7 @@ const initialState = {
           progress: -1,
           pay: 2300,
           cost: 600,
+          description: 'Груз алмазов для ювелирной мастерской в старом городе',
         }
     }
 }

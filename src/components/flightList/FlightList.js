@@ -30,7 +30,6 @@ export function FlightList({
     const onCancel = () => {
         setIsAddPanel(false)
     }
-    
    
     return (
         <div className="flight-list-container">

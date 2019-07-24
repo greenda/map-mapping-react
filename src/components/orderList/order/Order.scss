@@ -49,6 +49,10 @@
         color: $white-color;
         cursor: pointer;
     }
+
+    &__description {
+        font-size: 12px;
+    }
 }
 
 @include progressbar;

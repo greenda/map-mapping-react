@@ -51,10 +51,10 @@ export function generateOrders(maxTime, maxFlightId, airports, airportDistances)
   }
 }
 
-export function addOrder(order, flightId) {
+export function addOrder(orderId, flightId) {
   return {
     type: pageActionTypes.ADD_ORDER,
-    payload: { order, flightId }
+    payload: { orderId, flightId }
   }
 }
 

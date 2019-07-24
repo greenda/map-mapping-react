@@ -1,27 +1,25 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
-// import PropTypes, { number, string } from 'prop-types'
+import PropTypes, { number, string, object, func } from 'prop-types'
+import { DragSource } from 'react-dnd'
+import moment from 'moment'
 import { orderByIdSelector } from '../../../selectors/index'
-import { DragSource } from 'react-dnd';
-import { ItemTypes } from '../../../constants/item-types';
+import { ItemTypes } from '../../../constants/item-types'
+import useToggler from '../../../common/custom-hooks/toogle-open'
 import './Order.scss'
 
 const orderSource = {
     beginDrag(props) {
-        // TODO только нужные поля
-        return {order: {...props.order}, type: ItemTypes.ORDER };
+        return {orderId: props.order.id, type: ItemTypes.ORDER };
     },
     endDrag(props, monitor) {
         if (monitor.getDropResult() && monitor.getDropResult().id) {
-            props.addOrder(props.order, monitor.getDropResult().id);
+            props.addOrder(props.order.id, monitor.getDropResult().id);
         }
     },
 };
 
-const collect = (
-    connect,
-    monitor,
-) => ({
+const collect = (connect, monitor) => ({
     connectDragSource: connect.dragSource(),
     connectDragPreview: connect.dragPreview(),
     isDragging: monitor.isDragging(),
@@ -29,22 +27,15 @@ const collect = (
 
 export function Order({ order, connectDragSource }) {
     const { name, from, to, progress, dateTakeOff, dateLanding, pay, cost } = order
-    const [expanded, setExpanded] = useState(false)
+    const { expanded, toggleExpanded } = useToggler(false)
 
-    // TODO кастом хук
-    const toggleExpanded = () => {
-        setExpanded(!expanded)
-    }
-
-    // TODO - прогресс бар в отдельный компонент    
     return connectDragSource(
-        <div className={`order__container 
-            ${progress > 100 ? 'ended' : ''}`
-            }>
+        <div className={`order__container ${progress > 100 ? 'ended' : ''}`}>
             <div className="order__header">
                 <div className="order__header__row">
                     <div className="order__name">{name}</div>
-                    <div className="order__expand-button" onClick={toggleExpanded}>{expanded ? '-' : '+'}</div>
+                    <div className="order__expand-button" 
+                        onClick={toggleExpanded}>{expanded ? '-' : '+'}</div>
                 </div>
                 <div className="order__header__row left">
                     <div>{from.iata} - {to.iata}</div>
@@ -53,10 +44,9 @@ export function Order({ order, connectDragSource }) {
                     <div>cost: {cost}, pay: {pay}</div>
                 </div>
                 <div className="small-font">
-                   
-                    <div>{dateTakeOff.format('DD.MM HH:mm')} - {dateLanding.format('DD.MM HH:mm')}</div>
-                </div>
-                
+                    <div>{`${dateTakeOff.format('DD.MM HH:mm')} - 
+                           ${dateLanding.format('DD.MM HH:mm')}`}</div>
+                </div>                
             </div>
             
             {getDetails(expanded, order)}
@@ -65,58 +55,41 @@ export function Order({ order, connectDragSource }) {
 }
 
 function getDetails(expanded, order) {
-    if (expanded) {
-        return (
-            <div>Описание</div>
-            )
-    } else {
-        return (<div></div>)
-    }
+    return (expanded && order.description) ? (<div className="order__description">{order.description}</div>) : (<div></div>)
 }
 
-// TODO debounce
-// const flightTarget = {
-// 	canDrop(props, monitor) {
-//         return props.flight.fromId === monitor.getItem().airportId 
-//             && monitor.getItem().progress === -1
-//             && props.flight.progress === -1
-// 	},
+Order.propTypes = {
+    order: PropTypes.shape({
+        id: number,
+        name: string,
+        fromId: number,
+        toId: number,
+        dateTakeOff: PropTypes.instanceOf(moment),
+        dateLanding: PropTypes.instanceOf(moment),
+        status: string,
+        progress: number,
+        orderId: number,
+        pay: number,
+        cost: number,
+    }),
+    flight: PropTypes.shape({ 
+        id: number, 
+        name: string,
+        tailId: number,
+        from: object,
+        to: object,
+        fromIata: string,
+        toIata: string,
+        dateTakeOff: object,
+        dateLanding: object,
+        status: string
+    }),
+    addOrder: func,    
+    connectDragSource: func, 
+}
 
-// 	drop(props) {
-//         return { id: props.flight.id };
-//     }
-// }
-
-// const collect = (
-// 	connect,
-// 	monitor,
-// ) => {
-// 	return {
-// 		connectDropTarget: connect.dropTarget(),
-// 		isOver: !!monitor.isOver(),
-// 		canDrop: !!monitor.canDrop(),
-// 	}
-// }
-
-// Order.propTypes = {
-//     addOrder
-//     flight: PropTypes.shape({ 
-//         id: number, 
-//         name: string,
-//         tailId: number,
-//         from: PropTypes.object,
-//         to: PropTypes.object,
-//         fromIata: PropTypes.string,
-//         toIata: PropTypes.string,
-//         dateTakeOff: PropTypes.object,
-//         dateLanding: PropTypes.object,
-//         status: string
-//     })
-// }
-
-export default 
-    connect(
+export default connect(
         (state, ownProps) => ({
             order: orderByIdSelector(state, ownProps),
         }),
-    )(DragSource(ItemTypes.ORDER, orderSource, collect)(Order))
+)(DragSource(ItemTypes.ORDER, orderSource, collect)(Order))

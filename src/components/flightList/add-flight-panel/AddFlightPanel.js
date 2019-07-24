@@ -101,8 +101,7 @@ AddFlightPanel.propTypes = {
             costOnHour: number,
         })
     ), 
-    // TODO
-    // airportDistances: PropTypes.fun,
+    airportDistances: PropTypes.func,
     maxTime: PropTypes.instanceOf(moment),
     maxFlightId: number,
     onSave: func,

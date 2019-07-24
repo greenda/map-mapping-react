@@ -43,10 +43,10 @@ export function flightsReducer(state = initialState, action) {
     case pageActionTypes.ADD_ORDER:
       // TODO правильно оформить изменение массива
       // TODO Передавать только orderId
-      const { order } = action.payload;
-
+      const { orderId } = action.payload;
+      
       if (flight) {
-        flight.orderId = order.id
+        flight.orderId = orderId
       }
 
       return {...state}
