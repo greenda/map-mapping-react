@@ -7,7 +7,8 @@ const CELL_WIDTH_SCALE = 10
 const TIMELINE_OFFSET_HOURS = 2
 
 export function ScheduleTable({tails, flights, currentTime}) {
-    const tailRows = tails.map(tail => {
+    const tailsCount = tails.length
+    const tailRows = tails.map((tail, i) => {
         const flightCels = flights.filter(flight => flight.tailId === tail.id).map(flight => {
             
             const leftOffset = CELL_WIDTH_SCALE * (flight.dateTakeOff.diff(currentTime, 'hours') + TIMELINE_OFFSET_HOURS)
@@ -17,13 +18,13 @@ export function ScheduleTable({tails, flights, currentTime}) {
             </div>)
         })
         return (
-            <div key={`tail${tail.id}`} className="schedule__row">{flightCels}</div>
+            <div key={`tail${tail.id}`} className={`schedule__row ${(tailsCount - 1) === i ? 'last' : ''}`}>{flightCels}</div>
         )
     })
 
     return (
         <div className="schedule__container">
-            {tailRows}
+            {tailRows}   
             <div className="schedule__timeline" 
                  style={{left: `${TIMELINE_OFFSET_HOURS * CELL_WIDTH_SCALE}px`}}></div>
         </div>

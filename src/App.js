@@ -9,73 +9,91 @@ import OrderList from '../src/components/orderList/OrderList'
 import MapContainer from '../src/components/map/MapContainer'
 import ScheduleTable from '../src/components/schedule/ScheduleTable'
 import { orderIdsSelector, flightIdsSelector, maxFlightIdSelector,
-  flightsSelector, tailCoordinates, currentTimeSelector, flightsOnTime } from '../src/selectors/index'
+         flightsSelector, tailCoordinates, currentTimeSelector, flightsOnTime } from '../src/selectors/index'
 import logo from '../src/assets/map-mapping-logo.svg'
 import './App.scss';
 
 const tabNames = {
-  MAP_TAB: 'mapTab',
-  SCHEDULE_TAB: 'scheduleTab',
+    MAP_TAB: 'mapTab',
+    SCHEDULE_TAB: 'scheduleTab',
 }
 
 // TODO flights Вынести на этот уровень, чтобы два раза не просчитывать
 function App ({ orderIds, flights, tails, flightIds, maxFlightId, flightsOnTime, currentTime }) {
-  const [tabName, setTabName] = useState(tabNames.MAP_TAB)
+    const [tabName, setTabName] = useState(tabNames.MAP_TAB)
+    const getActiveClass = (name) => {
+        return tabName === name ? 'active' : ''
+    }
 
-
-  return (    
-      <div className="main-container">
-          <div className="main-container__column main-container__flight-column">
-            <div className="logo-container">
-              <img src={logo} alt="logo"></img>   
+    return (    
+        <div className="main-container">
+            <div className="main-container__column main-container__flight-column">
+                <div className="logo-container">
+                    <img src={logo} alt="logo"></img>   
+                </div>
+                <div className="section-container tails-section">
+                    <div className="section-container__header">
+                        <span>Tails</span>
+                    </div>
+                    {/* TODO tails передавать с этого уровня */}
+                    <div className="section-container__content">
+                        <TailList />
+                    </div>
+                </div>
+                <div className="section-container flights-section">
+                    <div className="section-container__header">
+                        <span>Flights</span>
+                    </div>
+                    <div className="section-container__content">
+                        <FlightList flightIds={flightIds} maxFlightId={maxFlightId}/>
+                    </div>
+                </div>
+                <div className="section-container orders-section">
+                    <div className="section-container__header">
+                        <span>Orders</span>
+                    </div>
+                    <div className="section-container__content">
+                        <OrderList orderIds={orderIds}/>
+                    </div>
+                </div>
             </div>
-            <div className="section-container tails-section">
-              <div className="section-container__header"><span>Tails</span></div>
-              {/* TODO tails передавать с этого уровня */}
-              <div className="section-container__content"><TailList /></div>
+            <div className="main-container__column main-container__map-column">
+            <div className="map-column__header">
+                <div><Timeline flights={flights} tails={tails}/></div>
+                <div className="map-column__tab-controls ">
+                <span className={`main-container__tab-control ${getActiveClass(tabNames.MAP_TAB)}`} 
+                        onClick={() => setTabName(tabNames.MAP_TAB)}>Map</span>
+                <span className={`main-container__tab-control ${getActiveClass(tabNames.SCHEDULE_TAB)}`}
+                        onClick={() => setTabName(tabNames.SCHEDULE_TAB)}>Shedule</span>
+                </div>
             </div>
-            <div className="section-container flights-section">
-              <div className="section-container__header"><span>Flights</span></div>
-              <div className="section-container__content"><FlightList flightIds={flightIds} maxFlightId={maxFlightId}/></div>
+            {getTabContent(tabName, tails, flightsOnTime, currentTime)}
             </div>
-            <div className="section-container orders-section">
-              <div className="section-container__header"><span>Orders</span></div>
-              <div className="section-container__content"><OrderList orderIds={orderIds}/></div>
-            </div>
-          </div>
-        <div className="main-container__column main-container__map-column">
-          <div><Timeline flights={flights} tails={tails}/></div>
-          <div>
-            <span className="main-container__tab-control" onClick={() => setTabName(tabNames.MAP_TAB)}>Map</span>
-            <span className="main-container__tab-control" onClick={() => setTabName(tabNames.SCHEDULE_TAB)}>Shedule</span>
-          </div>
-          {getTabContent(tabName, tails, flightsOnTime, currentTime)}
         </div>
-      </div>
-  );
+    );
 }
 
-function getTabContent(tabName, tails, flights, currentTime) {
-  switch(tabName) {
-    case tabNames.MAP_TAB: 
-      return <MapContainer />
-    case tabNames.SCHEDULE_TAB: 
-      return <ScheduleTable tails={tails} flights={flights} currentTime={currentTime}/>
-    default: return (<></>)
-  }          
-}
+    function getTabContent(tabName, tails, flights, currentTime) {
+    switch(tabName) {
+        case tabNames.MAP_TAB: 
+        return <MapContainer />
+        case tabNames.SCHEDULE_TAB: 
+        return <ScheduleTable tails={tails} flights={flights} currentTime={currentTime}/>
+        default: return (<></>)
+    }          
+    }
 
-export default DragDropContext(HTML5Backend)(
-    connect(
-    (state) => ({
-      orderIds: orderIdsSelector(state),
-      flightIds: flightIdsSelector(state),   
-      flights: flightsSelector(state),
-      flightsOnTime: flightsOnTime(state),
-      maxFlightId: maxFlightIdSelector(state),  
-      tails: tailCoordinates(state),
-      currentTime: currentTimeSelector(state),
-    })
-  )(App)
-);
+    export default DragDropContext(HTML5Backend)(
+        connect(
+        (state) => ({
+        orderIds: orderIdsSelector(state),
+        flightIds: flightIdsSelector(state),   
+        flights: flightsSelector(state),
+        flightsOnTime: flightsOnTime(state),
+        maxFlightId: maxFlightIdSelector(state),  
+        tails: tailCoordinates(state),
+        currentTime: currentTimeSelector(state),
+        })
+    )(App)
+    );
 

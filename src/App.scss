@@ -2,6 +2,7 @@
 
 $header-height: 40px;
 $content-height: calc(100% - #{$header-height});
+$map-width: 1100px;
 
 .App {
   text-align: center;
@@ -137,12 +138,49 @@ h1 {
 
         & > .map__container {
           margin-top: $offset__medium;
+          width: $map-width;
+        }
+
+        & > .schedule__container {
+          margin-top: $offset__medium;
+          width: $map-width;
         }
     }
 
     &__tab-control {
       padding: $offset__small;
       cursor: pointer;
+      font-weight: bold;
+      border: solid 1px $medium-color__yellow;
+      border-radius: $border-radius__medium $border-radius__medium 0px 0px;
+    }
+
+    &__tab-control.active {
+      border-bottom: solid 1px white;
+    }
+
+    .map-column {
+      &__header {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        
+        & > div:last-child {
+          margin-left: $offset__medium;
+        }
+      }
+
+      &__tab-controls {
+        border-bottom: solid 1px #dfc16d;
+        display: flex;
+        padding: 0px $offset__large 0px $offset__medium;
+
+        & > span {
+          margin-right: $offset__small;    
+          position: relative;
+          top: 1px;      
+        }
+      }
     }
 }
 
