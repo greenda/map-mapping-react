@@ -60,15 +60,8 @@ function getDetails(expanded, flight) {
 }
 
 const flightTarget = {    
-	canDrop(props, monitor) {
-        const dragItem = monitor.getItem()
-        if (dragItem.type === ItemTypes.TAIL) {
-            return (dragItem.tail.progress === -1
-                && props.flight.progress === -1)
-        } else if (dragItem.type === ItemTypes.ORDER) {
-            return true
-        }
-        return false
+	canDrop() {
+        return true
 	},
 
 	drop(props) {

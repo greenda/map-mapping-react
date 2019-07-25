@@ -64,13 +64,17 @@ export const tailCoordinates = createSelector(
     airportsSelector,    
     flightsSelector,
     currentTimeSelector,
-    (tails, airports, flights, _) => {
+    (tails, airports, flights, currentTime) => {
         return tails.map((tail) => {
-            const filteredFlight = flights.filter(flight => flight.tailId === tail.id)
+            const filteredFlight = 
+                flights.filter(flight => flight.tailId === tail.id &&
+                    flight.dateTakeOff &&
+                    flight.dateTakeOff.isBefore(currentTime))
             let tailAirport = tail.airportId ? airports.find(value => value.id === tail.airportId) : null
             let flightProgress = -1;
             if (filteredFlight.length > 0) {
-                const sortedFlights = filteredFlight.sort((a, b) => a.dateLanding.diff(b.dateLanding))
+                const sortedFlights = 
+                    filteredFlight.sort((a, b) => a.dateLanding.diff(b.dateLanding))
                 const endFlight = sortedFlights[sortedFlights.length - 1]
                 flightProgress = endFlight.progress 
                 switch (true) {
@@ -78,7 +82,7 @@ export const tailCoordinates = createSelector(
                     case flightProgress >= 100: tailAirport = airports.find(value => value.id === endFlight.toId); break;
                     default: tailAirport = null;
                 }
-            }
+            } 
             flightProgress = flightProgress < 100 ? flightProgress : -1
             
             return tailAirport ? 
