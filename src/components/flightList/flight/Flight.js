@@ -63,8 +63,7 @@ const flightTarget = {
 	canDrop(props, monitor) {
         const dragItem = monitor.getItem()
         if (dragItem.type === ItemTypes.TAIL) {
-            return (props.flight.fromId === dragItem.tail.airportId 
-                && dragItem.tail.progress === -1
+            return (dragItem.tail.progress === -1
                 && props.flight.progress === -1)
         } else if (dragItem.type === ItemTypes.ORDER) {
             return true
@@ -96,7 +95,7 @@ Flight.propTypes = {
         toIata: PropTypes.string,
         dateTakeOff: PropTypes.object,
         dateLanding: PropTypes.object,
-        status: string
+        status: string,
     }),
     isOver: PropTypes.bool.isRequired,
 }

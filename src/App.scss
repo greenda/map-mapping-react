@@ -139,6 +139,11 @@ h1 {
           margin-top: $offset__medium;
         }
     }
+
+    &__tab-control {
+      padding: $offset__small;
+      cursor: pointer;
+    }
 }
 
 .section-container {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux'
 import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend';
@@ -7,13 +7,23 @@ import FlightList from '../src/components/flightList/FlightList'
 import TailList from '../src/components/tailList/TailList'
 import OrderList from '../src/components/orderList/OrderList'
 import MapContainer from '../src/components/map/MapContainer'
-import { orderIdsSelector, flightIdsSelector, maxFlightIdSelector, flightsSelector, tailCoordinates } from '../src/selectors/index'
+import ScheduleTable from '../src/components/schedule/ScheduleTable'
+import { orderIdsSelector, flightIdsSelector, maxFlightIdSelector,
+  flightsSelector, tailCoordinates, currentTimeSelector, flightsOnTime } from '../src/selectors/index'
 import logo from '../src/assets/map-mapping-logo.svg'
 import './App.scss';
+
+const tabNames = {
+  MAP_TAB: 'mapTab',
+  SCHEDULE_TAB: 'scheduleTab',
+}
+
 // TODO flights Вынести на этот уровень, чтобы два раза не просчитывать
-function App ({ orderIds, flights, tails, flightIds, maxFlightId }) {
-  return (
-    
+function App ({ orderIds, flights, tails, flightIds, maxFlightId, flightsOnTime, currentTime }) {
+  const [tabName, setTabName] = useState(tabNames.MAP_TAB)
+
+
+  return (    
       <div className="main-container">
           <div className="main-container__column main-container__flight-column">
             <div className="logo-container">
@@ -35,10 +45,24 @@ function App ({ orderIds, flights, tails, flightIds, maxFlightId }) {
           </div>
         <div className="main-container__column main-container__map-column">
           <div><Timeline flights={flights} tails={tails}/></div>
-          <MapContainer />
+          <div>
+            <span className="main-container__tab-control" onClick={() => setTabName(tabNames.MAP_TAB)}>Map</span>
+            <span className="main-container__tab-control" onClick={() => setTabName(tabNames.SCHEDULE_TAB)}>Shedule</span>
+          </div>
+          {getTabContent(tabName, tails, flightsOnTime, currentTime)}
         </div>
       </div>
   );
+}
+
+function getTabContent(tabName, tails, flights, currentTime) {
+  switch(tabName) {
+    case tabNames.MAP_TAB: 
+      return <MapContainer />
+    case tabNames.SCHEDULE_TAB: 
+      return <ScheduleTable tails={tails} flights={flights} currentTime={currentTime}/>
+    default: return (<></>)
+  }          
 }
 
 export default DragDropContext(HTML5Backend)(
@@ -47,8 +71,10 @@ export default DragDropContext(HTML5Backend)(
       orderIds: orderIdsSelector(state),
       flightIds: flightIdsSelector(state),   
       flights: flightsSelector(state),
+      flightsOnTime: flightsOnTime(state),
       maxFlightId: maxFlightIdSelector(state),  
       tails: tailCoordinates(state),
+      currentTime: currentTimeSelector(state),
     })
   )(App)
 );
