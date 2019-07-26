@@ -1,4 +1,6 @@
-import { pageActionTypes } from '../constants/action-types';
+import { pageActionTypes } from '../constants/action-types'
+import moment from 'moment'
+import { getApproachFlight, getEmptyFlight } from '../helpers/FlightHelper'
 // import { generateFlights } from '../common/flights-generator/flights-generator'
 
 const initialState = {
@@ -11,18 +13,19 @@ const initialState = {
       progress: 16,
       orderId: 1,
     },    
-    // TODO где-то срабатывает isSame на null
-    // 2: {
-    //   id: 2,
-    //   name: 'Flight 2',
-    //   tail: null,
-    //   tailId: null,
-    //   fromId: null,
-    //   toId: null,
-    //   status: 'planned',
-    //   progress: -1,
-    //   orderId: null,
-    // },    
+    2: {
+      id: 2,
+      name: 'Flight 2',
+      tail: null,
+      tailId: 2,
+      fromId: 4,
+      toId: 5,
+      status: 'planned',
+      progress: -1,
+      orderId: null,
+      dateTakeOff: moment.utc('2000-01-01T18:00:00+00:00'),
+      dateLanding: moment.utc('2000-01-01T24:00:00+00:00'),
+    },    
   }
 
 export function flightsReducer(state = initialState, action) {
@@ -32,8 +35,7 @@ export function flightsReducer(state = initialState, action) {
   const newState =  {...state}
   switch (type) {    
     case pageActionTypes.ADD_TAIL:
-      const {tail} = action.payload;      
-
+      const { tail } = payload
       if (flight) {
         flight.tail = tail
         flight.tailId = tail.id
@@ -55,24 +57,14 @@ export function flightsReducer(state = initialState, action) {
       return newState     
     case pageActionTypes.ADD_EMPTY_FLIGHT:
       // TODO вынести создание пустого в хелпер
-      newState[flightId] = {
-        id: flightId,
-        name: 'Flight ' + flightId,
-        tail: null,
-        tailId: null,
-        fromId: null,
-        toId: null,
-        dateTakeOff: null,
-        dateLanding: null,
-        status: 'planned',
-        progress: -1,
-        orderId: null,
-        pay: 0,
-      }
+      newState[flightId] = getEmptyFlight(flightId)
       return newState
     case pageActionTypes.REMOVE_FLIGHT:
       delete newState[flightId]
       return newState 
+    case pageActionTypes.ADD_APPROACH_FLIGHT:
+      newState[payload.flight.id] = payload.flight
+      return newState
     default: return state;
   }
 }

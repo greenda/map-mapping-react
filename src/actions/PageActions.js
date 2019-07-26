@@ -29,6 +29,13 @@ export function removeFlight(flightId) {
   }
 }
 
+export function addApproachFlight(flight) {
+  return {
+    type: pageActionTypes.ADD_APPROACH_FLIGHT,
+    payload: { flight }
+  }
+}
+
 export function incrementTime(value) {
   return {
     type: pageActionTypes.INC_TIME,

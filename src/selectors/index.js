@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { getFlightInTime } from '../helpers/FlightHelper'
+import { getFlightInTime, getApproachFlight } from '../helpers/FlightHelper'
 
 export const currentTimeSelector = (state) => state.time.currentTime
 export const airportsSelector = (state) => Object.values(state.airports.items)
@@ -14,6 +14,7 @@ export const ordersSelector = (state) => Object.values(state.orders.items)
 export const orderIdsSelector = (state) => Object.keys(state.orders.items).map(value => +value).reverse()
 export const currentBudgetSelector = (state) => state.money.currentBudget
 export const airportDistancesSelector = (state) => state.airports.distance
+export const fuelCostSelector = (_) => 100
 
 export const flightsDetailSelector = createSelector(
     flightsSelector,
@@ -116,6 +117,19 @@ export const distanceBetweenAirportsSelector = createSelector(
     (distances) => {
         return (airport1Id, airport2Id) => {
             return Math.round(distances[airport1Id][airport2Id] / 760)
+        }
+    }
+)
+
+export const approachFlightBlancSelector = createSelector(
+    flightsSelector,
+    tailsSelector,
+    distanceBetweenAirportsSelector,
+    fuelCostSelector,
+    maxFlightIdSelector,
+    (flights, tails, airportDistances, fuelCost, maxFlightId) => {
+        return (flightId) => {
+            return getApproachFlight(flightId, tails, flights, fuelCost, airportDistances, maxFlightId)
         }
     }
 )

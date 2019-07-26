@@ -1,5 +1,6 @@
 @import '../../common/styles/variables.scss';
 
+
 .schedule {
     &__container {
         height: 100%;
@@ -35,11 +36,44 @@
             background: $medium-color__yellow;
             padding: $offset__small;
             box-sizing: border-box;
+            display: flex;
+            flex-direction: row;
+            &__content {
+                display: flex;
+                flex-direction: column;
+                padding-left: $offset__small;
+                @include ellipsis-text;
+            }
 
             &__label {
                 font-size: $text-size__ultra-small;
                 font-weight: bold;
                 color: $focus-color__red;
+                @include ellipsis-text;
+            }
+
+            &__airports {
+                font-size: $text-size__ultra-small;
+                @include ellipsis-text;                
+            }
+
+            &__add-approach-flight {
+                height: calc(100% - 8px);
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+                font-weight: bold;
+                overflow: hidden;
+                padding: 5px;
+                text-overflow: ellipsis;
+
+                &:hover {
+                    background: $focus-color__red;
+                }
+            }
+
+            & > span {
+                margin-left: $offset__small;
             }
         }
     }
@@ -49,7 +83,5 @@
         width: 2px;
         height: 100%;
         background: $dark-color__red;        
-    }
-
-    
+    }   
 }

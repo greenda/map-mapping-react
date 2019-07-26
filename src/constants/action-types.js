@@ -6,6 +6,7 @@ export const pageActionTypes = {
     ADD_ORDER: '[Order] add order to flight',
     ADD_FLIGHT: '[Flight] add flight',
     ADD_EMPTY_FLIGHT: '[Flight] add empty flight',
+    ADD_APPROACH_FLIGHT: '[Flight] add approach flight',
     REMOVE_FLIGHT: '[Flight] remove flight',
     CHECK_MONEY: '[Money] check money',
   } 

@@ -1,5 +1,6 @@
 // TODO сделать через inmutable
 import { MapActions } from '../constants/map-actions'
+import moment from 'moment'
 
 export function getFlightInTime(flight, airports, orders, currentTime ) {
     // flight.pay = flight.pay ? flight.pay : 0
@@ -69,6 +70,95 @@ export function getMapAction(oldProgress, newProgress ) {
             default: return MapActions.NONE
         }
     }
+}
+
+export function getApproachFlight(flightId, tails, flights, fuelCost, airportDistances, maxFlightId) {
+    const baseFlight = flights.find(flight => flight.id === flightId)
+    const baseTail = tails.find(tail => tail.id === baseFlight.tailId)
+    const tailFlights = 
+        flights.filter(flight => flight.tailId === baseTail.id &&
+            flight.dateTakeOff.isBefore(baseFlight.dateTakeOff))
+            .sort((a, b) => a.dateTakeOff.isBefore(b.dateTakeOff))
+
+    const dateLanding = baseFlight.dateTakeOff.clone().add(-1, 'hours')
+    const fromId = (tailFlights.length > 0) ? tailFlights[0].toId : baseTail.airportId
+    const toId = baseFlight.fromId
+    const { dateTakeOff, cost } = 
+        getUpdatedDateAndCost(dateLanding, dateType.LANDING, fromId, toId, fuelCost, airportDistances)
+
+    return {
+        dateTakeOff,
+        dateLanding,
+        fromId,
+        toId,
+        cost,
+        id: maxFlightId + 1,
+        name: `Подлет ${maxFlightId + 1}`,
+        tail: baseTail,
+        tailId: baseTail.id,
+        status: 'planned',
+        progress: -1,
+        orderId: null,
+        pay: 0,
+      }
+}
+
+export function getEmptyFlight(flightId) {
+    return {
+        id: flightId,
+        name: 'Flight ' + flightId,
+        tail: null,
+        tailId: null,
+        fromId: null,
+        toId: null,
+        dateTakeOff: null,
+        dateLanding: null,
+        status: 'planned',
+        progress: -1,
+        orderId: null,
+        pay: 0,
+      }
+}
+
+
+// TODO объединить в одну
+// const getLandingTime = (airport1Id, airport2Id, dateTakeOff, airportDistances) => {
+//     const flightTime = airportDistances(airport1Id, airport2Id)
+//     return dateTakeOff.clone().add(flightTime, 'hours')
+// }
+
+// const getTakeOffTime = (airport1Id, airport2Id, dateLanding, airportDistances) => {
+//     const flightTime = airportDistances(airport1Id, airport2Id)
+//     return dateLanding.clone().add(-flightTime, 'hours')
+// }
+
+const getCost = (dateTakeOff, dateLanding, fuelCost) => {
+    return dateLanding.diff(moment.utc(dateTakeOff), 'hours') * fuelCost
+}
+
+// export const getUpdatedLandingTimeAndCost = (dateTakeOff, airport1Id, airport2Id, fuelCost, airportDistances) => {
+//     const dateLanding = getLandingTime(airport1Id, airport2Id, dateTakeOff, airportDistances)
+//     const cost = getCost(dateTakeOff, dateLanding, fuelCost)
+//     return { dateLanding, cost }
+// }
+
+// export const getUpdatedDateTakeOffAndCost = (dateLanding, airport1Id, airport2Id, fuelCost, airportDistances) => {
+//     const dateTakeOff = getTakeOffTime(airport1Id, airport2Id, dateLanding, airportDistances)
+//     const cost = getCost(dateTakeOff, dateLanding, fuelCost)
+//     return { dateLanding, cost }
+// }
+
+export const dateType = {
+    TAKE_OFF: 'takeOff',
+    LANDING: 'landing',
+}
+
+export const getUpdatedDateAndCost = (date, dateType, airport1Id, airport2Id, fuelCost, airportDistances) => {
+    const flightTime = airportDistances(airport1Id, airport2Id)
+    const dateTakeOff = (dateType === dateType.TAKE_OFF) ? date : date.clone().add(-flightTime, 'hours')
+    const dateLanding = (dateType === dateType.LANDING) ? date : date.clone().add(flightTime, 'hours')
+    const cost = getCost(dateTakeOff, dateLanding, fuelCost)
+    return { dateLanding, dateTakeOff, cost }
 }
 
 export function getOrderDescription() {

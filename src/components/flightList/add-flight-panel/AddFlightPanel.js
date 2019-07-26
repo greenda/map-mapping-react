@@ -5,11 +5,8 @@ import TextField from '@material-ui/core/TextField'
 import useAddFlightFrom from './custom-hooks/useAddFlightForm'
 import './AddFlightPanel.scss'
 
-// TODO вынести в справочник и привязать к аэропорту
-const fuelCost = 100
-
 export function AddFlightPanel({    
-    airports, airportDistances,
+    airports, airportDistances, fuelCost,
     maxTime, maxFlightId, onSave, onCancel}) {
     const {inputs, hundleSubmit, hundleCancel, handleInputChange, hundleMaxTimeChange} = 
         useAddFlightFrom(airportDistances, fuelCost, maxTime, maxFlightId, onSave, onCancel)

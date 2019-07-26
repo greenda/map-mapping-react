@@ -5,7 +5,8 @@ import moment from 'moment'
 import { 
     maxTimeSelector, 
     airportsSelector, 
-    distanceBetweenAirportsSelector 
+    fuelCostSelector,
+    distanceBetweenAirportsSelector
 } from '../../selectors/index'
 import Flight from './flight/Flight'
 import AddFlightPanel from './add-flight-panel/AddFlightPanel'
@@ -19,6 +20,7 @@ export function FlightList({
     maxFlightId,
     maxTime, 
     airportDistances,
+    fuelCost,
     addFlight,
     addEmptyFlight,
     removeFlight}) {      
@@ -39,6 +41,7 @@ export function FlightList({
                     airports,  
                     maxFlightId, 
                     maxTime,
+                    fuelCost,
                     airportDistances,
                     onSave,
                     onCancel
@@ -80,7 +83,7 @@ function getFlights(isAddPanel, flightIds, removeFlight) {
 }
 
 function getAddPanel(isAddPanel, airports, maxFlightId, 
-    maxTime, airportDistances, onSaveCallback, onCancelCallback) {
+    maxTime, fuelCost, airportDistances, onSaveCallback, onCancelCallback) {
     if (isAddPanel) {
         return (
             <div className="flight-list-container__add-panel">
@@ -90,6 +93,7 @@ function getAddPanel(isAddPanel, airports, maxFlightId,
                     maxTime={maxTime}
                     onCancel={onCancelCallback}
                     onSave={onSaveCallback} 
+                    fuelCost={fuelCost}
                     airportDistances={airportDistances}/>
             </div>
         )
@@ -120,6 +124,7 @@ export default connect(
         airports: airportsSelector(state),    
         maxTime: maxTimeSelector(state),
         airportDistances: distanceBetweenAirportsSelector(state),
+        fuelCost: fuelCostSelector(state),
     }),
     { addFlight, addEmptyFlight, removeFlight }
 )(FlightList)

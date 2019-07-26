@@ -64,4 +64,10 @@ $text-size__ultra-small: 0.8em;
     }
 }
 
+@mixin ellipsis-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 

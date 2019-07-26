@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import moment from 'moment'
+import { dateType, getUpdatedDateAndCost } from '../../../../helpers/FlightHelper'
 
 export const useAddFlightForm = (airportDistances, fuelCost, maxTime, maxFlightId, onSubmit, onCancel) => {
     const defaultDateTakeOff = maxTime.utc().clone()
     const defaultFromId = 1
     const defaultToId = 2
     const { dateLanding: defaultDateLanding, cost } = 
-            getUpdatedLandingTimeAndCost(defaultDateTakeOff, defaultFromId, 
+    getUpdatedDateAndCost(defaultDateTakeOff, dateType.TAKE_OFF, defaultFromId, 
                 defaultToId, fuelCost, airportDistances)
     
     const defaultInputs = {
@@ -50,7 +51,7 @@ export const useAddFlightForm = (airportDistances, fuelCost, maxTime, maxFlightI
         if (moment.utc(inputs.dateTakeOff).isBefore(maxTime)) {
             const dateTakeOff = maxTime.utc().clone();
             const { dateLanding, cost } = 
-                getUpdatedLandingTimeAndCost(dateTakeOff, inputs.fromId, inputs.toId, fuelCost, airportDistances)
+                getUpdatedDateAndCost(dateTakeOff, dateType.TAKE_OFF, inputs.fromId, inputs.toId, fuelCost, airportDistances)
             setInputs(inputs => ({ ...inputs, cost, 
                 dateTakeOff: dateTakeOff.format('YYYY-MM-DDTHH:mm'),
                 dateLanding: dateLanding.format('YYYY-MM-DDTHH:mm'), }))
@@ -62,7 +63,7 @@ export const useAddFlightForm = (airportDistances, fuelCost, maxTime, maxFlightI
         const fromId =  getInputValue(event.target, 'fromId', inputs)
         const toId = getInputValue(event.target, 'toId', inputs)
         const { dateLanding, cost } = 
-            getUpdatedLandingTimeAndCost(dateTakeOff, fromId, toId, fuelCost, airportDistances)
+            getUpdatedDateAndCost(dateTakeOff, dateType.TAKE_OFF, fromId, toId, fuelCost, airportDistances)
 
         setInputs(inputs => ({ ...inputs, fromId, toId, cost,
             dateTakeOff:dateTakeOff.format('YYYY-MM-DDTHH:mm'), 
@@ -74,21 +75,6 @@ export const useAddFlightForm = (airportDistances, fuelCost, maxTime, maxFlightI
     }
 
     return { inputs, hundleSubmit, hundleCancel, handleInputChange, hundleMaxTimeChange} 
-}
-
-const getLandingTime = (airport1Id, airport2Id, dateTakeOff, airportDistances) => {
-    const flightTime = airportDistances(airport1Id, airport2Id)
-    return dateTakeOff.clone().add(flightTime, 'hours')
-}
-
-const getCost = (dateTakeOff, dateLanding, fuelCost) => {
-    return dateLanding.diff(moment.utc(dateTakeOff), 'hours') * fuelCost
-}
-
-const getUpdatedLandingTimeAndCost = (dateTakeOff, airport1Id, airport2Id, fuelCost, airportDistances) => {
-    const dateLanding = getLandingTime(airport1Id, airport2Id, dateTakeOff, airportDistances)
-    const cost = getCost(dateTakeOff, dateLanding, fuelCost)
-    return { dateLanding, cost }
 }
 
 export default useAddFlightForm
