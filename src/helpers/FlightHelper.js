@@ -100,6 +100,7 @@ export function getApproachFlight(flightId, tails, flights, fuelCost, airportDis
         progress: -1,
         orderId: null,
         pay: 0,
+        linkedFlightId: baseFlight.id,
       }
 }
 
@@ -120,33 +121,9 @@ export function getEmptyFlight(flightId) {
       }
 }
 
-
-// TODO объединить в одну
-// const getLandingTime = (airport1Id, airport2Id, dateTakeOff, airportDistances) => {
-//     const flightTime = airportDistances(airport1Id, airport2Id)
-//     return dateTakeOff.clone().add(flightTime, 'hours')
-// }
-
-// const getTakeOffTime = (airport1Id, airport2Id, dateLanding, airportDistances) => {
-//     const flightTime = airportDistances(airport1Id, airport2Id)
-//     return dateLanding.clone().add(-flightTime, 'hours')
-// }
-
 const getCost = (dateTakeOff, dateLanding, fuelCost) => {
     return dateLanding.diff(moment.utc(dateTakeOff), 'hours') * fuelCost
 }
-
-// export const getUpdatedLandingTimeAndCost = (dateTakeOff, airport1Id, airport2Id, fuelCost, airportDistances) => {
-//     const dateLanding = getLandingTime(airport1Id, airport2Id, dateTakeOff, airportDistances)
-//     const cost = getCost(dateTakeOff, dateLanding, fuelCost)
-//     return { dateLanding, cost }
-// }
-
-// export const getUpdatedDateTakeOffAndCost = (dateLanding, airport1Id, airport2Id, fuelCost, airportDistances) => {
-//     const dateTakeOff = getTakeOffTime(airport1Id, airport2Id, dateLanding, airportDistances)
-//     const cost = getCost(dateTakeOff, dateLanding, fuelCost)
-//     return { dateLanding, cost }
-// }
 
 export const dateType = {
     TAKE_OFF: 'takeOff',

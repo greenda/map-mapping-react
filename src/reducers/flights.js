@@ -45,6 +45,7 @@ const initialState = {
       orderId: null,
       tailId: 2,
       pay: 0,
+      lindedFlightId: 2,
     }, 
   }
 

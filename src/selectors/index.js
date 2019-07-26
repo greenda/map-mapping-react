@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect'
 import { getFlightInTime, getApproachFlight } from '../helpers/FlightHelper'
+import { getChainElement } from '../helpers/BudgetHelper'
 
 export const currentTimeSelector = (state) => state.time.currentTime
 export const airportsSelector = (state) => Object.values(state.airports.items)
@@ -15,6 +16,7 @@ export const orderIdsSelector = (state) => Object.keys(state.orders.items).map(v
 export const currentBudgetSelector = (state) => state.money.currentBudget
 export const airportDistancesSelector = (state) => state.airports.distance
 export const fuelCostSelector = (_) => 100
+export const budgetChainsSelector = (state) => state.money.budgetChains
 
 export const flightsDetailSelector = createSelector(
     flightsSelector,
@@ -132,4 +134,12 @@ export const approachFlightBlancSelector = createSelector(
             return getApproachFlight(flightId, tails, flights, fuelCost, airportDistances, maxFlightId)
         }
     }
+)
+
+export const budgetChainsElementsSelector = createSelector(
+    flightsSelector,
+    budgetChainsSelector,
+    (flights, budgetChains) => {
+        return budgetChains.map((chain, index) => getChainElement(chain, flights, index))
+    }    
 )

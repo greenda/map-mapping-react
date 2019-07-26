@@ -18,7 +18,7 @@ export function generateFlights(maxTime, maxFlightId, airports, airportDistances
         const toId =  airportIds[index]
         // TODO fuelCost в справочник
         const cost = airportDistances(fromId, toId) * 100
-        const pay = cost + Math.round(1000 + Math.random() * 1000)
+        const pay = cost + Math.round(2000 + Math.random() * 1000)
         const { title, description } = getOrderDescription()
         return [ 
             {

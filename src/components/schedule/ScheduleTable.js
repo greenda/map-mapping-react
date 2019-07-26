@@ -7,13 +7,10 @@ import './ScheduleTable.scss'
 const CELL_WIDTH_SCALE = 20
 const TIMELINE_OFFSET_HOURS = 2
 
-export function ScheduleTable({tails, flights, currentTime, addApproachFlight, blankApproachFlight}) {    
-    const budgetChains = [
-        {
-            ids: [2, 3],
-            tailId: 2,
-        }
-    ]
+export function ScheduleTable({
+    tails, flights, 
+    currentTime, budgetChains,
+    addApproachFlight, blankApproachFlight}) {    
 
     return (
         <div className="schedule__container">
@@ -52,6 +49,10 @@ ScheduleTable.propTypes = {
         status: string
     })),
     currentTime: PropTypes.instanceOf(moment),
+    budgetChains: PropTypes.arrayOf(PropTypes.shape({
+        ids: PropTypes.arrayOf(number),
+        tailId: number,
+    }))
 }
 
 export default ScheduleTable

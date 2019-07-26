@@ -12,12 +12,12 @@ export function ScheduleRow({
     const tailsCount = tails.length
     const tailRows = tails.map((tail, i) => {
         const tailBudgetChains = budgetChains.filter(budgetChain => budgetChain.tailId === tail.id)
-        const budgetChainRows = tailBudgetChains.map((budgetChain, chainIndex) => {
+        const budgetChainRows = tailBudgetChains.map((chainElement, chainIndex) => {
             return (
                 <BudgetCell
-                    key={`budget${budgetChain.id}`} 
+                    key={`budget${chainElement.id}`} 
                     flights={flights}
-                    budgetChain={budgetChain}
+                    chainElement={chainElement}
                     cellWidthScale={cellWidthScale}
                     currentTime={currentTime}
                     timelineOffsetHours={timelineOffsetHours}

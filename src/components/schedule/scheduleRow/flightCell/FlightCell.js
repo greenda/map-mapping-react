@@ -34,7 +34,8 @@ FlightCell.propTypes = {
         toIata: string,
         dateTakeOff: object,
         dateLanding: object,
-        status: string
+        status: string,
+        linkedFlightId: number,
     }),
     cellWidthScale: number,
     currentTime: PropTypes.instanceOf(moment),

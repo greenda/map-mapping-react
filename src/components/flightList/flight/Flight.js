@@ -89,6 +89,7 @@ Flight.propTypes = {
         dateTakeOff: PropTypes.object,
         dateLanding: PropTypes.object,
         status: string,
+        linkedFlightId: number,
     }),
     isOver: PropTypes.bool.isRequired,
 }
