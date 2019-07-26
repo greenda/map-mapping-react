@@ -25,7 +25,27 @@ const initialState = {
       orderId: null,
       dateTakeOff: moment.utc('2000-01-01T18:00:00+00:00'),
       dateLanding: moment.utc('2000-01-01T24:00:00+00:00'),
+      pay: 1100,
+      cost: 100,
     },    
+    3: {
+      dateTakeOff: moment.utc('2000-01-01T14:00+00:00'),
+      dateLanding: moment.utc('2000-01-01T17:00:00+00:00'),
+      fromId: 1,
+      toId: 4,
+      cost: 600,
+      id: 3,
+      name: 'Подлет 3',
+      tail: {
+        id: 2,
+        name: 'A-2',
+        airportId: 1
+      },
+      progress: -1,
+      orderId: null,
+      tailId: 2,
+      pay: 0,
+    }, 
   }
 
 export function flightsReducer(state = initialState, action) {

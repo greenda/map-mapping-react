@@ -1,0 +1,14 @@
+@import '../../../../common/styles/variables.scss';
+
+.chain-budget-cell {
+    position: absolute;
+    height: calc(20% - 8px);
+    top: 80%;
+    border-width: 1px;
+    border-top-width: 0px;
+    border-style: solid;
+    border-color: $gray-color__2;
+    padding: 0px 8px 6px 8px;
+    box-sizing: border-box;
+    text-align: center;
+}

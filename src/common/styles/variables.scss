@@ -16,6 +16,7 @@ $focus-color__green: #5c9506;
 $focus-color__red: #ff3e33;
 $dark-color__red: #c33529;
 $gray-color__1: #a5a5a5;
+$gray-color__2: slategrey;
 
 $text-color__dark: #320c00;
 
@@ -32,7 +33,7 @@ $text-size__ultra-small: 0.8em;
 
     &::-webkit-scrollbar-thumb {
     background-color: $medium-color__blue;
-    outline: 1px solid slategrey;
+    outline: 1px solid #{$gray-color__2};
     border: solid 1px $gray-color__1;
     border-radius: $border-radius__medium;
     }

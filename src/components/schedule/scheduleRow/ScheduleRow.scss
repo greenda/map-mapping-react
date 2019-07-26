@@ -1,0 +1,20 @@
+@import '../../../common/styles/variables.scss';
+
+.schedule {
+    &__rows {
+        height: 100%;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__row {
+        height: 100%;
+        padding: $offset__small;
+        padding-left: 0px;
+        background: $white-color;
+        border: solid 1px $gray-color__1;
+        position: relative;
+        overflow: hidden;
+    }
+}
