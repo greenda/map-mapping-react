@@ -2,10 +2,8 @@ import React from 'react'
 import PropTypes, { number, string } from 'prop-types'
 import moment from 'moment'
 import ScheduleRow from './scheduleRow/ScheduleRow'
+import { CELL_WIDTH_SCALE, TIMELINE_OFFSET_HOURS } from '../../constants/schedule'
 import './ScheduleTable.scss'
-
-const CELL_WIDTH_SCALE = 20
-const TIMELINE_OFFSET_HOURS = 2
 
 export function ScheduleTable({
     tails, flights, 

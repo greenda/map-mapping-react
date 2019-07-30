@@ -1,0 +1,7 @@
+@import  '../../../common/styles/scheduleStyles.scss';
+
+@include schedule;
+
+.order-schedule-row {
+    min-height: 60px;
+}

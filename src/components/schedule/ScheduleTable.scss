@@ -1,30 +1,3 @@
-@import '../../common/styles/variables.scss';
+@import '../../common/styles/scheduleStyles.scss';
 
-
-.schedule {
-    &__container {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        background: $medium-color__blue;
-        position: relative;
-        border-radius: $border-radius__large;
-
-        & > .schedule__rows > .schedule__row {
-            margin: $offset__small;
-            margin-bottom: 0px;
-            margin-left: 0px;
-
-            &.last {
-                margin-bottom: $offset__small;
-            }
-        }
-    }
-
-    &__timeline {
-        position: absolute;
-        width: 2px;
-        height: 100%;
-        background: $dark-color__red;        
-    }   
-}
+@include schedule;

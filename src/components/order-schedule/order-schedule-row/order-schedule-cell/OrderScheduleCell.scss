@@ -1,0 +1,7 @@
+@import  '../../../../common/styles/scheduleStyles.scss';
+
+@include order-flight-cell;
+
+.order-cell {
+    height: calc(100% - 16px);
+}

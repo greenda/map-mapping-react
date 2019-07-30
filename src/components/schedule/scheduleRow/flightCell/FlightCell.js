@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes, { number, string, object } from 'prop-types'
 import Tooltip from '@material-ui/core/Tooltip';
 import moment from 'moment'
-import { getCellProperties } from '../../helpers/ScheduleHelper'
+import { getCellProperties } from '../../../../helpers/ScheduleHelper'
 import './FlightCell.scss'
 
 export function FlightCell({ flight, cellWidthScale, currentTime, timelineOffsetHours, addApproachFlight, blankApproachFlight}) {

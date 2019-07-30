@@ -8,9 +8,11 @@ import TailList from '../src/components/tailList/TailList'
 import OrderList from '../src/components/orderList/OrderList'
 import MapContainer from '../src/components/map/MapContainer'
 import ScheduleTable from '../src/components/schedule/ScheduleTable'
+import OrderSchedule from '../src/components/order-schedule/OrderSchedule'
 import { licencedOrderIdsSelector, filteredFlightIdsSelector, maxFlightIdSelector,
          flightsSelector, tailCoordinates, currentTimeSelector, flightsOnTime,
-         approachFlightBlancSelector, budgetChainsElementsSelector, maxOrderIdSelector } from '../src/selectors/index'
+         approachFlightBlancSelector, budgetChainsElementsSelector,
+         maxOrderIdSelector } from '../src/selectors/index'
 import { addApproachFlight } from './actions/pageActions'
 import logo from '../src/assets/map-mapping-logo.svg'
 import './App.scss';
@@ -25,8 +27,8 @@ const tabNames = {
 function App ({ orderIds, flights, tails, flightIds, maxFlightId, 
     flightsOnTime, currentTime, addApproachFlight, 
     blankApproachFlight, budgetChains, maxOrderId}) {
-    const [tabName, setTabName] = useState(tabNames.MAP_TAB)
-    // const [tabName, setTabName] = useState(tabNames.SCHEDULE_TAB)
+    // const [tabName, setTabName] = useState(tabNames.MAP_TAB)
+    const [tabName, setTabName] = useState(tabNames.SCHEDULE_TAB)
     const getActiveClass = (name) => {
         return tabName === name ? 'active' : ''
     }
@@ -84,12 +86,18 @@ function App ({ orderIds, flights, tails, flightIds, maxFlightId,
         case tabNames.MAP_TAB: 
         return <MapContainer />
         case tabNames.SCHEDULE_TAB: 
-        return <ScheduleTable tails={tails} 
-            flights={flights}
-            currentTime={currentTime}
-            budgetChains={budgetChains}
-            addApproachFlight={addApproachFlight}
-            blankApproachFlight={blankApproachFlight}/>
+        return (
+            <div className="schedules__container">
+                <ScheduleTable tails={tails} 
+                    flights={flights}
+                    currentTime={currentTime}
+                    budgetChains={budgetChains}
+                    addApproachFlight={addApproachFlight}
+                    blankApproachFlight={blankApproachFlight}/>
+                <div className="schedules__line"></div>
+                <OrderSchedule currentTime={currentTime}/>
+            </div>
+        )
         default: return (<></>)
     }          
     }
@@ -106,7 +114,7 @@ function App ({ orderIds, flights, tails, flightIds, maxFlightId,
         tails: tailCoordinates(state),
         currentTime: currentTimeSelector(state),
         blankApproachFlight: approachFlightBlancSelector(state),
-        budgetChains: budgetChainsElementsSelector(state),
+        budgetChains: budgetChainsElementsSelector(state),        
         }),
         { addApproachFlight }
     )(App)

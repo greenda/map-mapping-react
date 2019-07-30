@@ -1,6 +1,9 @@
+// TODO разбросать по нескольким селекторам
+
 import { createSelector } from 'reselect'
 import { getFlightInTime, getApproachFlight } from '../helpers/FlightHelper'
 import { getChainElement } from '../helpers/BudgetHelper'
+import { getOrderSchaduleRows } from '../helpers/ScheduleHelper'
 import * as d3 from 'd3'
 
 export const currentTimeSelector = (state) => state.time.currentTime
@@ -113,6 +116,17 @@ export const orderByIdSelector = createSelector(
     }
 )
 
+export const ordersOnTime = createSelector(
+    currentTimeSelector,
+    airportsSelector,
+    ordersObjectSelector,
+    () => getFlightInTime,
+    // TODO - присоединять аэропорты в другом селекторе
+    (currentTime, airports, orders, getFlightInTime) => {
+        return Object.values(orders).map(order => getFlightInTime(order, airports, orders, currentTime)) 
+    }
+)
+
 export const maxFlightIdSelector = createSelector(
     flightIdsSelector,
     (ids) => ids.length > 0 ? Math.max(...ids) : 0
@@ -193,29 +207,43 @@ export const filteredFlightIdsSelector = createSelector(
     }
 )
 
-export const licencedOrderIdsSelector = createSelector(
-    ordersSelector,
+export const licencedOrderSelector = createSelector(
+    ordersOnTime,
     airportObjectsSelector,
     licencedRegionsIdsSelector,
     filteredFlightsSelector,
     currentTimeSelector,
     (orders, airports, regionIds, flights, currentTime) => {
         const orderInWorkIds = flights.map(flight => flight.orderId)
-        const filteredOrders = orders && orders.length > 0 ? 
+        return orders && orders.length > 0 ? 
             orders.filter(order =>
                     order.dateTakeOff.isAfter(currentTime) &&
                     !orderInWorkIds.includes(order.id))
-                .map(order => ({id: order.id, regionIds: [airports[order.fromId].regionId, airports[order.toId].regionId]}))
+                .map(order => ({...order, regionIds: [airports[order.fromId].regionId, airports[order.toId].regionId]}))
                 .filter(order => order.regionIds.every(region => regionIds.includes(region)))
                 .reverse() : []
-            
-        return filteredOrders.length > 0 ? filteredOrders.map(order => order.id) : []
     }
+)
+
+export const licencedOrderIdsSelector = createSelector(
+    licencedOrderSelector,
+    (filteredOrders) => filteredOrders.length > 0 ? filteredOrders.map(order => order.id) : []
 )
 
 export const maxOrderIdSelector = createSelector(
     orderIdsSelector,
     (orderIds) => {
         return orderIds.length === 0 ? 0 : Math.max(...orderIds)
+    }
+)
+
+export const ordersToScheduleSelector = createSelector(
+    licencedOrderSelector,
+    (orders) => {
+        const sorterArray = [...orders].sort((a, b) => a.dateTakeOff.isAfter(b.dateTakeOff) ? 1 : -1)
+        const rows = getOrderSchaduleRows(sorterArray)
+                
+        return rows.reduce((result, orders, index) => 
+            [...result, ...orders.map(order => { order.rowIndex = index; return order })], [])
     }
 )

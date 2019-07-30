@@ -1,0 +1,11 @@
+@import '../../common/styles/scheduleStyles.scss';
+
+@include schedule;
+
+.order-schedule {
+    &__container {
+        overflow: auto;
+
+        @include scrollbar;
+    }
+}

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes, { number, string, object } from 'prop-types'
 import moment from 'moment'
-import { getCellProperties } from '../../helpers/ScheduleHelper'
+import { getCellProperties } from '../../../../helpers/ScheduleHelper'
 import './BudgetCell.scss'
 
 export function BudgetCell({
