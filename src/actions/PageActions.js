@@ -51,10 +51,11 @@ export function decrementTime(value) {
   }
 }
 
-export function generateOrders(maxTime, maxFlightId, airports, airportDistances) {
+export function generateOrders(maxTime, maxFlightId, 
+  airports, airportDistances, isRequired) {
   return {
     type: pageActionTypes.GENERATE_ORDERS,
-    payload: { maxTime, maxFlightId, airports, airportDistances }
+    payload: { maxTime, maxFlightId, airports, airportDistances, isRequired }
   }
 }
 

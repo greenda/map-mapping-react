@@ -44,11 +44,12 @@ export function Flight({ flight, connectDropTarget, isOver, canDrop, onRemove })
 
 function getDetails(expanded, flight) {
     if (expanded) {
-        const {  status, progress, pay, cost } = flight
+        const {  status, progress, pay, cost, description } = flight
         return (
             <div>
                 <div>cost: {cost}</div>
-                <div>pay: {pay}</div>                
+                <div>pay: {pay}</div>   
+                <div className="flight__description">{description}</div>             
                 <div>{progress >= 0 ? Math.floor(progress) : null}</div>            
                     <ProgressBar progress={progress}/>
                 <div>{status}</div>

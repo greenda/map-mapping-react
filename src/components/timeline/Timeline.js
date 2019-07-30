@@ -11,8 +11,13 @@ import './Timeline.scss'
 //  }
 
 function Timeline({ flights, tails, maxTime, currentTime, incrementTime, decrementTime, currentBudget, checkMoney }) {
+    const [didMount, setDidMount] = useState(false)
     useEffect(() => {   
-        checkMoney(flights, tails, maxTime, currentTime)
+        if (didMount) {
+            checkMoney(flights, tails, maxTime, currentTime)
+        } else {
+            setDidMount(true)
+        }        
     }, [maxTime])
     const [ interval, setIntervalConst ] = useState()
 

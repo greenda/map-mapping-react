@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { flightIdsSelector, maxTimeSelector, airportIdsSelector, airportsSelector, distanceBetweenAirportsSelector } from '../../selectors/index'
@@ -7,9 +7,11 @@ import { addOrder } from '../../actions/pageActions'
 import { generateOrders } from '../../actions/pageActions'
 import './OrderList.scss'
 
-export function OrderList({orderIds, maxTime, airports, generateOrders, airportDistances, airportsIds, addOrder}) {
-    useEffect(() => {        
-        generateOrders(maxTime, Math.max(...orderIds), airportsIds, airportDistances)
+export function OrderList({orderIds, maxOrderId, maxTime, airports, generateOrders, airportDistances, airportsIds, addOrder}) {
+    const [didMount, setDidMount] = useState(false)
+    useEffect(() => {                
+        generateOrders(maxTime, maxOrderId, airportsIds, airportDistances, !didMount)
+        setDidMount(true)
     }, [maxTime])
 
     const orders = orderIds.map(value => (<Order key={value} id={value} addOrder={addOrder}/>))

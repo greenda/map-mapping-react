@@ -2,13 +2,7 @@ import { pageActionTypes } from '../constants/action-types';
 
 const initialState = {
     currentBudget: 1000,
-    budgetChains: [
-        {
-            id: 0,
-            ids: [2, 3],
-            tailId: 2,
-        }
-    ]
+    budgetChains: []
 }
 
 export function moneyReducer(state = initialState, action) {
@@ -21,8 +15,7 @@ export function moneyReducer(state = initialState, action) {
             if (maxTime.isSame(currentTime)) {
                 let budget = state.currentBudget
                 flights.forEach(flight => {
-                    if (flight.dateLanding && flight.dateLanding.isSame(currentTime)) {
-                        // console.log('pay by flight ' + (flight.pay - flight.cost))
+                    if (flight.dateLanding && flight.dateLanding.isSame(currentTime)) {                        
                         budget = budget + flight.pay - flight.cost
                     }
                 })
@@ -39,7 +32,6 @@ export function moneyReducer(state = initialState, action) {
         case pageActionTypes.ADD_APPROACH_FLIGHT:
             
             const linkedChainIndex = budgetChains.findIndex(chain => {
-                console.log(chain.ids)
                 return chain.ids.includes(flight.linkedFlightId)
                 })
             // TODO через mutable решить
@@ -54,8 +46,6 @@ export function moneyReducer(state = initialState, action) {
                 budgetChains[linkedChainIndex].ids.push(flight.id)
                 budgetChains[linkedChainIndex].saldo = budgetChains[linkedChainIndex] - flight.cost
             }
-
-            console.log(JSON.stringify(budgetChains))            
 
             return {
                 ...state,

@@ -8,9 +8,9 @@ import TailList from '../src/components/tailList/TailList'
 import OrderList from '../src/components/orderList/OrderList'
 import MapContainer from '../src/components/map/MapContainer'
 import ScheduleTable from '../src/components/schedule/ScheduleTable'
-import { orderIdsSelector, flightIdsSelector, maxFlightIdSelector,
+import { licencedOrderIdsSelector, filteredFlightIdsSelector, maxFlightIdSelector,
          flightsSelector, tailCoordinates, currentTimeSelector, flightsOnTime,
-         approachFlightBlancSelector, budgetChainsElementsSelector } from '../src/selectors/index'
+         approachFlightBlancSelector, budgetChainsElementsSelector, maxOrderIdSelector } from '../src/selectors/index'
 import { addApproachFlight } from './actions/pageActions'
 import logo from '../src/assets/map-mapping-logo.svg'
 import './App.scss';
@@ -21,11 +21,12 @@ const tabNames = {
 }
 
 // TODO flights Вынести на этот уровень, чтобы два раза не просчитывать
+// TODO уменьшить количество параметров
 function App ({ orderIds, flights, tails, flightIds, maxFlightId, 
     flightsOnTime, currentTime, addApproachFlight, 
-    blankApproachFlight, budgetChains}) {
-    // const [tabName, setTabName] = useState(tabNames.MAP_TAB)
-    const [tabName, setTabName] = useState(tabNames.SCHEDULE_TAB)
+    blankApproachFlight, budgetChains, maxOrderId}) {
+    const [tabName, setTabName] = useState(tabNames.MAP_TAB)
+    // const [tabName, setTabName] = useState(tabNames.SCHEDULE_TAB)
     const getActiveClass = (name) => {
         return tabName === name ? 'active' : ''
     }
@@ -58,7 +59,7 @@ function App ({ orderIds, flights, tails, flightIds, maxFlightId,
                         <span>Orders</span>
                     </div>
                     <div className="section-container__content">
-                        <OrderList orderIds={orderIds}/>
+                        <OrderList orderIds={orderIds} maxOrderId={maxOrderId}/>
                     </div>
                 </div>
             </div>
@@ -96,8 +97,9 @@ function App ({ orderIds, flights, tails, flightIds, maxFlightId,
     export default DragDropContext(HTML5Backend)(
         connect(
         (state) => ({
-        orderIds: orderIdsSelector(state),
-        flightIds: flightIdsSelector(state),   
+        orderIds: licencedOrderIdsSelector(state),
+        maxOrderId: maxOrderIdSelector(state),
+        flightIds: filteredFlightIdsSelector(state),   
         flights: flightsSelector(state),
         flightsOnTime: flightsOnTime(state),
         maxFlightId: maxFlightIdSelector(state),  

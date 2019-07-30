@@ -4,7 +4,7 @@ import PropTypes, { number, string } from 'prop-types'
 import moment from 'moment'
 import { 
     maxTimeSelector, 
-    airportsSelector, 
+    licencedAirportsSelector, 
     fuelCostSelector,
     distanceBetweenAirportsSelector
 } from '../../selectors/index'
@@ -121,7 +121,7 @@ FlightList.propTypes = {
 
 export default connect(
     (state) => ({        
-        airports: airportsSelector(state),    
+        airports: licencedAirportsSelector(state),    
         maxTime: maxTimeSelector(state),
         airportDistances: distanceBetweenAirportsSelector(state),
         fuelCost: fuelCostSelector(state),

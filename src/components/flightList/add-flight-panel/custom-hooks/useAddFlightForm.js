@@ -3,7 +3,7 @@ import moment from 'moment'
 import { dateType, getUpdatedDateAndCost } from '../../../../helpers/FlightHelper'
 
 export const useAddFlightForm = (airportDistances, fuelCost, maxTime, maxFlightId, onSubmit, onCancel) => {
-    const defaultDateTakeOff = maxTime.utc().clone()
+    const defaultDateTakeOff = maxTime.utc().clone().add(1, 'hours')
     const defaultFromId = 1
     const defaultToId = 2
     const { dateLanding: defaultDateLanding, cost } = 
@@ -16,8 +16,8 @@ export const useAddFlightForm = (airportDistances, fuelCost, maxTime, maxFlightI
         name: `Flight ${maxFlightId + 1}`,
         dateTakeOff: defaultDateTakeOff.format('YYYY-MM-DDTHH:mm'),
         dateLanding: defaultDateLanding.format('YYYY-MM-DDTHH:mm'),
-        fromId: defaultFromId,
-        toId: defaultToId,
+        fromId: 1,
+        toId: 11,
     }
     
     const [inputs, setInputs] = useState(defaultInputs)

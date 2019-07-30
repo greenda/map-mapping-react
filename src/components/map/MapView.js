@@ -5,9 +5,15 @@ import aircraftIconRed from '../../assets/aircraft-icon__red.svg'
 import aircraftIconGray from '../../assets/aircraft-icon__gray.svg'
 const width = 1100
 const height = 550
-const mediumColorYellow = '#dfc16d';
 
-export function MapView({flights, tails, airports}) {
+const ACTIVE_COUNTRY_COLOR = 'white'
+const ACTIVE_COUNTRY_BORDER = 'gray'
+const ACTIVE_AIRPORT_FILL = '#dfc16d'
+const INACTIVE_COUNTTRY_BORDER = '#9bacac'
+const INACTIVE_COUNTRY_COLOR = '#9bacac'
+const INACTIVE_AIRPORT_FILL = '#9bacac'
+
+export function MapView({flights, tails, airports, regionIds}) {
     const [isLoaded, setIsLoaded] = useState(false)
     const [svg, setSvg] = useState()
                 
@@ -15,6 +21,7 @@ export function MapView({flights, tails, airports}) {
                         .scale(180)
                         .translate( [width / 2, height / 2])
     const path = d3.geoPath().projection(projection)
+    const licencedAirports = airports.filter(airport => regionIds.includes(airport.regionId))
     
     useEffect(() => {
         d3.json('world_countries.json')
@@ -23,9 +30,9 @@ export function MapView({flights, tails, airports}) {
                 .attr("width", width)
                 .attr("height", height)
                 .attr('fill', 'green')
-            showMapBackground(svg, path, countries)
+            showMapBackground(svg, path, countries, regionIds)
             initLines(svg, path, projection, flights)
-            initAirports(svg, projection, airports)
+            initAirports(svg, projection, licencedAirports, regionIds)
             initAircraft(svg, path, projection, tails, flights)
             setIsLoaded(true)
             setSvg(svg)
@@ -58,7 +65,7 @@ export function MapView({flights, tails, airports}) {
 //     }))
 // }
 
-    function showMapBackground(svg, path, data) {
+    function showMapBackground(svg, path, data, regionIds) {
     svg.append("g")
        .attr("class", "countries")
        .selectAll("path")
@@ -66,9 +73,11 @@ export function MapView({flights, tails, airports}) {
        .enter()
        .append("path")
        .attr("d", path)
-       .style('stroke', 'gray')
+       .style('stroke', d => regionIds.includes(d.properties.regionId) ? 
+            ACTIVE_COUNTRY_BORDER : INACTIVE_COUNTTRY_BORDER)
        .style('stroke-width', 0.5)
-       .style('fill', 'white')
+       .style('fill', d => regionIds.includes(d.properties.regionId) ? 
+            ACTIVE_COUNTRY_COLOR : INACTIVE_COUNTRY_COLOR)
     }
 
 
@@ -110,17 +119,18 @@ export function MapView({flights, tails, airports}) {
         )  
     }
 
-    function initAirports(svg, projection, airports) {
+    function initAirports(svg, projection, airports, regionIds) {
         svg.append("g")
             .attr("class", "routes__airports")
             .selectAll('circle')
-            .data(Object.values(airports).map(value => [value.longt, value.latt]))
+            .data(airports)
             .enter()
             .append('circle')
-            .attr('cx', d =>  projection(d)[0])
-            .attr('cy', d => projection(d)[1])
+            .attr('cx', d =>  projection([d.longt, d.latt])[0])
+            .attr('cy', d => projection([d.logt, d.latt])[1])
             .attr('r', '6px')
-            .attr('fill', mediumColorYellow)   
+            .attr('fill', d => regionIds.includes(d.regionId) ? 
+                ACTIVE_AIRPORT_FILL : INACTIVE_AIRPORT_FILL)   
             .attr('stroke', 'black')
         
         svg.select('.routes__airports')    

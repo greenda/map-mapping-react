@@ -13,6 +13,10 @@
         color: $focus-color__red;
     }
 
+    &__description {
+        font-size: 12px;
+    }
+
     &__header {
         display: flex;
         flex-direction: column;

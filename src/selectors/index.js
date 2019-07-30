@@ -1,8 +1,10 @@
 import { createSelector } from 'reselect'
 import { getFlightInTime, getApproachFlight } from '../helpers/FlightHelper'
 import { getChainElement } from '../helpers/BudgetHelper'
+import * as d3 from 'd3'
 
 export const currentTimeSelector = (state) => state.time.currentTime
+export const airportObjectsSelector = (state) => state.airports.items
 export const airportsSelector = (state) => Object.values(state.airports.items)
 export const airportIdsSelector = (state) => Object.keys(state.airports.items).map(value => +value)
 export const flightsSelector = (state) => Object.values(state.flights)
@@ -17,6 +19,8 @@ export const currentBudgetSelector = (state) => state.money.currentBudget
 export const airportDistancesSelector = (state) => state.airports.distance
 export const fuelCostSelector = (_) => 100
 export const budgetChainsSelector = (state) => state.money.budgetChains
+export const licencesSelector = (state) => state.airports.licences
+export const currentLicenceIdsSelector = (state) => state.airports.currentLicenceIds
 
 export const flightsDetailSelector = createSelector(
     flightsSelector,
@@ -47,8 +51,9 @@ export const flightByIdSelector = createSelector(
     ordersObjectSelector,
     (_, { id }) => id,
     () => getFlightInTime,
-    (currentTime, airports, flights, orders, id, getFlightInTime) => 
-        getFlightInTime({...flights[id]}, airports, orders, currentTime)
+    (currentTime, airports, flights, orders, id, getFlightInTime) => {
+        return getFlightInTime({...flights[id]}, airports, orders, currentTime)
+    }
 )
 
 export const flightsOnTime = createSelector(
@@ -110,15 +115,21 @@ export const orderByIdSelector = createSelector(
 
 export const maxFlightIdSelector = createSelector(
     flightIdsSelector,
-    (ids) => Math.max(...ids)
+    (ids) => ids.length > 0 ? Math.max(...ids) : 0
 )
 
 // TODO в часах
 export const distanceBetweenAirportsSelector = createSelector(
-    airportDistancesSelector,
-    (distances) => {
+    airportObjectsSelector,
+    (airports) => {
         return (airport1Id, airport2Id) => {
-            return Math.round(distances[airport1Id][airport2Id] / 760)
+            const airport1 = airports[airport1Id]
+            const airport2 = airports[airport2Id]
+
+            return Math.round(
+                d3.geoDistance(
+                    [airport1.longt, airport1.latt],
+                    [airport2.longt, airport2.latt]) * 6371 / 760)
         }
     }
 )
@@ -142,4 +153,69 @@ export const budgetChainsElementsSelector = createSelector(
     (flights, budgetChains) => {
         return budgetChains.map((chain, index) => getChainElement(chain, flights, index))
     }    
+)
+
+export const licencedRegionsIdsSelector = createSelector(
+    licencesSelector,
+    currentLicenceIdsSelector,
+    (licences, currentLicenceIds) => {
+        return currentLicenceIds
+            .map(licenceId => licences[licenceId].regionIds)
+            .reduce((result, regionIds) => result = [...result, ...regionIds], [])
+    }
+)
+
+export const licencedAirportsSelector = createSelector(
+    licencedRegionsIdsSelector,
+    airportsSelector,
+    (regionsId, airports) => {
+        return airports.filter(airport => regionsId.includes(airport.regionId))
+    }
+)
+
+export const filteredFlightsSelector = createSelector(
+    flightsSelector,
+    currentTimeSelector,
+    (flights, currentTime) => {
+        const MAX_HOUR_DIFF = 2
+        const filteredFlights = 
+            flights.filter(flight =>  !flight.dateLanding || 
+                currentTime.diff(flight.dateLanding, 'hours') <= MAX_HOUR_DIFF)
+        
+        return filteredFlights
+    }
+)
+
+export const filteredFlightIdsSelector = createSelector(
+    filteredFlightsSelector,
+    (filteredFlights) => {
+        return filteredFlights.length > 0 ? filteredFlights.map(flight => flight.id).reverse() : []
+    }
+)
+
+export const licencedOrderIdsSelector = createSelector(
+    ordersSelector,
+    airportObjectsSelector,
+    licencedRegionsIdsSelector,
+    filteredFlightsSelector,
+    currentTimeSelector,
+    (orders, airports, regionIds, flights, currentTime) => {
+        const orderInWorkIds = flights.map(flight => flight.orderId)
+        const filteredOrders = orders && orders.length > 0 ? 
+            orders.filter(order =>
+                    order.dateTakeOff.isAfter(currentTime) &&
+                    !orderInWorkIds.includes(order.id))
+                .map(order => ({id: order.id, regionIds: [airports[order.fromId].regionId, airports[order.toId].regionId]}))
+                .filter(order => order.regionIds.every(region => regionIds.includes(region)))
+                .reverse() : []
+            
+        return filteredOrders.length > 0 ? filteredOrders.map(order => order.id) : []
+    }
+)
+
+export const maxOrderIdSelector = createSelector(
+    orderIdsSelector,
+    (orderIds) => {
+        return orderIds.length === 0 ? 0 : Math.max(...orderIds)
+    }
 )

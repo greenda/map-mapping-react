@@ -3,16 +3,16 @@ import { MapActions } from '../constants/map-actions'
 import moment from 'moment'
 
 export function getFlightInTime(flight, airports, orders, currentTime ) {
-    // flight.pay = flight.pay ? flight.pay : 0
-
     if (flight.orderId) {
-        const order = orders[flight.orderId]
+        const order = Object.values(orders).find(order => order.id === flight.orderId)
         flight.fromId = order.fromId
         flight.toId = order.toId
         flight.dateTakeOff = order.dateTakeOff
         flight.dateLanding = order.dateLanding
         flight.pay = order.pay
         flight.cost = order.cost
+        flight.name = `${order.name}`
+        flight.description = order.description
     }
     
     flight.from = {...airports.find(value => value.id === flight.fromId)}
@@ -169,7 +169,6 @@ export function getOrderDescription() {
     const randomPayloadShort = Math.round(Math.random() * (5 - 1))
     const randomPlaceShort = Math.round(Math.random() * (5 - 1))
 
-    console.log(randomPayload + ' ' + randomPlace)
     return {
         description: `Груз ${payloads[randomPayload].description} ${places[randomPlace].description}`,
         title: `${payloads[randomPayload].shorts[randomPayloadShort]} ${places[randomPlace].shorts[randomPlaceShort]}`
