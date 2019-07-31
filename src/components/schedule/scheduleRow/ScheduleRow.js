@@ -46,6 +46,7 @@ export function ScheduleRow({
             `}>
             {flightCels}
             {budgetChainRows}
+            <div className="tail-name">{`${tail.name} ${tail.airport ? tail.airport.iata : ''}`}</div>
         </div>
     )
 }
@@ -94,8 +95,8 @@ ScheduleRow.propTypes = {
     blankApproachFlight: PropTypes.func,
     connectDropTarget: PropTypes.func,
     isLast: PropTypes.bool,
-    isOver: PropTypes.func,
-    canDrop: PropTypes.func,
+    isOver: PropTypes.bool,
+    canDrop: PropTypes.bool,
 }
 
 export default DropTarget([ItemTypes.ORDER], rowTarget, collect)(ScheduleRow)

@@ -2,3 +2,19 @@
 @import '../../../common/styles/scheduleStyles.scss';
 
 @include schedule;
+
+.tail-name {
+    position: absolute;
+    text-align: center;
+    padding: $offset__ultra-small;
+    line-height: 1;
+    background-color: $white-color;
+    font-weight: bold;
+    width: 55px;
+    height: calc(100% - #{$offset__small});
+    display: flex;
+    align-items: center;
+    margin-top: -$offset__small;
+    background: $light-color;
+    justify-content: center;
+}
