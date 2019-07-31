@@ -35,9 +35,10 @@
 }
 
 .add-button {
-    background-color: white;
+    background-color: $white-color;
     padding: $offset__little $offset__ultra-small $offset__little $offset__ultra-small;
     border-radius: $offset__ultra-small;
-    border: dashed #a5a5a5 $offset__little;
+    border: dashed $gray-color__1 $offset__little;
     font-weight: bold;
+    cursor: pointer;
 }

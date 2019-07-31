@@ -10,6 +10,7 @@ import OrderList from '../src/components/orderList/OrderList'
 import MapContainer from '../src/components/map/MapContainer'
 import ScheduleTable from '../src/components/schedule/ScheduleTable'
 import OrderSchedule from '../src/components/order-schedule/OrderSchedule'
+import StoreContainer from '../src/components/store/StoreContainer'
 import { licencedOrderIdsSelector, filteredFlightIdsSelector, maxFlightIdSelector,
          flightsSelector, tailCoordinates, currentTimeSelector, flightsOnTime,
          approachFlightBlancSelector, budgetChainsElementsSelector,
@@ -22,6 +23,7 @@ import { useEffect } from 'react';
 const tabNames = {
     MAP_TAB: 'mapTab',
     SCHEDULE_TAB: 'scheduleTab',
+    STORE: 'store',
 }
 
 // TODO flights Вынести на этот уровень, чтобы два раза не просчитывать
@@ -38,8 +40,9 @@ function App ({ orderIds, flights, tails, flightIds, maxFlightId,
             }).catch(error => console.log(error))
         }
     })
-    const [tabName, setTabName] = useState(tabNames.MAP_TAB)
+    // const [tabName, setTabName] = useState(tabNames.MAP_TAB)
     // const [tabName, setTabName] = useState(tabNames.SCHEDULE_TAB)
+    const [tabName, setTabName] = useState(tabNames.STORE)
     const getActiveClass = (name) => {
         return tabName === name ? 'active' : ''
     }
@@ -84,6 +87,8 @@ function App ({ orderIds, flights, tails, flightIds, maxFlightId,
                         onClick={() => setTabName(tabNames.MAP_TAB)}>Map</span>
                 <span className={`main-container__tab-control ${getActiveClass(tabNames.SCHEDULE_TAB)}`}
                         onClick={() => setTabName(tabNames.SCHEDULE_TAB)}>Shedule</span>
+                <span className={`main-container__tab-control ${getActiveClass(tabNames.STORE)}`}
+                        onClick={() => setTabName(tabNames.STORE)}>Store</span>
                 </div>
             </div>
             {getTabContent(tabName, tails, flightsOnTime, countries,
@@ -101,18 +106,20 @@ function App ({ orderIds, flights, tails, flightIds, maxFlightId,
         case tabNames.MAP_TAB: 
             return <MapContainer countries={countries}/>
         case tabNames.SCHEDULE_TAB: 
-        return (
-            <div className="schedules__container">
-                <ScheduleTable tails={tails} 
-                    flights={flights}
-                    currentTime={currentTime}
-                    budgetChains={budgetChains}
-                    addApproachFlight={addApproachFlight}
-                    blankApproachFlight={blankApproachFlight}/>
-                <div className="schedules__line"></div>
-                <OrderSchedule currentTime={currentTime}/>
-            </div>
-        )
+            return (
+                <div className="schedules__container">
+                    <ScheduleTable tails={tails} 
+                        flights={flights}
+                        currentTime={currentTime}
+                        budgetChains={budgetChains}
+                        addApproachFlight={addApproachFlight}
+                        blankApproachFlight={blankApproachFlight}/>
+                    <div className="schedules__line"></div>
+                    <OrderSchedule currentTime={currentTime}/>
+                </div>
+            )
+        case tabNames.STORE:
+            return (<StoreContainer />)
         default: return (<></>)
     }          
     }

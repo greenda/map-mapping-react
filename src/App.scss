@@ -144,6 +144,11 @@ h1 {
             margin-top: $offset__medium;
             width: $map-width;
         }
+
+        & > .store__container {
+            margin-top: $offset__medium;
+            width: $map-width;
+        }
     }
 
     &__tab-control {

@@ -1,0 +1,43 @@
+@import '../.././../common/styles/variables.scss';
+
+.licence-item {
+    padding: $offset__medium;
+    border: solid 1px $gray-color__2;
+    display: flex;
+    flex-direction: row;
+    background: $medium-color__blue;
+    border-radius: $border-radius__medium;
+
+    & > &__name-column {
+        margin-right: $offset__medium;
+    }
+
+    &__name-column {
+        width: 160px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    &__buy-button {
+        background-color: $medium-color__yellow;
+        padding: $offset__ultra-small;
+        border-radius: $offset__ultra-small;
+        border: solid $gray-color__1 1;
+        font-weight: bold;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    &__active-licence {
+        font-weight: bold;
+    }
+
+    &__cost {
+        font-weight: bold;
+
+        &.inactive {
+            color: $dark-color__red;
+        }
+    }
+}

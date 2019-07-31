@@ -1,0 +1,25 @@
+@import '../../common/styles/variables.scss';
+
+.store {
+    &__container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding: $offset__small;
+    }
+
+    &__licences-container {
+        display: flex;
+        flex-wrap: wrap;
+
+        & > .licence-item {
+            margin: 0px $offset__medium $offset__medium 0px;            
+        }
+    }
+
+    &__licence-title {
+        font-size: $text-size__medium;
+        font-weight: bold;
+        padding-bottom: $offset__small;
+    }
+}

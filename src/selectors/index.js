@@ -22,7 +22,7 @@ export const currentBudgetSelector = (state) => state.money.currentBudget
 export const airportDistancesSelector = (state) => state.airports.distance
 export const fuelCostSelector = (_) => 100
 export const budgetChainsSelector = (state) => state.money.budgetChains
-export const licencesSelector = (state) => state.airports.licences
+export const licencesObjectSelector = (state) => state.airports.licences
 export const currentLicenceIdsSelector = (state) => state.airports.currentLicenceIds
 
 export const flightsDetailSelector = createSelector(
@@ -170,7 +170,7 @@ export const budgetChainsElementsSelector = createSelector(
 )
 
 export const licencedRegionsIdsSelector = createSelector(
-    licencesSelector,
+    licencesObjectSelector,
     currentLicenceIdsSelector,
     (licences, currentLicenceIds) => {
         return currentLicenceIds
@@ -258,5 +258,15 @@ export const ordersToScheduleSelector = createSelector(
                 
         return rows.reduce((result, orders, index) => 
             [...result, ...orders.map(order => { order.rowIndex = index; return order })], [])
+    }
+)
+
+export const licencesSelector = createSelector(
+    licencesObjectSelector,
+    currentLicenceIdsSelector,
+    (licencesObject, currentLicenceIds) => {
+        return Object.values(licencesObject).map(licence => 
+            ({...licence, isActive: (currentLicenceIds.includes(licence.id)) })
+        )
     }
 )

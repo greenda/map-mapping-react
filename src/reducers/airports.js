@@ -1,4 +1,5 @@
 // TODO переименова в geometry reducer, items в airports
+import { pageActionTypes } from '../constants/action-types'
 
 const initialState = {
     items: {
@@ -295,38 +296,56 @@ const initialState = {
         1: {
             id: 1,
             regionIds: [1],
-            name: 'Аэропорты Евразии'
+            name: 'Аэропорты Евразии',
+            imageKey: 'eurasia',
+            cost: 10000,
         },
         2: {
             id: 2,
             regionIds: [2],
-            name: 'Аэропорты Африки'
+            name: 'Аэропорты Африки',
+            imageKey: 'africa',
+            cost: 10000,
         },
         3: {
             id: 3,
             regionIds: [3],
-            name: 'Аэропорты Северной Америки'
+            name: 'Аэропорты Северной Америки',
+            imageKey: 'northAmerica',
+            cost: 10000,
         },
         4: {
             id: 4,
             regionIds: [4],
-            name: 'Аэропорты Южной Америки'
+            name: 'Аэропорты Южной Америки',
+            imageKey: 'southAmerica',
+            cost: 10000,
         },
         5: {
             id: 5,
             regionIds: [5],
-            name: 'Аэропорты Австралии и Океании'
+            name: 'Аэропорты Австралии и Океании',
+            imageKey: 'australia',
+            cost: 10000,
         },
         6: {
             id: 6,
             regionIds: [6],
-            name: 'Аэродромы Антарктиды'
+            name: 'Аэродромы Антарктиды',
+            imageKey: 'antarctida',
+            cost: 10000,
         },
         
     },
     currentLicenceIds: [1, 2]
 }
 
-export function airportsReducer(state = initialState) {
-    return state
+export function airportsReducer(state = initialState, action) {
+    const { type, payload = {} } = action
+    const { licence } = payload
+    switch (type) {
+        case pageActionTypes.ADD_LICENCE:
+            return {...state, currentLicenceIds: [...state.currentLicenceIds, licence.id]}
+        default: return state
+    }    
 }

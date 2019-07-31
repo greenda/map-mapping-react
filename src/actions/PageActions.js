@@ -80,3 +80,10 @@ export function checkMoney(flights, tails, maxTime, currentTime) {
   }
 }
 
+export function addLicence(licence) {
+  return {
+    type: pageActionTypes.ADD_LICENCE,
+    payload: { licence }
+  }
+}
+

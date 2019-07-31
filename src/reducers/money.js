@@ -1,7 +1,7 @@
 import { pageActionTypes } from '../constants/action-types';
 
 const initialState = {
-    currentBudget: 1000,
+    currentBudget: 10000,
     budgetChains: []
 }
 
@@ -61,6 +61,9 @@ export function moneyReducer(state = initialState, action) {
                         return chain
                     }).filter(chain => chain.ids.length > 1)              
                 }  
+        case pageActionTypes.ADD_LICENCE:
+            const { licence } = payload
+            return {...state, currentBudget: state.currentBudget - licence.cost}
         default:
             return {...state}
     }
