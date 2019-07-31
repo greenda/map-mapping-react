@@ -133,6 +133,7 @@ h1 {
 
     &__map-column {
         width: 100%;
+        position: relative;
 
         & > .map__container {
             margin-top: $offset__medium;

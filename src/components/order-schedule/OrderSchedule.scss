@@ -5,7 +5,14 @@
 .order-schedule {
     &__container {
         overflow: auto;
+        display: flex;
+        flex-direction: row;
 
         @include scrollbar;
     }
+}
+
+.timeline-container {
+    height: auto;
+    position: relative;
 }

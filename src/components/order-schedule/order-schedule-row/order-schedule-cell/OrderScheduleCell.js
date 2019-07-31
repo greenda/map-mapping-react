@@ -37,7 +37,8 @@ export function OrderScheduleCell({ order, cellWidthScale, currentTime, timeline
         getCellProperties(cellWidthScale, timelineOffsetHours, currentTime, order.dateTakeOff, order.dateLanding)
     
     return connectDragSource(
-        <div className="order-flight-cell order-cell" style={{left: leftOffset, width: cellWidth}}>
+        <div className={`order-flight-cell order-cell ${order.progress > 0 ? 'inactive' : ''}`}
+             style={{left: leftOffset, width: cellWidth}}>
             <div className="order-flight-cell__content">
                 <Tooltip disableFocusListener title={`${order.name} ${order.from.iata} - ${order.to.iata}`} placement="top">
                     <span className="order-flight-cell__label" >{order.name}</span>                

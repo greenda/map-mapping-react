@@ -1,7 +1,12 @@
+@import  '../../../../common/styles/variables.scss';
 @import  '../../../../common/styles/scheduleStyles.scss';
 
 @include order-flight-cell;
 
 .order-cell {
     height: calc(100% - 16px);
+
+    &.inactive {
+        background: $gray-color__1;
+    }
 }

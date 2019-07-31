@@ -217,7 +217,7 @@ export const licencedOrderSelector = createSelector(
         const orderInWorkIds = flights.map(flight => flight.orderId)
         return orders && orders.length > 0 ? 
             orders.filter(order =>
-                    order.dateTakeOff.isAfter(currentTime) &&
+                    order.dateTakeOff.diff(currentTime, 'hours') > 0 &&
                     !orderInWorkIds.includes(order.id))
                 .map(order => ({...order, regionIds: [airports[order.fromId].regionId, airports[order.toId].regionId]}))
                 .filter(order => order.regionIds.every(region => regionIds.includes(region)))
@@ -238,9 +238,22 @@ export const maxOrderIdSelector = createSelector(
 )
 
 export const ordersToScheduleSelector = createSelector(
-    licencedOrderSelector,
-    (orders) => {
-        const sorterArray = [...orders].sort((a, b) => a.dateTakeOff.isAfter(b.dateTakeOff) ? 1 : -1)
+    ordersOnTime,
+    airportObjectsSelector,
+    licencedRegionsIdsSelector,
+    filteredFlightsSelector,
+    currentTimeSelector,
+    (orders, airports, regionIds, flights, currentTime) => {
+        const orderInWorkIds = flights.map(flight => flight.orderId)
+        const filteredOrders = orders && orders.length > 0 ? 
+            orders.filter(order =>
+                    order.dateTakeOff.diff(currentTime, 'hours') > -24 &&
+                    !orderInWorkIds.includes(order.id))
+                .map(order => ({...order, regionIds: [airports[order.fromId].regionId, airports[order.toId].regionId]}))
+                .filter(order => order.regionIds.every(region => regionIds.includes(region)))
+                .reverse() : []
+
+        const sorterArray = [...filteredOrders].sort((a, b) => a.dateTakeOff.isAfter(b.dateTakeOff) ? 1 : -1)
         const rows = getOrderSchaduleRows(sorterArray)
                 
         return rows.reduce((result, orders, index) => 

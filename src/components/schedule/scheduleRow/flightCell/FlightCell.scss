@@ -1,3 +1,9 @@
 @import '../../../../common/styles/scheduleStyles.scss';
 
 @include order-flight-cell;
+
+.order-flight-cell {
+    &.inactive {
+        background: $gray-color__1;
+    }
+}

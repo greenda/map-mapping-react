@@ -10,14 +10,14 @@ export function FlightCell({ flight, cellWidthScale, currentTime, timelineOffset
         getCellProperties(cellWidthScale, timelineOffsetHours, currentTime, flight.dateTakeOff, flight.dateLanding)
 
     return (
-        <div className="order-flight-cell" style={{left: leftOffset, width: cellWidth}}>                
+        <div className={`order-flight-cell ${flight.progress > 0 ? 'inactive' : ''}`} style={{left: leftOffset, width: cellWidth}}>                
             <div className="order-flight-cell__add-approach-flight"
                     onClick={() => addApproachFlight(blankApproachFlight(flight.id))}>&lt;</div>
             <div className="order-flight-cell__content">
                 <Tooltip disableFocusListener title={`${flight.name} ${flight.from.iata} - ${flight.to.iata}`} placement="top">
                     <span className="order-flight-cell__label" >{flight.name}</span>                
                 </Tooltip>
-                <span className="order-flight-cell__airports" >{`${flight.from.iata} - ${flight.to.iata}`}</span>                
+                <span className="order-flight-cell__airports" >{`${flight.from.iata} - ${flight.to.iata} ${flight.progress}`}</span>                
             </div>
         </div>
     )

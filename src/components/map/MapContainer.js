@@ -4,12 +4,13 @@ import { flightsOnTime, tailCoordinates,
     airportsSelector, licencedRegionsIdsSelector } from '../../selectors/index'
 import MapView from './MapView'
 
-export function MapContainer({flights, tails, airports, regionIds}) {
+export function MapContainer({flights, tails, airports, regionIds, countries}) {
     return (
         <MapView 
             flights={flights} 
             tails={tails}
             airports={airports}
+            countries={countries}
             regionIds={regionIds}/>
     )
 }

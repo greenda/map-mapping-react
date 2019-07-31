@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux'
 import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend';
+import * as d3 from 'd3'
 import Timeline from '../src/components/timeline/Timeline'
 import FlightList from '../src/components/flightList/FlightList'
 import TailList from '../src/components/tailList/TailList'
@@ -16,6 +17,7 @@ import { licencedOrderIdsSelector, filteredFlightIdsSelector, maxFlightIdSelecto
 import { addApproachFlight } from './actions/pageActions'
 import logo from '../src/assets/map-mapping-logo.svg'
 import './App.scss';
+import { useEffect } from 'react';
 
 const tabNames = {
     MAP_TAB: 'mapTab',
@@ -27,8 +29,17 @@ const tabNames = {
 function App ({ orderIds, flights, tails, flightIds, maxFlightId, 
     flightsOnTime, currentTime, addApproachFlight, 
     blankApproachFlight, budgetChains, maxOrderId}) {
-    // const [tabName, setTabName] = useState(tabNames.MAP_TAB)
-    const [tabName, setTabName] = useState(tabNames.SCHEDULE_TAB)
+    
+    const [countries, setCountries] = useState();
+    useEffect(() => {
+        if (!countries) {
+            d3.json('world_countries.json').then((countries) => {
+                setCountries(countries)
+            }).catch(error => console.log(error))
+        }
+    })
+    const [tabName, setTabName] = useState(tabNames.MAP_TAB)
+    // const [tabName, setTabName] = useState(tabNames.SCHEDULE_TAB)
     const getActiveClass = (name) => {
         return tabName === name ? 'active' : ''
     }
@@ -75,16 +86,20 @@ function App ({ orderIds, flights, tails, flightIds, maxFlightId,
                         onClick={() => setTabName(tabNames.SCHEDULE_TAB)}>Shedule</span>
                 </div>
             </div>
-            {getTabContent(tabName, tails, flightsOnTime, currentTime, budgetChains, blankApproachFlight, addApproachFlight)}
+            {getTabContent(tabName, tails, flightsOnTime, countries,
+                currentTime, budgetChains, blankApproachFlight, addApproachFlight)}             
             </div>
         </div>
     );
 }
 
-    function getTabContent(tabName, tails, flights, currentTime, budgetChains, blankApproachFlight, addApproachFlight) {
+    function getTabContent(
+        tabName, tails, flights, countries,
+        currentTime, budgetChains,
+        blankApproachFlight, addApproachFlight) {
     switch(tabName) {
         case tabNames.MAP_TAB: 
-            return <MapContainer />
+            return <MapContainer countries={countries}/>
         case tabNames.SCHEDULE_TAB: 
         return (
             <div className="schedules__container">

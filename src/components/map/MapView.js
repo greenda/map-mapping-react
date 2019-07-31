@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import * as d3 from 'd3'
-import './MapView.css'
+import './MapView.scss'
 import aircraftIconRed from '../../assets/aircraft-icon__red.svg'
 import aircraftIconGray from '../../assets/aircraft-icon__gray.svg'
 const width = 1100
@@ -13,7 +13,7 @@ const INACTIVE_COUNTTRY_BORDER = '#9bacac'
 const INACTIVE_COUNTRY_COLOR = '#9bacac'
 const INACTIVE_AIRPORT_FILL = '#9bacac'
 
-export function MapView({flights, tails, airports, regionIds}) {
+export function MapView({flights, tails, airports, regionIds, countries}) {
     const [isLoaded, setIsLoaded] = useState(false)
     const [svg, setSvg] = useState()
                 
@@ -24,21 +24,10 @@ export function MapView({flights, tails, airports, regionIds}) {
     const licencedAirports = airports.filter(airport => regionIds.includes(airport.regionId))
     
     useEffect(() => {
-        d3.json('world_countries.json')
-        .then((countries) => {
-            const svg = d3.select('#mapa')
-                .attr("width", width)
-                .attr("height", height)
-                .attr('fill', 'green')
-            showMapBackground(svg, path, countries, regionIds)
-            initLines(svg, path, projection, flights)
-            initAirports(svg, projection, licencedAirports, regionIds)
-            initAircraft(svg, path, projection, tails, flights)
-            setIsLoaded(true)
-            setSvg(svg)
-        })
-        .catch(error => console.log(error))
-    }, [])
+        if (countries && !isLoaded) {
+            init(path, countries, regionIds, projection, licencedAirports, flights, tails, setIsLoaded, setSvg)
+        }
+    }, [countries])
     useEffect(() => {
         if (isLoaded) {
             initLines(svg, path, projection, flights)
@@ -46,8 +35,10 @@ export function MapView({flights, tails, airports, regionIds}) {
         }
     }, [flights])
 
-    return (
-        <svg id="mapa" className="map__container"></svg>
+    return (<>
+            <div className={`map__loader ${!isLoaded ? 'loading' : 'loaded'}`}>...</div>
+            <svg id="mapa" className={`map__container ${!isLoaded ? 'loading' : 'loaded'}`}></svg>
+        </>
     )
 }
 
@@ -80,6 +71,18 @@ export function MapView({flights, tails, airports, regionIds}) {
             ACTIVE_COUNTRY_COLOR : INACTIVE_COUNTRY_COLOR)
     }
 
+    function init(path, countries, regionIds, projection, licencedAirports, flights, tails, setIsLoaded, setSvg) {
+        const svg = d3.select('#mapa')
+            .attr("width", width)
+            .attr("height", height)
+            .attr('fill', 'green')
+        showMapBackground(svg, path, countries, regionIds)
+        initLines(svg, path, projection, flights)
+        initAirports(svg, projection, licencedAirports, regionIds)
+        initAircraft(svg, path, projection, tails, flights)
+        setIsLoaded(true)
+        setSvg(svg)
+    }
 
     // TODO Переименовать в updateRoutes
     function initLines(svg, path, projection, flights) {   

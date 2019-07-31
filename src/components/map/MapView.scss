@@ -1,0 +1,44 @@
+/* .routes__lines {
+    stroke: black;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 0;
+    animation: dash 1000s linear;
+  }
+  
+  @keyframes dash {
+    to {
+      stroke-dashoffset: 100;
+    }
+  } */
+
+  .loading {
+    opacity: 0;
+  }
+
+  @keyframes opacity {
+    0%   { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  .loaded {
+    opacity: 1;
+    animation: opacity 0.1s ease-in alternate;
+  }
+
+  .map__loader {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    font-size: xx-large;
+
+    &.loading {
+      opacity: 1;
+    }
+
+    &.loaded {
+      display: none;
+    }
+  }
