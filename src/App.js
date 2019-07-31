@@ -84,7 +84,7 @@ function App ({ orderIds, flights, tails, flightIds, maxFlightId,
     function getTabContent(tabName, tails, flights, currentTime, budgetChains, blankApproachFlight, addApproachFlight) {
     switch(tabName) {
         case tabNames.MAP_TAB: 
-        return <MapContainer />
+            return <MapContainer />
         case tabNames.SCHEDULE_TAB: 
         return (
             <div className="schedules__container">
@@ -105,16 +105,16 @@ function App ({ orderIds, flights, tails, flightIds, maxFlightId,
     export default DragDropContext(HTML5Backend)(
         connect(
         (state) => ({
-        orderIds: licencedOrderIdsSelector(state),
-        maxOrderId: maxOrderIdSelector(state),
-        flightIds: filteredFlightIdsSelector(state),   
-        flights: flightsSelector(state),
-        flightsOnTime: flightsOnTime(state),
-        maxFlightId: maxFlightIdSelector(state),  
-        tails: tailCoordinates(state),
-        currentTime: currentTimeSelector(state),
-        blankApproachFlight: approachFlightBlancSelector(state),
-        budgetChains: budgetChainsElementsSelector(state),        
+            orderIds: licencedOrderIdsSelector(state),
+            maxOrderId: maxOrderIdSelector(state),
+            flightIds: filteredFlightIdsSelector(state),   
+            flights: flightsSelector(state),
+            flightsOnTime: flightsOnTime(state),
+            maxFlightId: maxFlightIdSelector(state),  
+            tails: tailCoordinates(state),
+            currentTime: currentTimeSelector(state),
+            blankApproachFlight: approachFlightBlancSelector(state),
+            budgetChains: budgetChainsElementsSelector(state),        
         }),
         { addApproachFlight }
     )(App)

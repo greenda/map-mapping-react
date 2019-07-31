@@ -9,4 +9,5 @@ export const pageActionTypes = {
     ADD_APPROACH_FLIGHT: '[Flight] add approach flight',
     REMOVE_FLIGHT: '[Flight] remove flight',
     CHECK_MONEY: '[Money] check money',
+    CREATE_FLIGHT_FROM_ORDER: '[Flight] create flight from order',
   } 

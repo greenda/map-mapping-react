@@ -71,4 +71,20 @@ $text-size__ultra-small: 0.8em;
     text-overflow: ellipsis;
 }
 
+@mixin dropStyles {
+    .enableDrop {
+        background: greenyellow;
+        border-color: greenyellow;
+    }
+    
+    .disableDrop {
+        background: orangered;
+        border-color: orangered;
+    }
+    
+    .ended {
+        background: $gray-color__1;
+    }
+}
+
 

@@ -66,6 +66,13 @@ export function addOrder(orderId, flightId) {
   }
 }
 
+export function createFlightFromOrder(orderId, newFlightId, tailId) {
+  return {
+    type: pageActionTypes.CREATE_FLIGHT_FROM_ORDER,
+    payload: { orderId, newFlightId, tailId }
+  }
+}
+
 export function checkMoney(flights, tails, maxTime, currentTime) {
   return {
     type: pageActionTypes.CHECK_MONEY,

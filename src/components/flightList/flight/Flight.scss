@@ -61,16 +61,4 @@
     }
 }
 
-.enableDrop {
-    background: greenyellow;
-    border-color: greenyellow;
-}
-
-.disableDrop {
-    background: orangered;
-    border-color: orangered;
-}
-
-.ended {
-    background: $gray-color__1;
-}
+@include dropStyles;

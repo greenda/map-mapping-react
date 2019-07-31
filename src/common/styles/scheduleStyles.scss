@@ -43,6 +43,20 @@
             border: solid 1px $gray-color__1;
             position: relative;
             overflow: hidden;
+
+            &.enableDrop {
+                background: greenyellow;
+                border-color: greenyellow;
+            }
+            
+            &.disableDrop {
+                background: orangered;
+                border-color: orangered;
+            }
+            
+            &.ended {
+                background: $gray-color__1;
+            }
         }
     }
 }

@@ -66,7 +66,7 @@ const flightTarget = {
 	},
 
 	drop(props) {
-        return { id: props.flight.id };
+        return { id: props.flight.id, type: ItemTypes.FLIGHT };
     }
 }
 
