@@ -34,7 +34,7 @@ LicenceItem.propTypes = {
     }),
     addLicence: func,
     currentBudget: number,
-    image: PropTypes.object
+    image: string,
 }
 
 export default LicenceItem

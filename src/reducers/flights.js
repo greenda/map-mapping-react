@@ -55,7 +55,7 @@ export function flightsReducer(state = initialState, action) {
   const flight = flightId ? state[flightId] : {};
   const newState =  {...state}
   switch (type) {    
-    case pageActionTypes.ADD_TAIL:
+    case pageActionTypes.ADD_TAIL_IN_FLIGHT:       
       const { tail } = payload
       if (flight) {
         flight.tail = tail

@@ -4,6 +4,8 @@
     padding: 8px;
     cursor: pointer;
     text-align: center;
+    display: flex;
+    flex-direction: column;
 
     &__name {
         white-space: nowrap;

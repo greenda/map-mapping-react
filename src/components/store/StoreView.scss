@@ -22,4 +22,67 @@
         font-weight: bold;
         padding-bottom: $offset__small;
     }
+
+    &__aircrafts-title {
+        font-size: $text-size__medium;
+        font-weight: bold;
+        padding-bottom: $offset__small;
+    }
+
+    &__aircrafts-buy-button-container {
+        display: flex;
+        justify-content: space-between;
+        width: 400px;
+        padding: $offset__medium;
+        border: solid 1px gray;
+        background: $medium-color__blue;
+
+        &.without-button {
+            justify-content: flex-end;
+        }
+    }
+
+    &__aircrafts-buy-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: $medium-color__yellow;
+        padding: $offset__ultra-small;
+        border-radius: $offset__ultra-small;
+        border: solid 1px $gray-color__1;
+        font-weight: bold;
+        cursor: pointer;
+        user-select: none;
+        text-align: center;
+        width: 160px;
+        box-sizing: content-box;
+
+        &.hidden {
+            display: none;
+        }
+    }
+
+    &__aircrafts-icon-container {
+        display: flex;
+        align-items: center;
+        & > div:first-child {
+            margin-right: $offset__small;
+        }
+
+        & > select {
+            margin-right: $offset__medium;
+        }
+    }
+
+    &__aircrafts-icon {
+        transform:  rotate(-90deg);
+    }
+
+    &__aircrafts-cost {
+        font-weight: bold;
+
+        &.inactive {
+            color: $dark-color__red;
+        }
+    }
 }

@@ -2,14 +2,14 @@ import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { tailCoordinates } from '../../selectors/index'
-import { addTail } from '../../actions/pageActions'
+import { addTailInFlight } from '../../actions/pageActions'
 import Tail from './tail/Tail'
 import './TailList.scss'
 
-export function TailList({tails, addTail}) {
+export function TailList({tails, addTailInFlight}) {
     const tailsArray = tails.map(tail => (
         <Tail key={tail.id} tail={tail}
-            addTailAction={addTail}>
+            addTailAction={addTailInFlight}>
         </Tail>
     ))
 
@@ -33,5 +33,5 @@ export default connect(
     (state) => ({
         tails: tailCoordinates(state)
     }),
-    { addTail }
+    { addTailInFlight }
 )(TailList)

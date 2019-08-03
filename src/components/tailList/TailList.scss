@@ -1,8 +1,12 @@
+@import '../../common/styles/variables.scss';
+
 .tails-container {
     display: flex;
+    flex-wrap: wrap;
 
     & > div {
-        margin-right: 8px;
+        margin-right: $offset__ultra-small;
+        margin-bottom: $offset__ultra-small;
     }
 
     & > div:last-child {

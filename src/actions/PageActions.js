@@ -1,9 +1,9 @@
 
 import { pageActionTypes } from '../constants/action-types'
 
-export function addTail(tail, flightId) {
+export function addTailInFlight(tail, flightId) {  
   return {
-    type: pageActionTypes.ADD_TAIL,
+    type: pageActionTypes.ADD_TAIL_IN_FLIGHT,
     payload: { tail, flightId },
   }
 }
@@ -84,6 +84,13 @@ export function addLicence(licence) {
   return {
     type: pageActionTypes.ADD_LICENCE,
     payload: { licence }
+  }
+}
+
+export function addTail(airportId, cost) {
+  return {
+    type: pageActionTypes.ADD_TAIL,
+    payload: { airportId, cost }
   }
 }
 

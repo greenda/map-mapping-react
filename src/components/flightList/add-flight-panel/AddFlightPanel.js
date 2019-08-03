@@ -77,8 +77,7 @@ export function AddFlightPanel({
 }
 
 const getAirportSelector = (airports) => (type, inputs, handleInputChange) => {
-    const sortedAirports = [...airports]
-    sortedAirports.sort((a, b) => (a.iata < b.iata) ? -1: 1)
+    const sortedAirports = [...airports].sort((a, b) => (a.iata < b.iata) ? -1: 1)
     return (
         <select className="airport-selector" name={type} value={inputs[type]} onChange={handleInputChange}>
             {sortedAirports.map(airport => <option value={airport.id} key={airport.id}>{airport.iata}</option>)}

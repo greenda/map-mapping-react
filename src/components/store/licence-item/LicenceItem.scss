@@ -20,13 +20,19 @@
     }
 
     &__buy-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         background-color: $medium-color__yellow;
         padding: $offset__ultra-small;
         border-radius: $offset__ultra-small;
-        border: solid $gray-color__1 1;
+        border: solid 1px $gray-color__1;
         font-weight: bold;
         cursor: pointer;
         user-select: none;
+        text-align: center;
+        height: 40px;
+        box-sizing: border-box;
     }
 
     &__active-licence {

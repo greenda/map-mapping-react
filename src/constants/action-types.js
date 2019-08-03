@@ -1,5 +1,5 @@
 export const pageActionTypes = {
-    ADD_TAIL: '[Tail] add tail in flight',
+    ADD_TAIL_IN_FLIGHT: '[Tail] add tail in flight',
     INC_TIME: '[Time] increment time',
     DEC_TIME: '[Time] decrement time',
     GENERATE_ORDERS: '[Orders] generate orders',
@@ -11,4 +11,5 @@ export const pageActionTypes = {
     CHECK_MONEY: '[Money] check money',
     CREATE_FLIGHT_FROM_ORDER: '[Flight] create flight from order',
     ADD_LICENCE: '[Licence] add licence',
+    ADD_TAIL: '[Tail] add tail',
   } 
