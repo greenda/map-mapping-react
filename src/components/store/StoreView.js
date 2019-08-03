@@ -34,7 +34,7 @@ export function StoreView({ licences, images, addLicence, addTail, currentBudget
                     <div className={`store__aircrafts-cost ${currentBudget < aircraftCost ? 'inactive' : ''}`}>
                         {aircraftCost} ☼
                     </div>
-                    <select className="airport-selector" value={airportId} onChange={onAirportIdChange}>
+                    <select className={`store__airport-selector ${ currentBudget < aircraftCost ? 'hidden' : ''}`} value={airportId} onChange={onAirportIdChange}>
                         {sortedAirports.map(airport => <option value={airport.id} key={airport.id}>{airport.iata}</option>)}
                     </select>
                     <img className="store__aircrafts-icon" width="40" height="40" src={aircraftIcon} alt="aircrfat for buy"/>

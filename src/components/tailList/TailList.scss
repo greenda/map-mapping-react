@@ -3,6 +3,7 @@
 .tails-container {
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
 
     & > div {
         margin-right: $offset__ultra-small;

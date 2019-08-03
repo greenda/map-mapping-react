@@ -74,6 +74,16 @@
         }
     }
 
+    &__airport-selector {
+        border-color: #b7c6c6;
+        border-radius: 4px;
+        padding: 2px;
+
+        &.hidden {
+            display: none;
+        }
+    }
+
     &__aircrafts-icon {
         transform:  rotate(-90deg);
     }
