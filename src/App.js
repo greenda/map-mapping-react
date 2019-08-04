@@ -11,6 +11,8 @@ import MapContainer from '../src/components/map/MapContainer'
 import ScheduleTable from '../src/components/schedule/ScheduleTable'
 import OrderSchedule from '../src/components/order-schedule/OrderSchedule'
 import StoreContainer from '../src/components/store/StoreContainer'
+import AchievementsContainer from '../src/components/achievements/AchievementsContainer'
+import CongratulationContainer from './components/achievements/congratulation/CongratulationContainer'
 import { licencedOrderIdsSelector, filteredFlightIdsSelector, maxFlightIdSelector,
          flightsSelector, tailCoordinates, currentTimeSelector, flightsOnTime,
          approachFlightBlancSelector, budgetChainsElementsSelector,
@@ -24,6 +26,7 @@ const tabNames = {
     MAP_TAB: 'mapTab',
     SCHEDULE_TAB: 'scheduleTab',
     STORE: 'store',
+    ACHIEVEMENTS: 'achievements',
 }
 
 // TODO flights Вынести на этот уровень, чтобы два раза не просчитывать
@@ -40,61 +43,68 @@ function App ({ orderIds, flights, tails, flightIds, maxFlightId,
             }).catch(error => console.log(error))
         }
     })
+    useEffect(() => {
+    })
     // const [tabName, setTabName] = useState(tabNames.MAP_TAB)
     // const [tabName, setTabName] = useState(tabNames.SCHEDULE_TAB)
-    const [tabName, setTabName] = useState(tabNames.STORE)
+    const [tabName, setTabName] = useState(tabNames.ACHIEVEMENTS)
     const getActiveClass = (name) => {
         return tabName === name ? 'active' : ''
     }
 
-    return (    
-        <div className="main-container">
-            <div className="main-container__column main-container__flight-column">
-                <div className="logo-container">
-                    <img src={logo} alt="logo"></img>   
+    return (
+        <>
+            <CongratulationContainer className="congratulation-container"/>    
+            <div className="main-container">            
+                <div className="main-container__column main-container__flight-column">
+                    <div className="logo-container">
+                        <img src={logo} alt="logo"></img>   
+                    </div>
+                    <div className="section-container tails-section">
+                        <div className="section-container__header">
+                            <span>Tails</span>
+                        </div>
+                        {/* TODO tails передавать с этого уровня */}
+                        <div className="section-container__content">
+                            <TailList />
+                        </div>
+                    </div>
+                    <div className="section-container flights-section">
+                        <div className="section-container__header">
+                            <span>Flights</span>
+                        </div>
+                        <div className="section-container__content">
+                            <FlightList flightIds={flightIds} maxFlightId={maxFlightId}/>
+                        </div>
+                    </div>
+                    <div className="section-container orders-section">
+                        <div className="section-container__header">
+                            <span>Orders</span>
+                        </div>
+                        <div className="section-container__content">
+                            <OrderList orderIds={orderIds} maxOrderId={maxOrderId}/>
+                        </div>
+                    </div>
                 </div>
-                <div className="section-container tails-section">
-                    <div className="section-container__header">
-                        <span>Tails</span>
-                    </div>
-                    {/* TODO tails передавать с этого уровня */}
-                    <div className="section-container__content">
-                        <TailList />
-                    </div>
-                </div>
-                <div className="section-container flights-section">
-                    <div className="section-container__header">
-                        <span>Flights</span>
-                    </div>
-                    <div className="section-container__content">
-                        <FlightList flightIds={flightIds} maxFlightId={maxFlightId}/>
+                <div className="main-container__column main-container__map-column">
+                <div className="map-column__header">
+                    <div><Timeline flights={flights} tails={tails}/></div>
+                    <div className="map-column__tab-controls ">
+                    <span className={`main-container__tab-control ${getActiveClass(tabNames.MAP_TAB)}`} 
+                            onClick={() => setTabName(tabNames.MAP_TAB)}>Map</span>
+                    <span className={`main-container__tab-control ${getActiveClass(tabNames.SCHEDULE_TAB)}`}
+                            onClick={() => setTabName(tabNames.SCHEDULE_TAB)}>Shedule</span>
+                    <span className={`main-container__tab-control ${getActiveClass(tabNames.STORE)}`}
+                            onClick={() => setTabName(tabNames.STORE)}>Store</span>
+                    <span className={`main-container__tab-control ${getActiveClass(tabNames.ACHIEVEMENTS)}`}
+                            onClick={() => setTabName(tabNames.ACHIEVEMENTS)}>Achievements</span>
                     </div>
                 </div>
-                <div className="section-container orders-section">
-                    <div className="section-container__header">
-                        <span>Orders</span>
-                    </div>
-                    <div className="section-container__content">
-                        <OrderList orderIds={orderIds} maxOrderId={maxOrderId}/>
-                    </div>
-                </div>
+                {getTabContent(tabName, tails, flightsOnTime, countries,
+                    currentTime, budgetChains, blankApproachFlight, addApproachFlight)}             
+                </div>                
             </div>
-            <div className="main-container__column main-container__map-column">
-            <div className="map-column__header">
-                <div><Timeline flights={flights} tails={tails}/></div>
-                <div className="map-column__tab-controls ">
-                <span className={`main-container__tab-control ${getActiveClass(tabNames.MAP_TAB)}`} 
-                        onClick={() => setTabName(tabNames.MAP_TAB)}>Map</span>
-                <span className={`main-container__tab-control ${getActiveClass(tabNames.SCHEDULE_TAB)}`}
-                        onClick={() => setTabName(tabNames.SCHEDULE_TAB)}>Shedule</span>
-                <span className={`main-container__tab-control ${getActiveClass(tabNames.STORE)}`}
-                        onClick={() => setTabName(tabNames.STORE)}>Store</span>
-                </div>
-            </div>
-            {getTabContent(tabName, tails, flightsOnTime, countries,
-                currentTime, budgetChains, blankApproachFlight, addApproachFlight)}             
-            </div>
-        </div>
+        </>
     );
 }
 
@@ -120,6 +130,8 @@ function App ({ orderIds, flights, tails, flightIds, maxFlightId,
             )
         case tabNames.STORE:
             return (<StoreContainer />)
+        case tabNames.ACHIEVEMENTS:
+             return (<AchievementsContainer />)
         default: return (<></>)
     }          
     }
@@ -136,7 +148,7 @@ function App ({ orderIds, flights, tails, flightIds, maxFlightId,
             tails: tailCoordinates(state),
             currentTime: currentTimeSelector(state),
             blankApproachFlight: approachFlightBlancSelector(state),
-            budgetChains: budgetChainsElementsSelector(state),        
+            budgetChains: budgetChainsElementsSelector(state),      
         }),
         { addApproachFlight }
     )(App)

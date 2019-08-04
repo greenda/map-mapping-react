@@ -149,6 +149,11 @@ h1 {
             margin-top: $offset__medium;
             width: $map-width;
         }
+
+        & > .achievements__container {
+            margin-top: $offset__medium;
+            width: $map-width;
+        }
     }
 
     &__tab-control {
@@ -185,6 +190,10 @@ h1 {
             top: 1px;
             }
         }        
+    }
+
+    &.congratulation-container {
+        width: 0px;
     }
 }
 

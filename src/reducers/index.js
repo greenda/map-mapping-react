@@ -5,6 +5,7 @@ import { flightsReducer } from './flights'
 import { timeReducer } from './time'
 import { airportsReducer } from './airports'
 import { moneyReducer } from './money'
+import { achievementsReducer } from './achievements'
 
 
 export const rootReducer = combineReducers({
@@ -14,4 +15,5 @@ export const rootReducer = combineReducers({
     time: timeReducer,
     airports: airportsReducer,
     money: moneyReducer,
+    achievements: achievementsReducer,
 });

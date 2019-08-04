@@ -1,0 +1,18 @@
+@import '../../common/styles/variables.scss';
+
+.achievements {
+    &__container {
+        height: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+        overflow: auto;
+
+        @include scrollbar;
+
+        & > .achievement-item {
+            margin-right: $offset__medium;
+            margin-bottom: $offset__medium;
+        }
+    }
+}

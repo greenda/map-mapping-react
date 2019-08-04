@@ -12,4 +12,5 @@ export const pageActionTypes = {
     CREATE_FLIGHT_FROM_ORDER: '[Flight] create flight from order',
     ADD_LICENCE: '[Licence] add licence',
     ADD_TAIL: '[Tail] add tail',
+    ADD_ACHIEVEMENT: '[Achievement] add achievement',
   } 

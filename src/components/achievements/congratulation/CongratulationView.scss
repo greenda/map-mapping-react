@@ -1,0 +1,39 @@
+@import '../../../common/styles/variables.scss';
+
+.congratulation {
+    &__container {
+        background: $white-color;
+        width: 600px;
+        border-radius: $border-radius__large;
+        
+    }
+
+    @keyframes opacity {
+        0%   { opacity: 0; }
+        100% { opacity: 1; }
+      }
+    
+
+    &__title {
+        position: absolute;
+        top: 250px;
+        text-align: center;
+        width: 100%;
+        font-weight: bold;
+        opacity: 1;
+        animation-delay: 4s;
+        animation: opacity 0.5s ease-out;        
+    }
+
+    &__description {
+        position: absolute;
+        top: 280px;
+        text-align: center;
+        width: 100%;
+        opacity: 1;
+        animation-delay: 4s;
+        animation: opacity 0.5s ease-out;
+        padding: $offset__medium;    
+        box-sizing: border-box;    
+    }    
+}

@@ -87,6 +87,13 @@ export function addLicence(licence) {
   }
 }
 
+export function addAchievement(achievementId) {
+  return {
+    type: pageActionTypes.ADD_ACHIEVEMENT,
+    payload: { achievementId }
+  }
+}
+
 export function addTail(airportId, cost) {
   return {
     type: pageActionTypes.ADD_TAIL,

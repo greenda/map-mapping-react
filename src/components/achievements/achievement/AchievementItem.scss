@@ -1,0 +1,32 @@
+@import '../../../common/styles/variables.scss';
+
+.achievement-item {
+    display: flex;
+    border: solid 1px $gray-color__2;
+    border-radius: $border-radius__medium;
+    padding: $offset__medium;
+    width: 40%;
+    background: $light-color;
+
+    &.open {
+        border: solid $border-radius__large $medium-color__yellow;
+    }
+    
+    &__description-container {
+        display: flex;
+        flex-direction: column;
+        margin-left: $offset__medium;
+        
+        & > span:first-child {
+            font-weight: bold;
+        }
+
+        & > span {
+            margin-bottom: $offset__medium;
+
+            &.hidden {
+                display: none;
+            }
+        }
+    }   
+}

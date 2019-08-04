@@ -75,7 +75,6 @@ export function MapView({flights, tails, airports, regionIds, countries}) {
         const svg = d3.select('#mapa')
             .attr("width", width)
             .attr("height", height)
-            .attr('fill', 'green')
         showMapBackground(svg, path, countries, regionIds)
         initLines(svg, path, projection, flights)
         initAirports(svg, projection, licencedAirports, regionIds)

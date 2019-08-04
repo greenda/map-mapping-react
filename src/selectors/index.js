@@ -23,7 +23,10 @@ export const airportDistancesSelector = (state) => state.airports.distance
 export const fuelCostSelector = (_) => 100
 export const budgetChainsSelector = (state) => state.money.budgetChains
 export const licencesObjectSelector = (state) => state.airports.licences
+export const licenceIdsSelector = (state) => Object.keys(state.airports.licences)
 export const currentLicenceIdsSelector = (state) => state.airports.currentLicenceIds
+export const achievementsSelector = (state) => state.achievements.all
+export const currentAchievementIdsSelector = (state) => state.achievements.currentAchievemntIds
 
 export const flightsDetailSelector = createSelector(
     flightsSelector,
@@ -268,5 +271,12 @@ export const licencesSelector = createSelector(
         return Object.values(licencesObject).map(licence => 
             ({...licence, isActive: (currentLicenceIds.includes(licence.id)) })
         )
+    }
+)
+
+export const stockingFlightCountsSelector = createSelector(
+    flightsSelector,
+    (flights) => {
+        return flights.filter(flight => flight.progress === 100 && flight.description.includes('чулок')).length
     }
 )
