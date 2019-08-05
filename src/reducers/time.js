@@ -2,9 +2,11 @@
 import { pageActionTypes } from '../constants/action-types'
 import moment from 'moment'
 
+const startTime = moment.utc('2000-01-01T10:00:00+00:00')
+
 const initialState = {
-    currentTime: moment.utc('2000-01-01T10:00:00+00:00'),
-    maxTime: moment.utc('2000-01-01T10:00:00+00:00'),
+    currentTime: startTime.clone(),
+    maxTime: startTime.clone(),
 }
 
 export function timeReducer(state = initialState, action) {
@@ -26,8 +28,19 @@ export function timeReducer(state = initialState, action) {
                 currentTime: state.currentTime.add(-1 * payload, 'hour').clone()
             }
             break;
-        default: break;
-    }
+        case pageActionTypes.SET_START_TIME:
+            state = {
+                ...state,
+                currentTime: startTime.clone()
+            }
+            break
+        case pageActionTypes.SET_CURRENT_TIME:
+            return {
+                ...state,
+                currentTime: state.maxTime.clone()
+            }
+
+        default: break;    }
 
     return state
 }

@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend';
 import * as d3 from 'd3'
-import Timeline from '../src/components/timeline/Timeline'
+import TimelineContainer from '../src/components/timeline/TimelineContainer'
 import FlightList from '../src/components/flightList/FlightList'
 import TailList from '../src/components/tailList/TailList'
 import OrderList from '../src/components/orderList/OrderList'
@@ -94,7 +94,7 @@ function App ({ orderIds, flights, tails, flightIds, maxFlightId,
                 </div>
                 <div className="main-container__column main-container__map-column">
                 <div className="map-column__header">
-                    <div><Timeline flights={flights} tails={tails}/></div>
+                    <div><TimelineContainer /></div>
                     <div className="map-column__tab-controls ">
                     <span className={`main-container__tab-control ${getActiveClass(tabNames.MAP_TAB)}`} 
                             onClick={() => setTabName(tabNames.MAP_TAB)}>Map</span>

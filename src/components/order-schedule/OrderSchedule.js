@@ -15,6 +15,7 @@ export function OrderSchedule({ orderSchedule, currentTime }) {
         return (
             <OrderScheduleRow 
                 key={rowIndex}
+                leftOffset={TIMELINE_OFFSET_HOURS * CELL_WIDTH_SCALE}
                 rowIndex={rowIndex}
                 isLast={maxRowIndex === rowIndex} 
                 orders={cells}
@@ -28,8 +29,6 @@ export function OrderSchedule({ orderSchedule, currentTime }) {
              <div className="schedule__rows" >
                 {rows}
              </div>
-            <div className="schedule__timeline" 
-                 style={{left: `${TIMELINE_OFFSET_HOURS * CELL_WIDTH_SCALE}px`}}></div>
         </div>
     )
 }

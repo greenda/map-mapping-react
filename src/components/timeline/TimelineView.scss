@@ -12,7 +12,7 @@
 
     &__button {
         margin-right: $offset__small;
-        margin-right: 4px;
+        margin-right: $offset__ultra-small;
         background: $focus-color__red;
         height: 32px;
         width: 32px;
@@ -20,7 +20,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 6px;
+        border-radius: $border-radius__medium;
         font-weight: bold;
         color: $white-color;
         cursor: pointer;
@@ -28,6 +28,10 @@
         &:last-child {
             margin-right: 0px;
             font-size: 1.0em;
+        }
+
+        &.hidden {
+            display: none;
         }
     }
 
@@ -41,7 +45,7 @@
         & > span {
             display: flex;
             align-items: center;
-            margin-bottom: 4px;
+            margin-bottom: $offset__ultra-small;
             height: 1em;
         }
     }

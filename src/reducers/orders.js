@@ -54,9 +54,11 @@ export function ordersReducer(state = initialState, action) {
   // const flight = flightId ? state[flightId] : {};
   switch (type) {  
     case pageActionTypes.GENERATE_ORDERS:
-      const { maxTime, maxFlightId, airports, airportDistances, isRequired } = payload
+      const { maxTime, maxFlightId, airports, airportDistances, 
+        fuelCost, isRequired } = payload
       // TODO переименовать в generateOrders
-      const newOrders = generateFlights(maxTime, maxFlightId, airports, airportDistances, isRequired)
+      const newOrders = 
+        generateFlights(maxTime, maxFlightId, airports, airportDistances, fuelCost, isRequired)
       const result = {...state}      
       // TODO inmuttable
       newOrders.forEach((value) => {

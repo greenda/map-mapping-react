@@ -2,6 +2,8 @@ export const pageActionTypes = {
     ADD_TAIL_IN_FLIGHT: '[Tail] add tail in flight',
     INC_TIME: '[Time] increment time',
     DEC_TIME: '[Time] decrement time',
+    SET_START_TIME: '[Time] set start time',
+    SET_CURRENT_TIME: '[Time] set current time',
     GENERATE_ORDERS: '[Orders] generate orders',
     ADD_ORDER: '[Order] add order to flight',
     ADD_FLIGHT: '[Flight] add flight',

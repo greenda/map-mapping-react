@@ -15,6 +15,7 @@ export function ScheduleTable({
                 tail={tail} 
                 key={`tail${tail.id}`}
                 flights={flights}
+                leftOffset={TIMELINE_OFFSET_HOURS * CELL_WIDTH_SCALE}
                 isLast={(tailsCount - 1) === i}
                 currentTime={currentTime}
                 budgetChains={budgetChains}
@@ -25,10 +26,8 @@ export function ScheduleTable({
     )
     
     return (
-        <div className="schedule__container">
-            <div className="schedule__rows">{tailRows}</div>         
-            <div className="schedule__timeline" 
-                 style={{left: `${TIMELINE_OFFSET_HOURS * CELL_WIDTH_SCALE}px`}}></div>
+        <div className="schedule__container">            
+                <div className="schedule__rows">{tailRows}</div>        
         </div>
     )
 }

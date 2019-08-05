@@ -79,7 +79,9 @@ export const flightsDetailSelector = createSelector(
 export const tailsDetalsSelector = createSelector(
     airportsSelector,
     tailsSelector,
-    (airports, tails) => tails.map(tail => ({ ...tail, airport: tail.airportId ? airports.find(value => value.id === tail.airportId) : null }))
+    (airports, tails) => tails.map(tail => 
+        ({ ...tail, airport: tail.airportId ? 
+            airports.find(value => value.id === tail.airportId) : null }))
 )
 
 export const airportByIdSelector = createSelector(
@@ -255,7 +257,7 @@ export const ordersToScheduleSelector = createSelector(
         const orderInWorkIds = flights.map(flight => flight.orderId)
         const filteredOrders = orders && orders.length > 0 ? 
             orders.filter(order =>
-                    order.dateTakeOff.diff(currentTime, 'hours') > -24 &&
+                    order.dateLanding.diff(currentTime, 'hours') > -4 &&
                     !orderInWorkIds.includes(order.id))
                 .map(order => ({...order, regionIds: [airports[order.fromId].regionId, airports[order.toId].regionId]}))
                 .filter(order => order.regionIds.every(region => regionIds.includes(region)))

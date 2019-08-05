@@ -1,50 +1,52 @@
 
-import { getOrderDescription } from '../../helpers/FlightHelper'
+import { getOrderDescription, getRandomFromToAirportIds, getCostAndPay } from '../../helpers/FlightHelper'
 
 const maxHourOffset = 48
 const minHourOffset = 2
 const randomCoeff = 0.8
 const maxFlightOnHour = 3
 
-export function generateFlights(maxTime, maxFlightId, airports, airportDistances, isRequired) {
+export function generateFlights(maxTime, maxFlightId, 
+    airports, airportDistances, fuelCost, isRequired) {
     if (isRequired || Math.random() > randomCoeff) {
-        const flighOnHour = isRequired ? maxFlightOnHour : Math.round(Math.random() * maxFlightOnHour + 1)
+        const flighOnHour = isRequired ? maxFlightOnHour : 
+            Math.round(Math.random() * maxFlightOnHour + 1)
         const flights = Array(flighOnHour).fill('')
             
         return flights.map((_, index) => 
-            generateFlight(maxTime, maxFlightId + index, airports, airportDistances, isRequired)
+            generateFlight(maxTime, maxFlightId + index, 
+                airports, airportDistances, fuelCost)
         )
     }
 
     return []    
 }
 
-function generateFlight(maxTime, maxFlightId, airports, airportDistances) {
-    const timeOffset = Math.round((Math.random() * (maxHourOffset - minHourOffset)  + minHourOffset))
-    const flightLenght = 10
-    const startTime = maxTime.clone().add(timeOffset, 'hours')
-    const airportIds = [...airports]
-    let index = Math.round(Math.random() * (airportIds.length - 1))
-    const fromId = airportIds[index]
-    airportIds.splice(index, 1)
-    index = Math.round(Math.random() * (airportIds.length - 1))
-    const toId =  airportIds[index]
-    // TODO fuelCost в справочник
-    const cost = airportDistances(fromId, toId) * 100
-    const pay = cost + Math.round(2000 + Math.random() * 1000)
+function generateFlight(maxTime, maxFlightId, airports, airportDistances, fuelCost) {
+    const timeOffset = 
+        Math.round((Math.random() * (maxHourOffset - minHourOffset)  + minHourOffset))  
+    const { fromId, toId } = getRandomFromToAirportIds(airports.map(value => value.id))
+    
+    const flightLength = airportDistances(fromId, toId)
+    const dateTakeOff = maxTime.clone().add(timeOffset, 'hours')    
+    const dateLanding = dateTakeOff.clone().add(flightLength, 'hours')
+
+    const { cost, pay } = getCostAndPay(fromId, toId, airportDistances, airports, fuelCost)    
     const { title, description } = getOrderDescription()
+    const id = maxFlightId + 1
+
     return {
+        id,
+        fromId,
+        toId,
+        dateTakeOff,
+        dateLanding,
         pay,
         cost,
         description,
-        id: maxFlightId + 1,
-        name: `${title} ${maxFlightId + 1}`,
+        name: `${title} ${id}`,
         tail: null,
         tailId: null,
-        fromId: fromId,
-        toId: toId,
-        dateTakeOff: startTime,
-        dateLanding: startTime.clone().add(flightLenght, 'hours'),
         status: 'planned',
         progress: -1,
     }

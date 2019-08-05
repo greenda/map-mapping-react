@@ -11,7 +11,7 @@ export function OrderScheduleRow({
     orders, cellWidthScale,
     currentTime, timelineOffsetHours, isLast,
     createFlightFromOrder, addOrder,
-    maxFlightId
+    maxFlightId, leftOffset
  }) {
     return (
         <div className={`schedule__row order-schedule-row ${isLast ? 'last' : ''}`} >
@@ -26,6 +26,7 @@ export function OrderScheduleRow({
                     maxFlightId={maxFlightId}
                     key={order.id} order={order}/>)
             )}
+            <div className="schedule__timeline" style={{left: `${leftOffset}px`}}></div>
         </div>
     )
 }
@@ -52,6 +53,7 @@ OrderScheduleRow.propTypes = {
     createFlightFromOrder: PropTypes.func,
     addOrder: PropTypes.func,
     maxFlightId: number,
+    leftOffset: number,
 }
 
 export default connect(

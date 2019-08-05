@@ -3,7 +3,9 @@ import PropTypes, { number } from 'prop-types'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import { maxFlightIdSelector, maxTimeSelector,
-    airportIdsSelector, distanceBetweenAirportsSelector } from '../../selectors/index'
+    airportsSelector, distanceBetweenAirportsSelector,
+    fuelCostSelector
+} from '../../selectors/index'
 import Order from './order/Order'
 import { addOrder, createFlightFromOrder } from '../../actions/pageActions'
 import { generateOrders } from '../../actions/pageActions'
@@ -12,8 +14,8 @@ import './OrderList.scss'
 export function OrderList({
     orderIds, maxOrderId, maxTime, 
     generateOrders, airportDistances, 
-    airportsIds, addOrder, createFlightFromOrder, 
-    maxFlightId, selectedOrder}) {
+    airports, addOrder, createFlightFromOrder, 
+    maxFlightId, selectedOrder, fuelCost}) {
     const [didMount, setDidMount] = useState(false)
     const scrollToRef = (ref) => {
         if (ref && ref.current) {            
@@ -22,7 +24,7 @@ export function OrderList({
     }
 
     useEffect(() => {                
-        generateOrders(maxTime, maxOrderId, airportsIds, airportDistances, !didMount)
+        generateOrders(maxTime, maxOrderId, airports, airportDistances, fuelCost, !didMount)
         setDidMount(true)
     }, [maxTime])
 
@@ -61,14 +63,16 @@ OrderList.propTypes = {
     createFlightFromOrder: PropTypes.func,
     maxFlightId: number,
     selectedOrder: number,
+    fuelCost: number,
 }
 
 export default connect(
     (state) => ({
         maxTime: maxTimeSelector(state), 
-        airportsIds: airportIdsSelector(state),       
+        airports: airportsSelector(state),       
         airportDistances: distanceBetweenAirportsSelector(state),
         maxFlightId: maxFlightIdSelector(state),
+        fuelCost: fuelCostSelector(state),
     }),
     { generateOrders, addOrder, createFlightFromOrder }
 )(OrderList)

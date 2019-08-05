@@ -11,7 +11,7 @@ export function ScheduleRow({
     tail, flights, cellWidthScale, currentTime, 
     budgetChains, timelineOffsetHours, 
     addApproachFlight, blankApproachFlight,
-    connectDropTarget, isLast, isOver, canDrop }) {
+    connectDropTarget, isLast, isOver, canDrop, leftOffset }) {
     
     const tailBudgetChains = budgetChains.filter(budgetChain => budgetChain.tailId === tail.id)
     const budgetChainRows = tailBudgetChains.map((chainElement) => {
@@ -47,6 +47,7 @@ export function ScheduleRow({
             {flightCels}
             {budgetChainRows}
             <div className="tail-name">{`${tail.name} ${tail.airport ? tail.airport.iata : ''}`}</div>
+            <div className="schedule__timeline" style={{left: `${leftOffset}px`}}></div>
         </div>
     )
 }
@@ -97,6 +98,7 @@ ScheduleRow.propTypes = {
     isLast: PropTypes.bool,
     isOver: PropTypes.bool,
     canDrop: PropTypes.bool,
+    leftOffset: number,
 }
 
 export default DropTarget([ItemTypes.ORDER], rowTarget, collect)(ScheduleRow)

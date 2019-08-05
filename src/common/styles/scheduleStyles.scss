@@ -1,7 +1,7 @@
 @import './variables.scss';
 
 @mixin schedule {
-        .schedule {
+    .schedule {
         &__container {
             height: 100%;
             display: flex;
@@ -10,6 +10,7 @@
             position: relative;
             border-radius: $border-radius__large;
             overflow: auto;
+            @include scrollbar;
 
             & > .schedule__rows > .schedule__row {
                 margin: $offset__small;
@@ -26,7 +27,9 @@
             position: absolute;
             width: 2px;
             min-height: 100%;
-            background: $dark-color__red;        
+            background: $dark-color__red;
+            top: -$offset__medium;
+            height: calc(100% + #{$offset__medium});
         }  
 
         &__rows {

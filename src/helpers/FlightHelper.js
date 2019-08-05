@@ -176,9 +176,7 @@ export function getApproachFlight(flightId, tails, flights, fuelCost, airportDis
       }
 }
 
-export function getEmptyFlight(flightId) {
-    console.log('getEmptyFlight ' + flightId)
-    
+export function getEmptyFlight(flightId) {    
     return {
         id: flightId,
         name: `Flight ${flightId}`,
@@ -197,6 +195,23 @@ export function getEmptyFlight(flightId) {
 
 const getCost = (dateTakeOff, dateLanding, fuelCost) => {
     return dateLanding.diff(moment.utc(dateTakeOff), 'hours') * fuelCost
+}
+
+export function getRandomFromToAirportIds(airportIds) {
+    const fromRandomIndex = Math.round(Math.random() * (airportIds.length - 1))
+    const fromId = airportIds[fromRandomIndex]
+    airportIds.splice(fromRandomIndex, 1)
+    const toRandomIndex = Math.round(Math.random() * (airportIds.length - 1))
+    const toId =  airportIds[toRandomIndex]
+    return { fromId, toId }
+}
+
+export  function getCostAndPay(fromId, toId, airportDistances, airports, fuelCost) {
+    const findAirport = (id) => airports.find(airport => airport.id === id)
+    const cost = airportDistances(fromId, toId) * fuelCost
+    const allowance = findAirport(fromId).regionId !== findAirport(toId).regionId ? 2000 : 0
+    const pay = cost + Math.round(2000 + Math.random() * 1000) + allowance
+    return { cost, pay }
 }
 
 export const dateType = {
