@@ -26,7 +26,7 @@ AcheivementsView.propTypes = {
         congratulation: string,
     }),
     currentAchievementIds: PropTypes.arrayOf(number),
-    images: PropTypes.arrayOf(string),
+    images: PropTypes.object,
 }
 
 export default AcheivementsView

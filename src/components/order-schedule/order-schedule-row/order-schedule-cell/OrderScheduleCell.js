@@ -14,14 +14,14 @@ const orderSource = {
     endDrag(props, monitor) {
         const dropResult = monitor.getDropResult()
         if (dropResult && dropResult.type === ItemTypes.FLIGHT && dropResult.id) {
-            props.addOrder(props.order.id, monitor.getDropResult().id);
+            props.addOrder(props.order.id, +monitor.getDropResult().id);
         }
 
         if (dropResult && dropResult.type === ItemTypes.SCHEDULE && dropResult.id) {
             props.createFlightFromOrder(
                 props.order.id, 
                 props.maxFlightId + 1,
-                monitor.getDropResult().id);
+                +monitor.getDropResult().id);
         }
     },
 };

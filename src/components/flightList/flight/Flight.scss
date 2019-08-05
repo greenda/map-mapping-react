@@ -5,6 +5,13 @@
         background: $light-color;
         padding: $offset__medium;
         padding-right: $offset__small;
+
+        &.canceled {
+            background: $focus-color__red;
+            > .flight__header > .flight__header__row > .flight__name {
+                color: $white-color;
+            }
+        }
     }
 
     &__name {

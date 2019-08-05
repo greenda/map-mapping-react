@@ -10,7 +10,10 @@ export function FlightCell({ flight, cellWidthScale, currentTime, timelineOffset
         getCellProperties(cellWidthScale, timelineOffsetHours, currentTime, flight.dateTakeOff, flight.dateLanding)
 
     return (
-        <div className={`order-flight-cell ${flight.progress > 0 ? 'inactive' : ''}`} style={{left: leftOffset, width: cellWidth}}>                
+        <div className={`order-flight-cell
+                 ${flight.progress > 0 ? 'inactive' : ''} 
+                 ${(flight.progress === -1 && flight.status === 'canceled') ? 'canceled' : ''}`}
+            style={{left: leftOffset, width: cellWidth}}>                
             <div className="order-flight-cell__add-approach-flight"
                     onClick={() => addApproachFlight(blankApproachFlight(flight.id))}>&lt;</div>
             <div className="order-flight-cell__content">

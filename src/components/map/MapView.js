@@ -167,6 +167,14 @@ export function MapView({flights, tails, airports, regionIds, countries}) {
         // TODO зарефакторить этот момент
         const aircrafts = tails ? tails.map(tail => {
             const tailOnAir = aircraftsOnAir.find(tailOnAir => tailOnAir.id === tail.id) 
+
+            if (!tailOnAir && !tail.coordinates) {
+                console.log(flights)
+                console.log(tails)
+                console.log(tailOnAir)
+                debugger
+                return null
+            }
             
             // TODO onFlight в селектор
             return tailOnAir ? {...tailOnAir, coordinates: tailOnAir.coordinates, onFlight: true } : 

@@ -9,6 +9,7 @@
             background: $medium-color__blue;
             position: relative;
             border-radius: $border-radius__large;
+            overflow: auto;
 
             & > .schedule__rows > .schedule__row {
                 margin: $offset__small;
@@ -44,6 +45,7 @@
             border: solid 1px $gray-color__1;
             position: relative;
             overflow: hidden;
+            min-height: 70px;
 
             &.enableDrop {
                 background: greenyellow;

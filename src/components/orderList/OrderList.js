@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
+import PropTypes, { number } from 'prop-types'
 import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
-import { maxFlightIdSelector, maxTimeSelector, airportIdsSelector, airportsSelector, distanceBetweenAirportsSelector } from '../../selectors/index'
+import moment from 'moment'
+import { maxFlightIdSelector, maxTimeSelector, airportIdsSelector, distanceBetweenAirportsSelector } from '../../selectors/index'
 import Order from './order/Order'
 import { addOrder, createFlightFromOrder } from '../../actions/pageActions'
 import { generateOrders } from '../../actions/pageActions'
@@ -9,7 +10,7 @@ import './OrderList.scss'
 
 export function OrderList({
     orderIds, maxOrderId, maxTime, 
-    airports, generateOrders, airportDistances, 
+    generateOrders, airportDistances, 
     airportsIds, addOrder, createFlightFromOrder, maxFlightId}) {
     const [didMount, setDidMount] = useState(false)
     useEffect(() => {                
@@ -29,19 +30,17 @@ export function OrderList({
     )
 }
 
-// TODO propTypes
-// OrderList.propTypes = {
-//     flightIds: PropTypes.arrayOf(PropTypes.number)
-// }
-
-// export default connect(
-//     (state) => ({
-//         flightIds: flightIdsSelector(state),
-//         maxTime: maxTimeSelector(state),
-//         airports: airportIdsSelector(state),
-//     }),
-//     { generateFlights }
-// )(FlightList)
+OrderList.propTypes = {
+    orderIds: PropTypes.arrayOf(number),
+    maxOrderId: number,
+    maxTime: PropTypes.instanceOf(moment), 
+    generateOrders: PropTypes.func,
+    airportDistances: PropTypes.func,
+    airportsIds: PropTypes.arrayOf(number),
+    addOrder: PropTypes.func,
+    createFlightFromOrder: PropTypes.func,
+    maxFlightId: number,
+}
 
 export default connect(
     (state) => ({

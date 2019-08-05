@@ -6,4 +6,11 @@
     &.inactive {
         background: $gray-color__1;
     }
+    
+    &.canceled {
+        background: $focus-color__red;
+        > .order-flight-cell__content > .order-flight-cell__label {
+            color: $white-color;
+        }
+    }
 }

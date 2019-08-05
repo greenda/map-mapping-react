@@ -10,13 +10,14 @@ import './Flight.scss'
 
 export function Flight({ flight, connectDropTarget, isOver, canDrop, onRemove }) {
     const { expanded, toggleExpanded } = useToggler(false)
-    const { id, name, from, to, progress, dateTakeOff, dateLanding, tail } = flight    
+    const { id, name, from, to, progress, status, dateTakeOff, dateLanding, tail } = flight    
 
     return connectDropTarget(
         <div className={`flight__container 
             ${isOver && canDrop ? 'enableDrop' : ''}
             ${isOver && !canDrop ? 'disableDrop' : ''}
-            ${progress > 100 ? 'ended' : ''}`
+            ${progress > 100 ? 'ended' : ''}
+            ${progress === -1 && status === 'canceled' ? 'canceled' : ''}`
             }>
             <div className="flight__header">
                 <div className="flight__header__row">

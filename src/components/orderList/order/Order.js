@@ -55,15 +55,15 @@ export function Order({ order, connectDragSource }) {
                     <div>{`${dateTakeOff.format('DD.MM HH:mm')} - 
                            ${dateLanding.format('DD.MM HH:mm')}`}</div>
                 </div>                
-            </div>
-            
+            </div>            
             {getDetails(expanded, order)}
         </div>
     )
 }
 
 function getDetails(expanded, order) {
-    return (expanded && order.description) ? (<div className="order__description">{order.description}</div>) : (<div></div>)
+    return (expanded && order.description) ? 
+        (<div className="order__description">{order.description}</div>) : (<div></div>)
 }
 
 Order.propTypes = {

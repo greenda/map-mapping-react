@@ -1,7 +1,7 @@
 // TODO разбросать по нескольким селекторам
 
 import { createSelector } from 'reselect'
-import { getFlightInTime, getApproachFlight } from '../helpers/FlightHelper'
+import { getFlightInTime, getOrdersInTime, getApproachFlight } from '../helpers/FlightHelper'
 import { getChainElement } from '../helpers/BudgetHelper'
 import { getOrderSchaduleRows } from '../helpers/ScheduleHelper'
 import * as d3 from 'd3'
@@ -23,10 +23,47 @@ export const airportDistancesSelector = (state) => state.airports.distance
 export const fuelCostSelector = (_) => 100
 export const budgetChainsSelector = (state) => state.money.budgetChains
 export const licencesObjectSelector = (state) => state.airports.licences
-export const licenceIdsSelector = (state) => Object.keys(state.airports.licences)
+export const licenceIdsSelector = (state) => Object.keys(state.airports.licences).map(value => +value)
 export const currentLicenceIdsSelector = (state) => state.airports.currentLicenceIds
 export const achievementsSelector = (state) => state.achievements.all
 export const currentAchievementIdsSelector = (state) => state.achievements.currentAchievemntIds
+
+
+export const tailCoordinates = createSelector(
+    tailsSelector,
+    airportsSelector,    
+    flightsSelector,
+    currentTimeSelector,
+    (tails, airports, flights, currentTime) => {
+        return tails.map((tail) => {
+            const filteredFlight = 
+                flights.filter(flight => flight.status !== 'canceled' && flight.tailId === tail.id &&
+                    flight.dateTakeOff &&
+                    flight.dateTakeOff.isBefore(currentTime))
+            let tailAirport = tail.airportId ? airports.find(value => value.id === tail.airportId) : null
+            let flightProgress = -1;
+            if (filteredFlight.length > 0) {
+                const sortedFlights = 
+                    filteredFlight.sort((a, b) => a.dateLanding.diff(b.dateLanding))
+                const endFlight = sortedFlights[sortedFlights.length - 1]
+                flightProgress = endFlight.progress 
+                switch (true) {
+                    case flightProgress <= 0: tailAirport = airports.find(value => value.id === endFlight.fromId); break;
+                    case flightProgress >= 100: tailAirport = airports.find(value => value.id === endFlight.toId); break;
+                    default: tailAirport = null;
+                }
+            } 
+            flightProgress = flightProgress < 100 ? flightProgress : -1
+            
+            return tailAirport ? 
+                { ...tail, airport: tailAirport, airportId: tailAirport.id, 
+                    coordinates: [tailAirport.longt, tailAirport.latt],
+                    progress: flightProgress
+                } 
+                : { ...tail, progress: flightProgress }
+        })
+    }
+)
 
 export const flightsDetailSelector = createSelector(
     flightsSelector,
@@ -55,10 +92,11 @@ export const flightByIdSelector = createSelector(
     airportsSelector,
     flightsObjectSelector,
     ordersObjectSelector,
+    tailCoordinates,
     (_, { id }) => id,
     () => getFlightInTime,
-    (currentTime, airports, flights, orders, id, getFlightInTime) => {
-        return getFlightInTime({...flights[id]}, airports, orders, currentTime)
+    (currentTime, airports, flights, orders, tails, id, getFlightInTime) => {
+        return getFlightInTime({...flights[id]}, airports, orders, tails, currentTime)
     }
 )
 
@@ -67,55 +105,21 @@ export const flightsOnTime = createSelector(
     airportsSelector,
     flightsDetailSelector,
     ordersObjectSelector,
+    tailCoordinates,
     () => getFlightInTime,
     // TODO - присоединять аэропорты в другом селекторе
-    (currentTime, airports, flights, orders, getFlightInTime) => 
-        flights.map(flight => getFlightInTime(flight, airports, orders, currentTime))            
-)
-
-export const tailCoordinates = createSelector(
-    tailsSelector,
-    airportsSelector,    
-    flightsSelector,
-    currentTimeSelector,
-    (tails, airports, flights, currentTime) => {
-        return tails.map((tail) => {
-            const filteredFlight = 
-                flights.filter(flight => flight.tailId === tail.id &&
-                    flight.dateTakeOff &&
-                    flight.dateTakeOff.isBefore(currentTime))
-            let tailAirport = tail.airportId ? airports.find(value => value.id === tail.airportId) : null
-            let flightProgress = -1;
-            if (filteredFlight.length > 0) {
-                const sortedFlights = 
-                    filteredFlight.sort((a, b) => a.dateLanding.diff(b.dateLanding))
-                const endFlight = sortedFlights[sortedFlights.length - 1]
-                flightProgress = endFlight.progress 
-                switch (true) {
-                    case flightProgress <= 0: tailAirport = airports.find(value => value.id === endFlight.fromId); break;
-                    case flightProgress >= 100: tailAirport = airports.find(value => value.id === endFlight.toId); break;
-                    default: tailAirport = null;
-                }
-            } 
-            flightProgress = flightProgress < 100 ? flightProgress : -1
-            
-            return tailAirport ? 
-                { ...tail, airport: tailAirport, airportId: tailAirport.id, 
-                    coordinates: [tailAirport.longt, tailAirport.latt],
-                    progress: flightProgress
-                } 
-                : { ...tail, progress: flightProgress }
-        })
-    }
+    (currentTime, airports, flights, orders, tails, getFlightInTime) => 
+        flights.map(flight => getFlightInTime(flight, airports, orders, tails, currentTime))            
 )
 
 export const orderByIdSelector = createSelector(
     currentTimeSelector,
     airportsSelector,
     ordersObjectSelector,
+    tailCoordinates,
     (_, { id }) => id,
-    (currentTime, airports, orders, id) => {
-        return getFlightInTime({...orders[id]}, airports, orders, currentTime) 
+    (currentTime, airports, orders, tails, id) => {
+        return getFlightInTime({...orders[id]}, airports, orders, tails, currentTime) 
     }
 )
 
@@ -123,10 +127,10 @@ export const ordersOnTime = createSelector(
     currentTimeSelector,
     airportsSelector,
     ordersObjectSelector,
-    () => getFlightInTime,
+    () => getOrdersInTime,
     // TODO - присоединять аэропорты в другом селекторе
-    (currentTime, airports, orders, getFlightInTime) => {
-        return Object.values(orders).map(order => getFlightInTime(order, airports, orders, currentTime)) 
+    (currentTime, airports, orders, getOrdersInTime) => {
+        return Object.values(orders).map(order => getOrdersInTime(order, airports, orders, currentTime)) 
     }
 )
 
@@ -157,9 +161,10 @@ export const approachFlightBlancSelector = createSelector(
     distanceBetweenAirportsSelector,
     fuelCostSelector,
     maxFlightIdSelector,
-    (flights, tails, airportDistances, fuelCost, maxFlightId) => {
+    currentTimeSelector,
+    (flights, tails, airportDistances, fuelCost, maxFlightId, currentTime) => {
         return (flightId) => {
-            return getApproachFlight(flightId, tails, flights, fuelCost, airportDistances, maxFlightId)
+            return getApproachFlight(flightId, tails, flights, fuelCost, airportDistances, maxFlightId, currentTime)
         }
     }
 )
@@ -277,6 +282,8 @@ export const licencesSelector = createSelector(
 export const stockingFlightCountsSelector = createSelector(
     flightsSelector,
     (flights) => {
-        return flights.filter(flight => flight.progress === 100 && flight.description.includes('чулок')).length
+        return flights.filter(flight => flight.progress === 100
+            && flight.description 
+            && flight.description.includes('чулок')).length
     }
 )

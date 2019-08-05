@@ -1,7 +1,5 @@
 import { pageActionTypes } from '../constants/action-types'
-import moment from 'moment'
-import { getApproachFlight, getEmptyFlight } from '../helpers/FlightHelper'
-// import { generateFlights } from '../common/flights-generator/flights-generator'
+import { getEmptyFlight } from '../helpers/FlightHelper'
 
 const initialState = {
     // 1: {

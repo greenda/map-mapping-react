@@ -15,7 +15,7 @@ export function moneyReducer(state = initialState, action) {
             if (maxTime.isSame(currentTime)) {
                 let budget = state.currentBudget
                 flights.forEach(flight => {
-                    if (flight.dateLanding && flight.dateLanding.isSame(currentTime)) {                        
+                    if (flight.status !== 'canceled' && flight.dateLanding && flight.dateLanding.isSame(currentTime)) {                        
                         budget = budget + flight.pay - flight.cost
                     }
                 })

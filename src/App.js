@@ -46,8 +46,8 @@ function App ({ orderIds, flights, tails, flightIds, maxFlightId,
     useEffect(() => {
     })
     // const [tabName, setTabName] = useState(tabNames.MAP_TAB)
-    // const [tabName, setTabName] = useState(tabNames.SCHEDULE_TAB)
-    const [tabName, setTabName] = useState(tabNames.ACHIEVEMENTS)
+    const [tabName, setTabName] = useState(tabNames.SCHEDULE_TAB)
+    //const [tabName, setTabName] = useState(tabNames.ACHIEVEMENTS)
     const getActiveClass = (name) => {
         return tabName === name ? 'active' : ''
     }
