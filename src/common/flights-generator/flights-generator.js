@@ -1,7 +1,7 @@
 
 import { getOrderDescription } from '../../helpers/FlightHelper'
 
-const maxHourOffset = 24
+const maxHourOffset = 48
 const minHourOffset = 2
 const randomCoeff = 0.8
 const maxFlightOnHour = 3

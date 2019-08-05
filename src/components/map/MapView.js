@@ -13,7 +13,7 @@ const INACTIVE_COUNTTRY_BORDER = '#9bacac'
 const INACTIVE_COUNTRY_COLOR = '#9bacac'
 const INACTIVE_AIRPORT_FILL = '#9bacac'
 
-export function MapView({flights, tails, airports, regionIds, countries}) {
+export function MapView({flights, orders, tails, airports, regionIds, countries, onOrderClick}) {
     const [isLoaded, setIsLoaded] = useState(false)
     const [svg, setSvg] = useState()
                 
@@ -25,12 +25,13 @@ export function MapView({flights, tails, airports, regionIds, countries}) {
     
     useEffect(() => {
         if (countries && !isLoaded) {
-            init(path, countries, regionIds, projection, licencedAirports, flights, tails, setIsLoaded, setSvg)
+            init(path, countries, regionIds, projection, licencedAirports, 
+                flights, orders, tails, setIsLoaded, setSvg, onOrderClick)
         }
     }, [countries])
     useEffect(() => {
         if (isLoaded) {
-            initLines(svg, path, projection, flights)
+            initLines(svg, path, projection, flights, orders, onOrderClick)
             updateAircrafts(svg, path, projection, tails, flights)
         }
     }, [flights])
@@ -54,6 +55,7 @@ export function MapView({flights, tails, airports, regionIds, countries}) {
 //         status: PropTypes.string,
 //         tails
 //     }))
+// orders
 // }
 
     function showMapBackground(svg, path, data, regionIds) {
@@ -71,12 +73,13 @@ export function MapView({flights, tails, airports, regionIds, countries}) {
             ACTIVE_COUNTRY_COLOR : INACTIVE_COUNTRY_COLOR)
     }
 
-    function init(path, countries, regionIds, projection, licencedAirports, flights, tails, setIsLoaded, setSvg) {
+    function init(path, countries, regionIds, projection, licencedAirports, 
+        flights, orders, tails, setIsLoaded, setSvg, onOrderClick) {
         const svg = d3.select('#mapa')
             .attr("width", width)
             .attr("height", height)
         showMapBackground(svg, path, countries, regionIds)
-        initLines(svg, path, projection, flights)
+        initLines(svg, path, projection, flights, orders, onOrderClick)
         initAirports(svg, projection, licencedAirports, regionIds)
         initAircraft(svg, path, projection, tails, flights)
         setIsLoaded(true)
@@ -84,7 +87,7 @@ export function MapView({flights, tails, airports, regionIds, countries}) {
     }
 
     // TODO Переименовать в updateRoutes
-    function initLines(svg, path, projection, flights) {   
+    function initLines(svg, path, projection, flights, orders, onOrderClick) {   
         const currentFlights = flights.filter(value => 0 <= value.progress && value.progress <= 100)
         const lines = currentFlights.map(flight => getFlightLine(flight))
         
@@ -93,6 +96,7 @@ export function MapView({flights, tails, airports, regionIds, countries}) {
                .attr("class", "routes")
         } else {
             svg.select('.routes').select('.routes__lines').remove()
+            svg.select('.routes').select('.orders__lines').remove()
             svg.select('.routes').select('.routes__airports').remove()
         }
         
@@ -104,7 +108,7 @@ export function MapView({flights, tails, airports, regionIds, countries}) {
            .enter()
            .append("path")
            .attr('id', d => d.id)
-           .attr('class', d => 'line' + d.id)
+           .attr('class', 'line')
            .attr("d", path)
            .attr('fill', 'none')  
            .attr('stroke', 'black')
@@ -119,6 +123,24 @@ export function MapView({flights, tails, airports, regionIds, countries}) {
                   .attr('stroke-dashoffset', 0)
             }
         )  
+
+        const orderLines = orders.map(order => getFlightLine(order))
+        svg.select('.routes')
+            .append("g")
+            .attr("class", "orders__lines")
+            .selectAll("path")
+            .data(orderLines)
+            .enter()
+            .append("path")
+            .attr('id', d => `order ${d.id}`)
+            .attr('class', 'order-line')
+            .attr('d', path)
+            .attr('fill', 'none')  
+            .attr('stroke', 'slategrey')
+            .attr('stroke-width', 2)
+            .attr('stroke-dasharray', 10) 
+            .style('cursor', 'pointer')
+            .on('click', d => onOrderClick(d.id))
     }
 
     function initAirports(svg, projection, airports, regionIds) {
@@ -152,7 +174,7 @@ export function MapView({flights, tails, airports, regionIds, countries}) {
         const lineNodes = svg.selectAll('.routes').selectAll('.routes__lines').selectAll('path').nodes()
         const aircraftsOnAir = lineNodes.map(line => {
             const id = +line.getAttribute('id')
-            const flight = flights.find(value => value.id = id)
+            const flight = flights.find(value => value.id === id)
             const totalLenght = line.getTotalLength()
             const aircraftPosition = line.getPointAtLength(flight.progress / 100 * totalLenght)
             const nextPosition = line.getPointAtLength(flight.progress + 1 / 100 * totalLenght)
@@ -269,7 +291,7 @@ export function MapView({flights, tails, airports, regionIds, countries}) {
   function getFlightLine(flight) {
     return (flight.from && flight.to) ?
         {type: 'LineString', 'id': flight.id,
-         'coordinates': [[flight.from.longt, flight.from.latt], 
+         'coordinates': [[flight.from.longt, flight.from.latt],
          [flight.to.longt, flight.to.latt]], 'new': flight.mapAction === 'add_flight'} : {}
   }
 

@@ -20,7 +20,7 @@ export function FlightCell({ flight, cellWidthScale, currentTime, timelineOffset
                 <Tooltip disableFocusListener title={`${flight.name} ${flight.from.iata} - ${flight.to.iata}`} placement="top">
                     <span className="order-flight-cell__label" >{flight.name}</span>                
                 </Tooltip>
-                <span className="order-flight-cell__airports" >{`${flight.from.iata} - ${flight.to.iata} ${flight.progress}`}</span>                
+                <span className="order-flight-cell__airports" >{`${flight.from.iata} - ${flight.to.iata}`}</span>                
             </div>
         </div>
     )

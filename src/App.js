@@ -36,6 +36,7 @@ function App ({ orderIds, flights, tails, flightIds, maxFlightId,
     blankApproachFlight, budgetChains, maxOrderId}) {
     
     const [countries, setCountries] = useState();
+    const [selectedOrder, setSelectedOrder] = useState();
     useEffect(() => {
         if (!countries) {
             d3.json('world_countries.json').then((countries) => {
@@ -51,6 +52,8 @@ function App ({ orderIds, flights, tails, flightIds, maxFlightId,
     const getActiveClass = (name) => {
         return tabName === name ? 'active' : ''
     }
+    
+    const hundleOrderClick = (id) => setSelectedOrder(id)
 
     return (
         <>
@@ -82,7 +85,10 @@ function App ({ orderIds, flights, tails, flightIds, maxFlightId,
                             <span>Orders</span>
                         </div>
                         <div className="section-container__content">
-                            <OrderList orderIds={orderIds} maxOrderId={maxOrderId}/>
+                            <OrderList 
+                                orderIds={orderIds} 
+                                maxOrderId={maxOrderId} 
+                                selectedOrder={selectedOrder}/>
                         </div>
                     </div>
                 </div>
@@ -101,7 +107,8 @@ function App ({ orderIds, flights, tails, flightIds, maxFlightId,
                     </div>
                 </div>
                 {getTabContent(tabName, tails, flightsOnTime, countries,
-                    currentTime, budgetChains, blankApproachFlight, addApproachFlight)}             
+                    currentTime, budgetChains, blankApproachFlight, 
+                    addApproachFlight, hundleOrderClick)}
                 </div>                
             </div>
         </>
@@ -111,10 +118,11 @@ function App ({ orderIds, flights, tails, flightIds, maxFlightId,
     function getTabContent(
         tabName, tails, flights, countries,
         currentTime, budgetChains,
-        blankApproachFlight, addApproachFlight) {
+        blankApproachFlight, addApproachFlight,
+        hundleOrderClick) {
     switch(tabName) {
         case tabNames.MAP_TAB: 
-            return <MapContainer countries={countries}/>
+            return <MapContainer countries={countries} onOrderClick={hundleOrderClick}/>
         case tabNames.SCHEDULE_TAB: 
             return (
                 <div className="schedules__container">
