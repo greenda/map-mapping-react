@@ -33,7 +33,7 @@ function getAchievementList(currentAchievementIds, licencesIds,
     }
 
     if (stockingFlightCounts === STOCKING_ACHIEVEMENT_LIMIT &&
-        !currentAchievementIds.includes(2)) {
+        !currentAchievementIds.includes(2)) {            
         achievementIdsList.push(2)
     }
 
@@ -63,7 +63,7 @@ export function CongratulationContainer({ achievements, currentAchievementIds,
             currentLicenceIds, currentBudget, stockingFlightCounts,
             tails, achievements)
 
-        if (achievementIdsList > 0) {
+        if (achievementIdsList.length > 0) {
             if (achievementQueue.length === 0) {
                 const newAchievement = achievements[achievementIdsList[0]]
                 setAchievementToShow(newAchievement)
@@ -78,7 +78,7 @@ export function CongratulationContainer({ achievements, currentAchievementIds,
             }
         }
 
-    }, [maxTime, tails, currentLicenceIds, currentBudget])
+    }, [maxTime, tails, currentLicenceIds, stockingFlightCounts, currentBudget])
 
     const handleClose = () => {
         if (achievementQueue.length > 0) {

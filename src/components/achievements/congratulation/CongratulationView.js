@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes, { number, string } from 'prop-types'
 import * as d3 from 'd3'
+import { translateAlong } from '../../../helpers/MapHelper'
 import './CongratulationView.scss'
 import aircraftIconRed from '../../../assets/aircraft-icon__red.svg'
 import achievementMagelan from '../../../assets/achievement_Magelan.svg'
@@ -31,19 +32,6 @@ export function CongratulationView({ achievement }) {
     )
 
 }
-
-function translateAlong(path) {
-    // TODO рефакторинг
-    var l = path.getTotalLength();
-    return function(d, i, a) {
-      return function(t) {
-        var p = path.getPointAtLength(t * l);
-        var prevP = path.getPointAtLength(((t < 0.9 ? t : 0.9)  - 0.1) * l);
-        const angle = Math.atan2(p.y - prevP.y, p.x - prevP.x) * 180 / Math.PI;
-        return `rotate(${angle} ${p.x} ${p.y}) translate(${p.x - 15}, ${p.y - 15})`;
-      };
-    };
-  }
 
 function init(isLoaded, setIsLoaded, images, achievement) {
     if (!isLoaded) {

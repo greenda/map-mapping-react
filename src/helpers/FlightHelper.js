@@ -30,48 +30,60 @@ export function getFlightInTime(flight, airports, orders, tails, currentTime ) {
     switch(true) {
         case (oldStatus === 'canceled'):
             flight.progress = -1
+            flight.prevProgress = -1
             flight.status = 'canceled'
             break
         case (!dateTakeOff):
             flight.progress = -1
+            flight.prevProgress = -1
             flight.status = 'not takeOff'
             break
         case (!dateLanding):
             flight.progress = -1
-            flight.progress = 0
+            flight.prevProgress = -1
             flight.status = 'not landing' 
             break   
         case (currentTime < dateTakeOff):
-            flight.progress = -1            
+            flight.progress = -1   
+            flight.prevProgress = -1         
             flight.status = 'planed'
             break
         case (currentTime.isSame(dateTakeOff)):
             if (linkTail && linkTail.airportId === flight.fromId) {
                 flight.progress = 0
+                flight.prevProgress = 0
                 flight.status = 'takeOff'
             } else {
                 flight.progress = -1
+                flight.prevProgress = -1
                 flight.status = 'canceled'
             }
             break  
         case (currentTime.isSame(dateLanding)):
             flight.progress = 100
+            flight.prevProgress =  (currentTime.diff(dateTakeOff, 'hours') - 1) / 
+                dateLanding.diff(dateTakeOff, 'hours') * 100 
             flight.status = 'landing'
             break      
         case (currentTime > dateLanding):
                 flight.progress = 101
+                flight.prevProgress = 101
                 flight.status = 'done'
             break
         case (dateTakeOff < currentTime && currentTime < dateLanding):             
             flight.progress = currentTime.diff(dateTakeOff) / 
                 dateLanding.diff(dateTakeOff) * 100 
+            // TODO используется ли progressNext?
             flight.progressNext = currentTime.clone().add(1, 'hour').diff(dateTakeOff) / 
-                dateLanding.diff(dateTakeOff) * 100      
+                dateLanding.diff(dateTakeOff) * 100    
+            flight.prevProgress =  (currentTime.diff(dateTakeOff, 'hours') - 1) / 
+                dateLanding.diff(dateTakeOff, 'hours') * 100   
             flight.status = 'in progress'           
             break
         default: break;
     }
     flight.mapAction = getMapAction(oldProgress, flight.progress)
+    flight.oldProgress = oldProgress
     return flight
 }
 
@@ -129,7 +141,7 @@ export function getOrdersInTime(flight, airports, orders, currentTime ) {
             break
         default: break;
     }
-    flight.mapAction = getMapAction(oldProgress, flight.progress)
+    flight.mapAction = getMapAction(oldProgress, flight.progress)    
     return flight
 }
 

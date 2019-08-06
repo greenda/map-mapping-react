@@ -198,7 +198,7 @@ export const licencedAirportsSelector = createSelector(
 )
 
 export const filteredFlightsSelector = createSelector(
-    flightsSelector,
+    flightsOnTime,
     currentTimeSelector,
     (flights, currentTime) => {
         const MAX_HOUR_DIFF = 2
@@ -284,7 +284,7 @@ export const licencesSelector = createSelector(
 export const stockingFlightCountsSelector = createSelector(
     flightsSelector,
     (flights) => {
-        return flights.filter(flight => flight.progress === 100
+        return flights.filter(flight => flight.progress >= 100 
             && flight.description 
             && flight.description.includes('чулок')).length
     }
