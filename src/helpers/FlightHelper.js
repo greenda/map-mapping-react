@@ -163,7 +163,7 @@ export function getApproachFlight(flightId, tails, flights, fuelCost, airportDis
     const tailFlights = 
         flights.filter(flight => flight.status !== 'canceled' && flight.tailId === baseTail.id &&
             flight.dateTakeOff.isBefore(baseFlight.dateTakeOff))
-            .sort((a, b) => a.dateTakeOff.isBefore(b.dateTakeOff) ? 1 : -1)    
+            .sort(flightDateSortPredicatInvert)    
     const dateLanding = baseFlight.dateTakeOff.clone().add(-1, 'hours')
     const fromId = (tailFlights.length > 0) ? tailFlights[0].toId : baseTail.airportId
     const toId = baseFlight.fromId
@@ -275,3 +275,6 @@ export function getOrderDescription() {
         title: `${payloads[randomPayload].shorts[randomPayloadShort]} ${places[randomPlace].shorts[randomPlaceShort]}`
     }
 }
+
+export const flightDateSortPredicat = (a, b) => a.dateTakeOff.isAfter(b.dateTakeOff) ? 1 : -1
+export const flightDateSortPredicatInvert = (a, b) => a.dateTakeOff.isBefore(b.dateTakeOff) ? 1 : -1
