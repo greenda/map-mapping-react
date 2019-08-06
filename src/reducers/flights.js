@@ -49,15 +49,13 @@ const initialState = {
 
 export function flightsReducer(state = initialState, action) {
   const { type, payload = {} } = action
-  const { flightId, orderId } = payload
+  const { flightId, tailId, orderId } = payload
   const flight = flightId ? state[flightId] : {};
   const newState =  {...state}
   switch (type) {    
-    case pageActionTypes.ADD_TAIL_IN_FLIGHT:       
-      const { tail } = payload
+    case pageActionTypes.ADD_TAIL_IN_FLIGHT:    
       if (flight) {
-        flight.tail = tail
-        flight.tailId = tail.id
+        flight.tailId = tailId
       }
       // TODO правильно оформить изменение массива
       return {...state}
@@ -87,7 +85,7 @@ export function flightsReducer(state = initialState, action) {
       }
       return state      
     case pageActionTypes.CREATE_FLIGHT_FROM_ORDER:
-        const { newFlightId, tailId } = payload
+        const { newFlightId } = payload
         let newFlight = getEmptyFlight(newFlightId)
         newFlight = {...newFlight, tailId, orderId }
         newState[newFlightId] = newFlight

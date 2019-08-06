@@ -20,10 +20,10 @@ export function setCurrentTime() {
     }
 }
 
-export function addTailInFlight(tail, flightId) {
+export function addTailInFlight(tailId, flightId) {
     return {
         type: pageActionTypes.ADD_TAIL_IN_FLIGHT,
-        payload: { tail, flightId },
+        payload: { tailId, flightId },
     }
 }
 

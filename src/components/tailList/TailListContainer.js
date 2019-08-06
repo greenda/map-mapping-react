@@ -3,22 +3,17 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { tailCoordinates } from '../../selectors/index'
 import { addTailInFlight } from '../../actions/pageActions'
-import Tail from './tail/Tail'
-import './TailList.scss'
+import TailListView from './TailListView'
 
-export function TailList({tails, addTailInFlight}) {
-    const tailsArray = tails.map(tail => (
-        <Tail key={tail.id} tail={tail}
-            addTailAction={addTailInFlight}>
-        </Tail>
-    ))
-
+export function TailListContainer({ tails, addTailInFlight }) {
     return (
-        <div className="tails-container">{tailsArray}</div>
+        <TailListView 
+            tails={tails}
+            addTailInFlight={addTailInFlight}/>
     )
 }
 
-TailList.propTypes = {
+TailListContainer.propTypes = {
     tails: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.number,
@@ -34,4 +29,4 @@ export default connect(
         tails: tailCoordinates(state)
     }),
     { addTailInFlight }
-)(TailList)
+)(TailListContainer)

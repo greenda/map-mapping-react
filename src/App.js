@@ -5,7 +5,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import * as d3 from 'd3'
 import TimelineContainer from '../src/components/timeline/TimelineContainer'
 import FlightList from '../src/components/flightList/FlightList'
-import TailList from '../src/components/tailList/TailList'
+import TailListContainer from '../src/components/tailList/TailListContainer'
 import OrderList from '../src/components/orderList/OrderList'
 import MapContainer from '../src/components/map/MapContainer'
 import ScheduleTable from '../src/components/schedule/ScheduleTable'
@@ -44,15 +44,11 @@ function App ({ orderIds, flights, tails, flightIds, maxFlightId,
             }).catch(error => console.log(error))
         }
     })
-    useEffect(() => {
-    })
+
     // const [tabName, setTabName] = useState(tabNames.MAP_TAB)
     const [tabName, setTabName] = useState(tabNames.SCHEDULE_TAB)
     //const [tabName, setTabName] = useState(tabNames.ACHIEVEMENTS)
-    const getActiveClass = (name) => {
-        return tabName === name ? 'active' : ''
-    }
-    
+    const getActiveClass = (name) => tabName === name ? 'active' : ''    
     const hundleOrderClick = (id) => setSelectedOrder(id)
 
     return (
@@ -69,7 +65,7 @@ function App ({ orderIds, flights, tails, flightIds, maxFlightId,
                         </div>
                         {/* TODO tails передавать с этого уровня */}
                         <div className="section-container__content">
-                            <TailList />
+                            <TailListContainer />
                         </div>
                     </div>
                     <div className="section-container flights-section">
