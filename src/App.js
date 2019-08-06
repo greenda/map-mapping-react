@@ -4,7 +4,7 @@ import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend';
 import * as d3 from 'd3'
 import TimelineContainer from '../src/components/timeline/TimelineContainer'
-import FlightList from '../src/components/flightList/FlightList'
+import FlightListContainer from '../src/components/flightList/FlightListContainer'
 import TailListContainer from '../src/components/tailList/TailListContainer'
 import OrderList from '../src/components/orderList/OrderList'
 import MapContainer from '../src/components/map/MapContainer'
@@ -73,7 +73,7 @@ function App ({ orderIds, flights, tails, flightIds, maxFlightId,
                             <span>Flights</span>
                         </div>
                         <div className="section-container__content">
-                            <FlightList flightIds={flightIds} maxFlightId={maxFlightId}/>
+                            <FlightListContainer />
                         </div>
                     </div>
                     <div className="section-container orders-section">

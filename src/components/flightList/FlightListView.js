@@ -1,20 +1,12 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import PropTypes, { number, string } from 'prop-types'
 import moment from 'moment'
-import { 
-    maxTimeSelector, 
-    licencedAirportsSelector, 
-    fuelCostSelector,
-    distanceBetweenAirportsSelector
-} from '../../selectors/index'
-import Flight from './flight/Flight'
+import FlightContainer from './flight/FlightContainer'
 import AddFlightPanel from './add-flight-panel/AddFlightPanel'
-import { addFlight, addEmptyFlight, removeFlight } from '../../actions/pageActions'
 import useToggler from '../../common/custom-hooks/toogle-open'
-import './FlightList.scss'
+import './FlightListView.scss'
 
-export function FlightList({
+export function FlightListView({
     flightIds, 
     airports,
     maxFlightId,
@@ -53,7 +45,8 @@ export function FlightList({
 
 function getAddButtons(isAddPanel, maxFlightId, addEmptyFlight, setIsAddPanel) {
     if (!isAddPanel) {
-        return (<div className="flight-list-container__add-buttons">
+        return (
+            <div className="flight-list-container__add-buttons">
                 <input className="add-button" 
                         type="button" 
                         value="Add empty" 
@@ -63,7 +56,8 @@ function getAddButtons(isAddPanel, maxFlightId, addEmptyFlight, setIsAddPanel) {
                                 type="button"
                                 value="Add custom flight"
                                 onClick={() => setIsAddPanel(true)}/>) : ''}
-                </div>) 
+            </div>
+        ) 
     }
     
     return (<div></div>)
@@ -71,7 +65,7 @@ function getAddButtons(isAddPanel, maxFlightId, addEmptyFlight, setIsAddPanel) {
 
 function getFlights(isAddPanel, flightIds, removeFlight) {
     const flights = flightIds.map(value => (
-        <Flight key={value} id={value} onRemove={(id) => removeFlight(id)}/>)
+        <FlightContainer key={value} id={value} onRemove={(id) => removeFlight(id)}/>)
     )
 
     if (!isAddPanel) {
@@ -101,7 +95,7 @@ function getAddPanel(isAddPanel, airports, maxFlightId,
     return (<div></div>)
 }
 
-FlightList.propTypes = {
+FlightListView.propTypes = {
     flightIds: PropTypes.arrayOf(number),
     airports: PropTypes.arrayOf(
         PropTypes.shape({ 
@@ -116,16 +110,12 @@ FlightList.propTypes = {
     ),
     maxFlightId: number,
     maxTime: PropTypes.instanceOf(moment),
-    irportDistances: number,
+    airportDistances: PropTypes.func,
+    fuelCost: number,
+    addFlight: PropTypes.func,
+    addEmptyFlight: PropTypes.func,
+    removeFlight: PropTypes.func,
 }
 
-export default connect(
-    (state) => ({        
-        airports: licencedAirportsSelector(state),    
-        maxTime: maxTimeSelector(state),
-        airportDistances: distanceBetweenAirportsSelector(state),
-        fuelCost: fuelCostSelector(state),
-    }),
-    { addFlight, addEmptyFlight, removeFlight }
-)(FlightList)
+export default FlightListView
 

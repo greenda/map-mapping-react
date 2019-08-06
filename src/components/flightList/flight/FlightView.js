@@ -1,18 +1,14 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import PropTypes, { number, string } from 'prop-types'
-import { ItemTypes } from '../../../constants/item-types';
-import { DropTarget } from 'react-dnd';
-import { flightByIdSelector } from '../../../selectors/index'
 import useToggler from '../../../common/custom-hooks/toogle-open'
 import ProgressBar from './progress-bar/ProgressBar'
-import './Flight.scss'
+import './FlightView.scss'
 
-export function Flight({ flight, connectDropTarget, isOver, canDrop, onRemove }) {
+export function FlightView({ flight, isOver, canDrop, onRemove }) {
     const { expanded, toggleExpanded } = useToggler(false)
     const { id, name, from, to, progress, status, dateTakeOff, dateLanding, tail } = flight    
 
-    return connectDropTarget(
+    return (
         <div className={`flight__container 
             ${isOver && canDrop ? 'enableDrop' : ''}
             ${isOver && !canDrop ? 'disableDrop' : ''}
@@ -61,25 +57,7 @@ function getDetails(expanded, flight) {
     }
 }
 
-const flightTarget = {    
-	canDrop() {
-        return true
-	},
-
-	drop(props) {
-        return { id: props.flight.id, type: ItemTypes.FLIGHT };
-    }
-}
-
-const collect = (connect,monitor) => {
-	return {
-		connectDropTarget: connect.dropTarget(),
-		isOver: !!monitor.isOver(),
-		canDrop: !!monitor.canDrop(),
-	}
-}
-
-Flight.propTypes = {
+FlightView.propTypes = {
     flight: PropTypes.shape({ 
         id: number, 
         name: string,
@@ -93,10 +71,9 @@ Flight.propTypes = {
         status: string,
         linkedFlightId: number,
     }),
-    isOver: PropTypes.bool.isRequired,
+    isOver: PropTypes.bool,
+    canDrop: PropTypes.bool,
+    onRemove: PropTypes.func,
 }
 
-export default connect((state, ownProps) => ({
-            flight: flightByIdSelector(state, ownProps),
-    }))(DropTarget([ItemTypes.TAIL, ItemTypes.ORDER], flightTarget, collect)(Flight)
-)
+export default FlightView

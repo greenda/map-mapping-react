@@ -20,11 +20,11 @@
         overflow-y: auto;
         @include scrollbar;
 
-        & > .flight__container {
+        & > div > .flight__container {
             margin-bottom: $offset__ultra-small;
         }
 
-        &:last-child {
+        & > div:last-child {
             margin-bottom: 0px;
         }
     }

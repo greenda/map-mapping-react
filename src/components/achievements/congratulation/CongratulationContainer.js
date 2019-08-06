@@ -11,44 +11,14 @@ import {
 } from '../../../selectors/index'
 import { addAchievement } from '../../../actions/pageActions'
 import CongratulationView from './CongratulationView'
+import { getAchievementList } from '../../../helpers/AchievementHelper'
+import { 
+    BUDGET_ACHIEVEMENT_LIMIT, 
+    STOCKING_ACHIEVEMENT_LIMIT, 
+    TAIL_ACHIEVEMENT_LIMIT 
+} from '../../../constants/achievements'
+
 import './CongratulationContainer.scss'
-
-const BUDGET_ACHIEVEMENT_LIMIT = 10000
-const STOCKING_ACHIEVEMENT_LIMIT = 5
-const TAIL_ACHIEVEMENT_LIMIT = 10
-
-function getAchievementList(currentAchievementIds, licencesIds,
-    currentLicenceIds, currentBudget, stockingFlightCounts,
-    tails, achievements) {
-    const achievementIdsList = []
-
-    if (licencesIds.length === currentLicenceIds.length &&
-        !currentAchievementIds.includes(0)) {
-        achievementIdsList.push(0)
-    }
-
-    if (currentBudget >= BUDGET_ACHIEVEMENT_LIMIT &&
-        !currentAchievementIds.includes(1)) {
-        achievementIdsList.push(1)
-    }
-
-    if (stockingFlightCounts === STOCKING_ACHIEVEMENT_LIMIT &&
-        !currentAchievementIds.includes(2)) {            
-        achievementIdsList.push(2)
-    }
-
-    if (tails.length === TAIL_ACHIEVEMENT_LIMIT &&
-        !currentAchievementIds.includes(3)) {
-        achievementIdsList.push(3)
-    }
-
-    if (achievements.length === currentAchievementIds.length + 1 &&
-        !currentAchievementIds.includes(4)) {
-        achievementIdsList.push(4)
-    }
-
-    return achievementIdsList
-}
 
 export function CongratulationContainer({ achievements, currentAchievementIds,
     maxTime, licencesIds, currentLicenceIds, currentBudget, stockingFlightCounts, tails, addAchievement }) {
@@ -61,7 +31,8 @@ export function CongratulationContainer({ achievements, currentAchievementIds,
     useEffect(() => {
         const achievementIdsList = getAchievementList(currentAchievementIds, licencesIds,
             currentLicenceIds, currentBudget, stockingFlightCounts,
-            tails, achievements)
+            tails, achievements, BUDGET_ACHIEVEMENT_LIMIT, 
+            STOCKING_ACHIEVEMENT_LIMIT, TAIL_ACHIEVEMENT_LIMIT )
 
         if (achievementIdsList.length > 0) {
             if (achievementQueue.length === 0) {
