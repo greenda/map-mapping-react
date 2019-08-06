@@ -30,27 +30,29 @@ export function moneyReducer(state = initialState, action) {
             }
             return state  
         case pageActionTypes.ADD_APPROACH_FLIGHT:
-            
-            const linkedChainIndex = budgetChains.findIndex(chain => {
-                return chain.ids.includes(flight.linkedFlightId)
-                })
-            // TODO через mutable решить
-            if (linkedChainIndex === -1) {
-                const maxId = budgetChains.length > 0 ? budgetChains.map(chain => chain.id).sort((a, b) => a < b)[0] : -1
-                budgetChains.push({
-                    id: maxId + 1,
-                    ids: [flight.id, flight.linkedFlightId],
-                    tailId: flight.tailId,
-                })
-            } else {
-                budgetChains[linkedChainIndex].ids.push(flight.id)
-                budgetChains[linkedChainIndex].saldo = budgetChains[linkedChainIndex] - flight.cost
-            }
+            if (flight.fromId !== flight.toId) {
+                const linkedChainIndex = budgetChains.findIndex(chain => {
+                    return chain.ids.includes(flight.linkedFlightId)
+                    })
+                // TODO через mutable решить
+                if (linkedChainIndex === -1) {
+                    const maxId = budgetChains.length > 0 ? budgetChains.map(chain => chain.id).sort((a, b) => a < b)[0] : -1
+                    budgetChains.push({
+                        id: maxId + 1,
+                        ids: [flight.id, flight.linkedFlightId],
+                        tailId: flight.tailId,
+                    })
+                } else {
+                    budgetChains[linkedChainIndex].ids.push(flight.id)
+                    budgetChains[linkedChainIndex].saldo = budgetChains[linkedChainIndex] - flight.cost
+                }
 
-            return {
-                ...state,
-                budgetChains,                
+                return {
+                    ...state,
+                    budgetChains,                
+                }
             }
+            return state
         case pageActionTypes.REMOVE_FLIGHT:
                 return {
                     ...state,

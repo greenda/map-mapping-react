@@ -81,8 +81,11 @@ export function flightsReducer(state = initialState, action) {
       delete newState[flightId]
       return newState 
     case pageActionTypes.ADD_APPROACH_FLIGHT:
-      newState[payload.flight.id] = payload.flight
-      return newState
+      if (payload.flight.fromId !== payload.flight.toId) {
+        newState[payload.flight.id] = payload.flight
+        return newState
+      }
+      return state      
     case pageActionTypes.CREATE_FLIGHT_FROM_ORDER:
         const { newFlightId, tailId } = payload
         let newFlight = getEmptyFlight(newFlightId)
