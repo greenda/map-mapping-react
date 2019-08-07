@@ -1,43 +1,15 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import PropTypes, { number, string, object, func } from 'prop-types'
-import { DragSource } from 'react-dnd'
+import PropTypes, { number, string } from 'prop-types'
 import moment from 'moment'
-import { orderByIdSelector } from '../../../selectors/index'
-import { ItemTypes } from '../../../constants/item-types'
 import useToggler from '../../../common/custom-hooks/toogle-open'
-import './Order.scss'
+import './OrderView.scss'
 
-const orderSource = {
-    beginDrag(props) {
-        return {orderId: props.order.id, type: ItemTypes.ORDER };
-    },
-    endDrag(props, monitor) {
-        const dropResult = monitor.getDropResult()
-        if (dropResult && dropResult.type === ItemTypes.FLIGHT && dropResult.id) {
-            props.addOrder(props.order.id, monitor.getDropResult().id);
-        }
 
-        if (dropResult && dropResult.type === ItemTypes.SCHEDULE && dropResult.id) {
-            props.createFlightFromOrder(
-                props.order.id,
-                props.maxFlightId + 1,
-                monitor.getDropResult().id);
-        }
-    },
-};
-
-const collect = (connect, monitor) => ({
-    connectDragSource: connect.dragSource(),
-    connectDragPreview: connect.dragPreview(),
-    isDragging: monitor.isDragging(),
-})
-
-export function Order({ order, connectDragSource }) {
+export function OrderView({ order }) {
     const { name, from, to, progress, dateTakeOff, dateLanding, pay, cost } = order
     const { expanded, toggleExpanded } = useToggler(false)
-
-    return connectDragSource(
+    
+    return (
         <div className={`order__container ${progress > 100 ? 'ended' : ''}`}>
             <div className="order__header">
                 <div className="order__header__row">
@@ -66,7 +38,7 @@ function getDetails(expanded, order) {
         (<div className="order__description">{order.description}</div>) : (<div></div>)
 }
 
-Order.propTypes = {
+OrderView.propTypes = {
     order: PropTypes.shape({
         id: number,
         name: string,
@@ -80,26 +52,6 @@ Order.propTypes = {
         pay: number,
         cost: number,
     }),
-    flight: PropTypes.shape({ 
-        id: number, 
-        name: string,
-        tailId: number,
-        from: object,
-        to: object,
-        fromIata: string,
-        toIata: string,
-        dateTakeOff: object,
-        dateLanding: object,
-        status: string,
-        linkedFlightId: number,
-    }),
-    addOrder: func,    
-    connectDragSource: func, 
-    maxFlightId: number,
 }
 
-export default connect(
-        (state, ownProps) => ({
-            order: orderByIdSelector(state, ownProps),
-        }),
-)(DragSource(ItemTypes.ORDER, orderSource, collect)(Order))
+export default OrderView

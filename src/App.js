@@ -6,7 +6,7 @@ import * as d3 from 'd3'
 import TimelineContainer from '../src/components/timeline/TimelineContainer'
 import FlightListContainer from '../src/components/flightList/FlightListContainer'
 import TailListContainer from '../src/components/tailList/TailListContainer'
-import OrderList from '../src/components/orderList/OrderList'
+import OrderListContainer from '../src/components/orderList/OrderListContainer'
 import MapContainer from '../src/components/map/MapContainer'
 import ScheduleTable from '../src/components/schedule/ScheduleTable'
 import OrderSchedule from '../src/components/order-schedule/OrderSchedule'
@@ -81,10 +81,7 @@ function App ({ orderIds, flights, tails, flightIds, maxFlightId,
                             <span>Orders</span>
                         </div>
                         <div className="section-container__content">
-                            <OrderList 
-                                orderIds={orderIds} 
-                                maxOrderId={maxOrderId} 
-                                selectedOrder={selectedOrder}/>
+                            <OrderListContainer selectedOrder={selectedOrder}/>
                         </div>
                     </div>
                 </div>
