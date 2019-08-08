@@ -9,7 +9,7 @@ const initialState = [
     {
         id: 2,
         name: 'A-2',
-        airportId: 11,
+        airportId: 8,
     },
     {
         id: 3,

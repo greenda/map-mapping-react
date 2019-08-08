@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import { ordersReducer } from './orders'
-import { tailsReducer } from './tiles'
+import { tailsReducer } from './tailes'
 import { flightsReducer } from './flights'
 import { timeReducer } from './time'
 import { airportsReducer } from './airports'

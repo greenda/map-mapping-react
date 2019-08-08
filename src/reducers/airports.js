@@ -173,16 +173,305 @@ const initialState = {
             costOnHour: 10,
             regionId: 1,
         },
-        // : {
-        //     id: ,
-        //     name: '',
-        //     iata: '',
-        //     countriesId: ,
-        //     latt: ,
-        //     longt: ,
-        //     costOnHour: ,
-        //     regionId: ,
-        // },
+        18: {
+            id: 18,
+            name: 'Порт-Судан',
+            iata: 'PZU',
+            countriesId: 17,
+            latt: 19.43,
+            longt: 37.23,
+            costOnHour: 20,
+            regionId: 2,
+        },
+        19: {
+            id: 19,
+            name: 'Киншаса Нджили',
+            iata: 'FIH',
+            countriesId: 18,
+            latt: -4.39,
+            longt: 15.44,
+            costOnHour: 10,
+            regionId: 2,
+        },
+        20: {
+            id: 20,
+            name: 'Абиджан Порт-Буэ',
+            iata: 'ABJ',
+            countriesId: 19,
+            latt: 5.26,
+            longt: -3.93,
+            costOnHour: 10,
+            regionId: 2,
+        },
+        21: {
+            id: 21,
+            name: 'Антананариву Ивато',
+            iata: 'TNR',
+            countriesId: 20,
+            latt: -18.8,
+            longt: 47.48,
+            costOnHour: 10,
+            regionId: 2,
+        },
+        22: {
+            id: 22,
+            name: 'Александрия Эль-Нужа',
+            iata: 'ALY',
+            countriesId: 21,
+            latt: 31.18,
+            longt: 29.95,
+            costOnHour: 10,
+            regionId: 2,
+        },
+        23: {
+            id: 23,
+            name: 'Виланкулос',
+            iata: 'VNX',
+            countriesId: 22,
+            latt: -22.02,
+            longt: 35.31,
+            costOnHour: 20,
+            regionId: 2,
+        },
+        24: {
+            id: 24,
+            name: 'Сингапур Чанги',
+            iata: 'SIN',
+            countriesId: 23,
+            latt: 1.35,
+            longt: 103.99,
+            costOnHour: 30,
+            regionId: 5,
+        },
+
+
+        25: {
+            id: 25,
+            name: 'Джаяпура Сентани',
+            iata: 'DJJ',
+            countriesId: 24,
+            latt: -2.58,
+            longt: 140.52,
+            costOnHour: 20,
+            regionId: 5,
+        },
+
+        26: {
+            id: 26,
+            name: 'Кэрнс',
+            iata: 'CNS',
+            countriesId: 9,
+            latt: -16.89,
+            longt: 145.76,
+            costOnHour: 10,
+            regionId: 5,
+        },
+
+        27: {
+            id: 27,
+            name: 'Хобарт',
+            iata: 'HBA',
+            countriesId: 9,
+            latt: -42.84,
+            longt: 147.51,
+            costOnHour: 20,
+            regionId: 5,
+        },
+
+        28: {
+            id: 28,
+            name: 'Ванака',
+            iata: 'WKA',
+            countriesId: 9,
+            latt: -44.72,
+            longt: 169.25,
+            costOnHour: 10,
+            regionId: 5,
+        },
+
+        29: {
+            id: 29,
+            name: 'Франциско Бангой',
+            iata: 'DVO',
+            countriesId: 25,
+            latt: 7.13,
+            longt: 125.65,
+            costOnHour: 20,
+            regionId: 5,
+        },
+
+        30: {
+            id: 30,
+            name: 'Бенито Хуарес',
+            iata: 'MEX',
+            countriesId: 26,
+            latt: 19.44,
+            longt: -99.07,
+            costOnHour: 20,
+            regionId: 3,
+        },
+
+        31: {
+            id: 31,
+            name: 'Сан-Франциско',
+            iata: 'SFO',
+            countriesId: 7,
+            latt: 37.62,
+            longt: -122.37,
+            costOnHour: 20,
+            regionId: 3,
+        },
+       
+        32: {
+            id: 32,
+            name: ' Харбор Уотер',
+            iata: 'CXH',
+            countriesId: 7,
+            latt: 49.29,
+            longt: -123.12,
+            costOnHour: 20,
+            regionId: 3,
+        },
+        33: {
+            id: 33,
+            name: 'Денвер',
+            iata: 'DEN',
+            countriesId: 7,
+            latt: 39.86,
+            longt: -104.67,
+            costOnHour: 20,
+            regionId: 3,
+        },
+        34: {
+            id: 34,
+            name: 'Луи Армстронг',
+            iata: 'MSY',
+            countriesId: 7,
+            latt: 29.99,
+            longt: -90.26,
+            costOnHour: 20,
+            regionId: 3,
+        },
+        35: {
+            id: 35,
+            name: 'Форт-Лодердейл Голливуд',
+            iata: 'FLL',
+            countriesId: 7,
+            latt: 26.07,
+            longt: -80.15,
+            costOnHour: 30,
+            regionId: 3,
+        },
+        36: {
+            id: 36,
+            name: 'Нук',
+            iata: 'GOH',
+            countriesId: 27,
+            latt: 64.19,
+            longt: -51.68,
+            costOnHour: 10,
+            regionId: 3,
+        },
+        37: {
+            id: 37,
+            name: 'Ранкин-Инлет',
+            iata: 'YRT',
+            countriesId: 6,
+            latt: 62.81,
+            longt: -92.12,
+            costOnHour: 10,
+            regionId: 3,
+        },
+        38: {
+            id: 38,
+            name: 'Пунта-Аренас',
+            iata: 'PUQ',
+            countriesId: 28,
+            latt: -53,
+            longt: -70.85,
+            costOnHour: 10,
+            regionId: 4,
+        },
+        39: {
+            id: 39,
+            name: 'Сеймур',
+            iata: 'GPS',
+            countriesId: 29,
+            latt: -0.45,
+            longt: -90.27,
+            costOnHour: 40,
+            regionId: 4,
+        },
+        40: {
+            id: 40,
+            name: 'Виру Виру',
+            iata: 'VVI',
+            countriesId: 30,
+            latt: -17.64,
+            longt: -63.14,
+            costOnHour: 10,
+            regionId: 4,
+        },
+        41: {
+            id: 41,
+            name: 'Уилсон Фонсека',
+            iata: 'STM',
+            countriesId: 5,
+            latt: -2.42,
+            longt: -54.79,
+            costOnHour: 20,
+            regionId: 4,
+        },
+        42: {
+            id: 42,
+            name: 'Боа-Виста',
+            iata: 'BVB',
+            countriesId: 5,
+            latt: 2.85,
+            longt: -60.69,
+            costOnHour: 20,
+            regionId: 4,
+        },
+        43: {
+            id: 43,
+            name: 'Маркос Гелаберт',
+            iata: 'PAC',
+            countriesId: 31,
+            latt: 8.97,
+            longt: -79.56,
+            costOnHour: 20,
+            regionId: 4,
+        },
+        44: {
+            id: 44,
+            name: 'Тениенте Родолфо Мфрша Мартина',
+            iata: 'TNM',
+            countriesId: 32,
+            latt: -62.19,
+            longt: -58.98,
+            costOnHour: 100,
+            regionId: 6,
+        },
+        45: {
+            id: 45,
+            name: 'Пегасус Филд',
+            iata: 'NZPG',
+            countriesId: 32,
+            latt: -77.57,
+            longt: -166.31,
+            costOnHour: 100,
+            regionId: 6,
+        },
+        46 : {
+            id: 46,
+            name: 'Дейвис ',
+            iata: 'NZD',
+            countriesId: 32,
+            latt: -68.35,
+            longt: 77.58,
+            costOnHour: 100,
+            regionId: 6,
+        },       
     },
     regions: {
         1: {
@@ -259,6 +548,54 @@ const initialState = {
         16: {
             name: 'Вьетнам'
         },
+        17: {
+            name: 'Судан'
+        },
+        18: {
+            name: 'Демократическая Республика Конго'
+        },
+        19: {
+            name: 'Кот д\'Ивуар'
+        },
+        20: {
+            name: 'Мадагаскар'
+        },
+        21: {
+            name: 'Египет'
+        },
+        22: {
+            name: 'Мозамбик'
+        },
+        23: {
+            name: 'Сингапур'
+        },
+        24: {
+            name: 'Индонезия'
+        },
+        25: {
+            name: 'Филиппины'
+        },
+        26: {
+            name: 'Мексика'
+        },
+        27: {
+            name: 'Гренландия'
+        },
+        28: {
+            name: 'Чили'
+        },
+        29: {
+            name: 'Эквадор'
+        },
+        30: {
+            name: 'Боливия'
+        },
+        31: {
+            name: 'Панама'
+        },
+        32: {
+            name: 'Антарктида'
+        }
     },
     licences: {
         1: {
