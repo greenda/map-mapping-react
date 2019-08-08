@@ -1,19 +1,17 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import PropTypes, { number, string } from 'prop-types'
 import moment from 'moment'
-import { ordersToScheduleSelector } from '../../selectors/index'
-import OrderScheduleRow from './order-schedule-row/OrderScheduleRow'
 import { CELL_WIDTH_SCALE, TIMELINE_OFFSET_HOURS } from '../../constants/schedule'
-import './OrderSchedule.scss'
+import OrderScheduleRowContainer from './order-schedule-row/OrderScheduleRowContainer';
+import './OrderScheduleView.scss'
 
-export function OrderSchedule({ orderSchedule, currentTime }) {
+export function OrderScheduleView({ orderSchedule, currentTime }) {
     const maxRowIndex = 
         orderSchedule.length > 0 ? Math.max(...orderSchedule.map(cell => cell.rowIndex)) : 0
     const rows = Array(maxRowIndex + 1).fill('').map((_, rowIndex) => {
         const cells = orderSchedule.filter(cell => cell.rowIndex === rowIndex)
         return (
-            <OrderScheduleRow 
+            <OrderScheduleRowContainer
                 key={rowIndex}
                 leftOffset={TIMELINE_OFFSET_HOURS * CELL_WIDTH_SCALE}
                 rowIndex={rowIndex}
@@ -33,7 +31,7 @@ export function OrderSchedule({ orderSchedule, currentTime }) {
     )
 }
 
-OrderSchedule.propTypes = {
+OrderScheduleView.propTypes = {
     orderSchedule: PropTypes.arrayOf(PropTypes.shape({
         id: number,
         name: string,
@@ -51,8 +49,4 @@ OrderSchedule.propTypes = {
     currentTime: PropTypes.instanceOf(moment)
 }
 
-export default connect(
-    (store) => ({
-        orderSchedule: ordersToScheduleSelector(store)
-    })
-)(OrderSchedule)
+export default OrderScheduleView

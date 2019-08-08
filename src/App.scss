@@ -249,7 +249,7 @@ h1 {
     & > div.section-container__content {
         padding: 0px;
 
-        overflow-y: scroll;
+        overflow-y: auto;
         &::-webkit-scrollbar {
             width: 0.8em;
         }

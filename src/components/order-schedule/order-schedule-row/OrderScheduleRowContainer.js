@@ -2,36 +2,32 @@ import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes, { number, string } from 'prop-types'
 import moment from 'moment'
-import OrderScheduleCell from './order-schedule-cell/OrderScheduleCell'
 import { maxFlightIdSelector } from '../../../selectors/index'
 import { addOrder, createFlightFromOrder } from '../../../actions/pageActions'
-import './OrderScheduleRow.scss'
+import OrderScheduleRowView from './OrderScheduleRowView'
 
-export function OrderScheduleRow({ 
+export function OrderScheduleRowContainer({ 
     orders, cellWidthScale,
     currentTime, timelineOffsetHours, isLast,
     createFlightFromOrder, addOrder,
     maxFlightId, leftOffset
  }) {
     return (
-        <div className={`schedule__row order-schedule-row ${isLast ? 'last' : ''}`} >
-            {orders.map((order, i) => (
-                <OrderScheduleCell 
-                    className={`schedule__row ${(orders.length - 1) === i ? 'last' : ''}`} 
-                    cellWidthScale={cellWidthScale}
-                    currentTime={currentTime}
-                    addOrder={addOrder}
-                    createFlightFromOrder={createFlightFromOrder}
-                    timelineOffsetHours={timelineOffsetHours}
-                    maxFlightId={maxFlightId}
-                    key={order.id} order={order}/>)
-            )}
-            <div className="schedule__timeline" style={{left: `${leftOffset}px`}}></div>
-        </div>
+       <OrderScheduleRowView 
+            orders={orders}
+            cellWidthScale={cellWidthScale}
+            currentTime={currentTime}
+            timelineOffsetHours={timelineOffsetHours}
+            isLast={isLast}
+            createFlightFromOrder={createFlightFromOrder}
+            addOrder={addOrder}
+            maxFlightId={maxFlightId}
+            leftOffset={leftOffset}
+       />
     )
-}
+ }
 
-OrderScheduleRow.propTypes = {
+ OrderScheduleRowContainer.propTypes = {
     orders: PropTypes.arrayOf(PropTypes.shape({
         id: number,
         name: string,
@@ -56,9 +52,9 @@ OrderScheduleRow.propTypes = {
     leftOffset: number,
 }
 
-export default connect(
+ export default connect(
     (state) => ({
         maxFlightId: maxFlightIdSelector(state),
     }), 
     { addOrder, createFlightFromOrder }
-)(OrderScheduleRow)
+)(OrderScheduleRowView)

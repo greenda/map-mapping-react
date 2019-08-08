@@ -1,38 +1,34 @@
+
 import React from 'react'
 import PropTypes, { number, string } from 'prop-types'
+import { connect } from 'react-redux'
 import moment from 'moment'
-import ScheduleRow from './scheduleRow/ScheduleRow'
-import { CELL_WIDTH_SCALE, TIMELINE_OFFSET_HOURS } from '../../constants/schedule'
-import './ScheduleTable.scss'
+import {
+    tailCoordinates,
+    flightsSelector,
+    currentTimeSelector,
+    budgetChainsElementsSelector,
+    approachFlightBlancSelector,
+} from '../../selectors/index'
+import { addApproachFlight } from '../../actions/pageActions'
+import ScheduleTableView from './ScheduleTableView'
 
-export function ScheduleTable({
-    tails, flights, 
+export function ScheduleTableContainer({ tails, flights, 
     currentTime, budgetChains,
-    addApproachFlight, blankApproachFlight}) { 
-    const tailsCount = tails.length
-    const tailRows = tails.map((tail, i) => (
-            <ScheduleRow 
-                tail={tail} 
-                key={`tail${tail.id}`}
+    addApproachFlight, blankApproachFlight }) { 
+        return (
+            <ScheduleTableView 
+                tails={tails}
                 flights={flights}
-                leftOffset={TIMELINE_OFFSET_HOURS * CELL_WIDTH_SCALE}
-                isLast={(tailsCount - 1) === i}
                 currentTime={currentTime}
                 budgetChains={budgetChains}
                 addApproachFlight={addApproachFlight}
                 blankApproachFlight={blankApproachFlight}
-                timelineOffsetHours={TIMELINE_OFFSET_HOURS}
-                cellWidthScale={CELL_WIDTH_SCALE} /> )  
-    )
-    
-    return (
-        <div className="schedule__container">            
-                <div className="schedule__rows">{tailRows}</div>        
-        </div>
-    )
+            />
+        )
 }
 
-ScheduleTable.propTypes = {
+ScheduleTableContainer.propTypes = {
     tails: PropTypes.arrayOf(PropTypes.shape({
         id: number,
         name: string, 
@@ -55,7 +51,16 @@ ScheduleTable.propTypes = {
     budgetChains: PropTypes.arrayOf(PropTypes.shape({
         ids: PropTypes.arrayOf(number),
         tailId: number,
-    }))
+    })),
+    addApproachFlight: PropTypes.func,
+    blankApproachFlight: PropTypes.func,
 }
 
-export default ScheduleTable
+export default connect(
+    (state) => ({
+        tails: tailCoordinates(state),
+        flights: flightsSelector(state),
+        currentTime: currentTimeSelector(state),
+        budgetChains: budgetChainsElementsSelector(state),  
+        blankApproachFlight: approachFlightBlancSelector(state),  
+    }),{ addApproachFlight })(ScheduleTableContainer)

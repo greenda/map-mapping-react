@@ -1,17 +1,15 @@
 import React from 'react'
 import PropTypes, { number, string, object } from 'prop-types'
 import moment from 'moment'
-import { DropTarget } from 'react-dnd';
-import { ItemTypes } from '../../../constants/item-types';
 import FlightCell from './flightCell/FlightCell'
 import BudgetCell from './budgetCell/BudgetCell'
-import './ScheduleRow.scss'
+import './ScheduleRowView.scss'
 
-export function ScheduleRow({
+export function ScheduleRowView({
     tail, flights, cellWidthScale, currentTime, 
     budgetChains, timelineOffsetHours, 
     addApproachFlight, blankApproachFlight,
-    connectDropTarget, isLast, isOver, canDrop, leftOffset }) {
+    isLast, isOver, canDrop, leftOffset }) {
     
     const tailBudgetChains = budgetChains.filter(budgetChain => budgetChain.tailId === tail.id)
     const budgetChainRows = tailBudgetChains.map((chainElement) => {
@@ -37,7 +35,7 @@ export function ScheduleRow({
                     blankApproachFlight={blankApproachFlight}
         />)
     })        
-    return connectDropTarget(
+    return (
         <div key={`tail${tail.id}`} 
             className={`schedule__row 
                 ${ isLast ? 'last' : ''}
@@ -52,25 +50,7 @@ export function ScheduleRow({
     )
 }
 
-const rowTarget = {    
-	canDrop() {
-        return true
-	},
-
-	drop(props) {
-        return { id: props.tail.id, type: ItemTypes.SCHEDULE };
-    }
-}
-
-const collect = (connect, monitor) => {
-	return {
-		connectDropTarget: connect.dropTarget(),
-		isOver: !!monitor.isOver(),
-		canDrop: !!monitor.canDrop(),
-	}
-}
-
-ScheduleRow.propTypes = {
+ScheduleRowView.propTypes = {
     tail: PropTypes.shape({
         airportId:number,
         id: number,
@@ -94,11 +74,10 @@ ScheduleRow.propTypes = {
     timelineOffsetHours: number,
     addApproachFlight: PropTypes.func,
     blankApproachFlight: PropTypes.func,
-    connectDropTarget: PropTypes.func,
     isLast: PropTypes.bool,
     isOver: PropTypes.bool,
     canDrop: PropTypes.bool,
     leftOffset: number,
 }
 
-export default DropTarget([ItemTypes.ORDER], rowTarget, collect)(ScheduleRow)
+export default ScheduleRowView

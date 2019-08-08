@@ -1,7 +1,7 @@
 @import '../../common/styles/variables.scss';
 
 .order-list-container {
-    & > div > .order__container {
+    & > div > div > .order__container {
         margin-bottom: $offset__small;
     }
 

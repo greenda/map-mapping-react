@@ -12,6 +12,16 @@
             overflow: auto;
             @include scrollbar;
 
+            & > .schedule__rows > .schedule__drop-container > .schedule__row {
+                margin: $offset__small;
+                margin-bottom: 0px;
+                margin-left: 0px;
+
+                &.last {
+                    margin-bottom: $offset__small;
+                }
+            }
+
             & > .schedule__rows > .schedule__row {
                 margin: $offset__small;
                 margin-bottom: 0px;
@@ -63,6 +73,11 @@
             &.ended {
                 background: $gray-color__1;
             }
+        }
+
+        &__drop-container {
+            display: flex;
+            flex-direction: column;
         }
     }
 }

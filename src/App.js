@@ -8,15 +8,11 @@ import FlightListContainer from '../src/components/flightList/FlightListContaine
 import TailListContainer from '../src/components/tailList/TailListContainer'
 import OrderListContainer from '../src/components/orderList/OrderListContainer'
 import MapContainer from '../src/components/map/MapContainer'
-import ScheduleTable from '../src/components/schedule/ScheduleTable'
-import OrderSchedule from '../src/components/order-schedule/OrderSchedule'
+import ScheduleTableContainer from './components/schedule/ScheduleTableContainer'
+import OrderScheduleContainer from './components/order-schedule/OrderScheduleContainer';
 import StoreContainer from '../src/components/store/StoreContainer'
 import AchievementsContainer from '../src/components/achievements/AchievementsContainer'
 import CongratulationContainer from './components/achievements/congratulation/CongratulationContainer'
-import { licencedOrderIdsSelector, filteredFlightIdsSelector, maxFlightIdSelector,
-         flightsSelector, tailCoordinates, currentTimeSelector, flightsOnTime,
-         approachFlightBlancSelector, budgetChainsElementsSelector,
-         maxOrderIdSelector } from '../src/selectors/index'
 import { addApproachFlight } from './actions/pageActions'
 import logo from '../src/assets/map-mapping-logo.svg'
 import './App.scss';
@@ -29,12 +25,7 @@ const tabNames = {
     ACHIEVEMENTS: 'achievements',
 }
 
-// TODO flights Вынести на этот уровень, чтобы два раза не просчитывать
-// TODO уменьшить количество параметров
-function App ({ orderIds, flights, tails, flightIds, maxFlightId, 
-    flightsOnTime, currentTime, addApproachFlight, 
-    blankApproachFlight, budgetChains, maxOrderId}) {
-    
+function App () {    
     const [countries, setCountries] = useState();
     const [selectedOrder, setSelectedOrder] = useState();
     useEffect(() => {
@@ -45,9 +36,8 @@ function App ({ orderIds, flights, tails, flightIds, maxFlightId,
         }
     })
 
-    // const [tabName, setTabName] = useState(tabNames.MAP_TAB)
     const [tabName, setTabName] = useState(tabNames.SCHEDULE_TAB)
-    //const [tabName, setTabName] = useState(tabNames.ACHIEVEMENTS)
+
     const getActiveClass = (name) => tabName === name ? 'active' : ''    
     const hundleOrderClick = (id) => setSelectedOrder(id)
 
@@ -99,34 +89,23 @@ function App ({ orderIds, flights, tails, flightIds, maxFlightId,
                             onClick={() => setTabName(tabNames.ACHIEVEMENTS)}>Achievements</span>
                     </div>
                 </div>
-                {getTabContent(tabName, tails, flightsOnTime, countries,
-                    currentTime, budgetChains, blankApproachFlight, 
-                    addApproachFlight, hundleOrderClick)}
+                {getTabContent(tabName, countries, hundleOrderClick)}
                 </div>                
             </div>
         </>
     );
 }
 
-    function getTabContent(
-        tabName, tails, flights, countries,
-        currentTime, budgetChains,
-        blankApproachFlight, addApproachFlight,
-        hundleOrderClick) {
+    function getTabContent(tabName, countries, hundleOrderClick) {
     switch(tabName) {
         case tabNames.MAP_TAB: 
             return <MapContainer countries={countries} onOrderClick={hundleOrderClick}/>
         case tabNames.SCHEDULE_TAB: 
             return (
                 <div className="schedules__container">
-                    <ScheduleTable tails={tails} 
-                        flights={flights}
-                        currentTime={currentTime}
-                        budgetChains={budgetChains}
-                        addApproachFlight={addApproachFlight}
-                        blankApproachFlight={blankApproachFlight}/>
+                    <ScheduleTableContainer />
                     <div className="schedules__line"></div>
-                    <OrderSchedule currentTime={currentTime}/>
+                    <OrderScheduleContainer />
                 </div>
             )
         case tabNames.STORE:
@@ -138,20 +117,6 @@ function App ({ orderIds, flights, tails, flightIds, maxFlightId,
     }
 
     export default DragDropContext(HTML5Backend)(
-        connect(
-        (state) => ({
-            orderIds: licencedOrderIdsSelector(state),
-            maxOrderId: maxOrderIdSelector(state),
-            flightIds: filteredFlightIdsSelector(state),   
-            flights: flightsSelector(state),
-            flightsOnTime: flightsOnTime(state),
-            maxFlightId: maxFlightIdSelector(state),  
-            tails: tailCoordinates(state),
-            currentTime: currentTimeSelector(state),
-            blankApproachFlight: approachFlightBlancSelector(state),
-            budgetChains: budgetChainsElementsSelector(state),      
-        }),
-        { addApproachFlight }
-    )(App)
+        connect(null, { addApproachFlight })(App)
     );
 
