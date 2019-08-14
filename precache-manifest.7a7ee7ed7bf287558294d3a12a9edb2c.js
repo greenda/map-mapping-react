@@ -4,7 +4,7 @@ self.__precacheManifest = [
     "url": "/map-mapping-react/static/media/aircraft-icon__gray.e8c5ef48.svg"
   },
   {
-    "revision": "d498e4ac2a6aaaa31453",
+    "revision": "b5489dd21bb7224e3572",
     "url": "/map-mapping-react/static/css/main.94812aea.chunk.css"
   },
   {
@@ -40,8 +40,8 @@ self.__precacheManifest = [
     "url": "/map-mapping-react/static/media/achievement_achievment_hunter.f0ffb6aa.svg"
   },
   {
-    "revision": "d498e4ac2a6aaaa31453",
-    "url": "/map-mapping-react/static/js/main.d498e4ac.chunk.js"
+    "revision": "b5489dd21bb7224e3572",
+    "url": "/map-mapping-react/static/js/main.b5489dd2.chunk.js"
   },
   {
     "revision": "0246aa141347217bd6c3b73cccdd3fc2",
@@ -76,7 +76,7 @@ self.__precacheManifest = [
     "url": "/map-mapping-react/static/media/map-mapping-logo.098cb11e.svg"
   },
   {
-    "revision": "479f00a3c411265f3dfcbe9fc8c7f02d",
+    "revision": "82f4b680faf240a0e70c98b29141a938",
     "url": "/map-mapping-react/index.html"
   }
 ];
