@@ -44,16 +44,6 @@ export function getFlightInTime(originFlight, airports, orders, currentTime ) {
             flight.status = flightStatuses.PLANED
             break
         case (currentTime.isSame(dateTakeOff)):
-            console.log('CANCELED')
-            // if (linkTail && linkTail.airportId === flight.fromId) {
-            //     flight.progress = 0
-            //     flight.prevProgress = 0
-            //     flight.status = flightStatuses.TAKE_OFF
-            // } else {
-            //     flight.progress = -1
-            //     flight.prevProgress = -1
-            //     flight.status = flightStatuses.CANCELED
-            // }
             if (flight.status !== flightStatuses.CANCELED) {
                 flight.progress = 0
                 flight.prevProgress = 0
