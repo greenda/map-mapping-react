@@ -1,95 +1,68 @@
 import { pageActionTypes } from '../constants/action-types'
 import { getEmptyFlight } from '../helpers/FlightHelper'
+import { flightStatuses } from '../constants/flight-status'
 
-const initialState = {
-    // 1: {
-    //   id: 1,
-    //   name: 'Flight 1',
-    //   tail: null,
-    //   tailId: 1,
-    //   status: 'progress',
-    //   progress: 16,
-    //   orderId: 1,
-    // },    
-    // 2: {
-    //   id: 2,
-    //   name: 'Flight 2',
-    //   tail: null,
-    //   tailId: 2,
-    //   fromId: 4,
-    //   toId: 5,
-    //   status: 'planned',
-    //   progress: -1,
-    //   orderId: null,
-    //   dateTakeOff: moment.utc('2000-01-01T18:00:00+00:00'),
-    //   dateLanding: moment.utc('2000-01-01T24:00:00+00:00'),
-    //   pay: 1100,
-    //   cost: 100,
-    // },    
-    // 3: {
-    //   dateTakeOff: moment.utc('2000-01-01T14:00+00:00'),
-    //   dateLanding: moment.utc('2000-01-01T17:00:00+00:00'),
-    //   fromId: 1,
-    //   toId: 4,
-    //   cost: 600,
-    //   id: 3,
-    //   name: 'Подлет 3',
-    //   tail: {
-    //     id: 2,
-    //     name: 'A-2',
-    //     airportId: 1
-    //   },
-    //   progress: -1,
-    //   orderId: null,
-    //   tailId: 2,
-    //   pay: 0,
-    //   lindedFlightId: 2,
-    // }, 
-  }
+const initialState = {}
 
 export function flightsReducer(state = initialState, action) {
-  const { type, payload = {} } = action
-  const { flightId, tailId, orderId } = payload
-  const flight = flightId ? state[flightId] : {};
-  const newState =  {...state}
-  switch (type) {    
-    case pageActionTypes.ADD_TAIL_IN_FLIGHT:    
-      if (flight) {
-        flight.tailId = tailId
-      }
-      // TODO правильно оформить изменение массива
-      return {...state}
-    case pageActionTypes.ADD_ORDER:
-      // TODO правильно оформить изменение массива
-      // TODO Передавать только orderId
-      
-      if (flight) {
-        flight.orderId = orderId
-      }
+	const { type, payload = {} } = action
+	const { flightId, tailId, orderId } = payload
+	const flight = flightId ? state[flightId] : {};
+	const newState = { ...state }
+	let newFlight
+	switch (type) {
+		case pageActionTypes.ADD_TAIL_IN_FLIGHT:
+			newFlight = { ...flight, tailId }
+			return { ...state, [newFlight.id]: newFlight }
+		case pageActionTypes.ADD_ORDER:
+			if (flight) {
+				newFlight = { ...flight, orderId }
+				return { ...state, [newFlight.id]: newFlight }
+			}
+			return state
+		case pageActionTypes.ADD_FLIGHT:
+			newState[payload.flight.id] = payload.flight
+			return newState
+		case pageActionTypes.ADD_EMPTY_FLIGHT:
+			newState[flightId] = getEmptyFlight(flightId)
+			return newState
+		case pageActionTypes.REMOVE_FLIGHT:
+			delete newState[flightId]
+			return newState
+		case pageActionTypes.ADD_APPROACH_FLIGHT:
+			if (payload.flight.fromId !== payload.flight.toId) {
+				newState[payload.flight.id] = payload.flight
+				return newState
+			}
+			return state
+		case pageActionTypes.CREATE_FLIGHT_FROM_ORDER:
+			const { newFlightId } = payload
+			newState[newFlightId] = getEmptyFlight(newFlightId, tailId, orderId)
+			return newState
+		case pageActionTypes.CHECK_CANCELED:
+			const { tails, maxTime, orders } = payload
 
-      return {...state}
-    case pageActionTypes.ADD_FLIGHT:
-      newState[payload.flight.id] = payload.flight
-      return newState     
-    case pageActionTypes.ADD_EMPTY_FLIGHT:
-      // TODO вынести создание пустого в хелпер
-      newState[flightId] = getEmptyFlight(flightId)
-      return newState
-    case pageActionTypes.REMOVE_FLIGHT:
-      delete newState[flightId]
-      return newState 
-    case pageActionTypes.ADD_APPROACH_FLIGHT:
-      if (payload.flight.fromId !== payload.flight.toId) {
-        newState[payload.flight.id] = payload.flight
-        return newState
-      }
-      return state      
-    case pageActionTypes.CREATE_FLIGHT_FROM_ORDER:
-        const { newFlightId } = payload
-        let newFlight = getEmptyFlight(newFlightId)
-        newFlight = {...newFlight, tailId, orderId }
-        newState[newFlightId] = newFlight
-        return newState
-    default: return state;
-  }
+			const canceledFlights =  Object.values(state).filter(flight => {
+				const linkedOrder = orders.find(order => order.id === flight.orderId)
+				const dateTakeOff = linkedOrder ? linkedOrder.dateTakeOff : flight.dateTakeOff
+				if (dateTakeOff && dateTakeOff.isSame(maxTime)) {
+					const linkedTail = tails.find(tail => tail.id === flight.tailId)
+					
+					const airportFrom = linkedOrder ? linkedOrder.fromId : flight.fromId
+
+					return  (linkedTail && linkedTail.airportId !== airportFrom)
+				}
+				return false
+			})
+
+			if (canceledFlights.length === 0) {
+				return state
+			}
+
+			return { ...state, ...canceledFlights.reduce((result, flight) => {
+				result[flight.id] = { ...flight, status: flightStatuses.CANCELED}
+				return result
+			}, {}) }
+		default: return state;
+	}
 }

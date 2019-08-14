@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes, { number, string } from 'prop-types'
 import useToggler from '../../../common/custom-hooks/toogle-open'
 import ProgressBar from './progress-bar/ProgressBar'
+import { flightStatuses } from '../../../constants/flight-status'
 import './FlightView.scss'
 
 export function FlightView({ flight, isOver, canDrop, onRemove }) {
@@ -13,7 +14,7 @@ export function FlightView({ flight, isOver, canDrop, onRemove }) {
             ${isOver && canDrop ? 'enableDrop' : ''}
             ${isOver && !canDrop ? 'disableDrop' : ''}
             ${progress > 100 ? 'ended' : ''}
-            ${progress === -1 && status === 'canceled' ? 'canceled' : ''}`
+            ${progress === -1 && status === flightStatuses.CANCELED ? 'canceled' : ''}`
             }>
             <div className="flight__header">
                 <div className="flight__header__row">

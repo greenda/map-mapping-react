@@ -62,8 +62,6 @@ export function incrementTime(value) {
     }
 }
 
-
-
 export function generateOrders(maxTime, maxFlightId,
     airports, airportDistances, fuelCost, isRequired) {
     return {
@@ -117,3 +115,9 @@ export function addTail(airportId, cost) {
     }
 }
 
+export function checkCanceled(tails, orders, maxTime) {
+    return {
+        type: pageActionTypes.CHECK_CANCELED,
+        payload: { tails, orders, maxTime }
+    }
+}

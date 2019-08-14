@@ -1,15 +1,14 @@
-// TODO разбросать по нескольким селекторам
-
 import { createSelector } from 'reselect'
 import { getFlightInTime, getOrdersInTime, getApproachFlight } from '../helpers/FlightHelper'
 import { getChainElement } from '../helpers/BudgetHelper'
 import { getOrderSchaduleRows } from '../helpers/ScheduleHelper'
+import { flightStatuses } from '../constants/flight-status'
 import * as d3 from 'd3'
 
 export const currentTimeSelector = (state) => state.time.currentTime
-export const airportObjectsSelector = (state) => state.airports.items
-export const airportsSelector = (state) => Object.values(state.airports.items)
-export const airportIdsSelector = (state) => Object.keys(state.airports.items).map(value => +value)
+export const airportObjectsSelector = (state) => state.geography.airports
+export const airportsSelector = (state) => Object.values(state.geography.airports)
+export const airportIdsSelector = (state) => Object.keys(state.geography.airports).map(value => +value)
 export const flightsSelector = (state) => Object.values(state.flights)
 export const flightsObjectSelector = (state) => state.flights
 export const flightIdsSelector = (state) => Object.keys(state.flights).map(value => +value).reverse()
@@ -19,25 +18,58 @@ export const ordersObjectSelector = (state) => state.orders.items
 export const ordersSelector = (state) => Object.values(state.orders.items)
 export const orderIdsSelector = (state) => Object.keys(state.orders.items).map(value => +value).reverse()
 export const currentBudgetSelector = (state) => state.money.currentBudget
-export const airportDistancesSelector = (state) => state.airports.distance
 export const fuelCostSelector = (_) => 100
 export const budgetChainsSelector = (state) => state.money.budgetChains
-export const licencesObjectSelector = (state) => state.airports.licences
-export const licenceIdsSelector = (state) => Object.keys(state.airports.licences).map(value => +value)
-export const currentLicenceIdsSelector = (state) => state.airports.currentLicenceIds
+export const licencesObjectSelector = (state) => state.geography.licences
+export const licenceIdsSelector = (state) => Object.keys(state.geography.licences).map(value => +value)
+export const currentLicenceIdsSelector = (state) => state.geography.currentLicenceIds
 export const achievementsSelector = (state) => state.achievements.all
 export const currentAchievementIdsSelector = (state) => state.achievements.currentAchievemntIds
 
+export const flightsDetailSelector = createSelector(
+    flightsSelector,
+    tailsSelector,
+    ordersObjectSelector,
+    (flights, tails, orders) => flights.map((flight) => {
+            const newFlight = { ...flight }
+            if (flight.tailId) {
+                newFlight.tail = tails.find(tail => tail.id === flight.tailId)
+            }
+            if (flight.orderId) {
+                const order = Object.values(orders).find(order => order.id === flight.orderId)
+                newFlight.fromId = order.fromId
+                newFlight.toId = order.toId
+                newFlight.dateTakeOff = order.dateTakeOff
+                newFlight.dateLanding = order.dateLanding
+                newFlight.pay = order.pay
+                newFlight.cost = order.cost
+                newFlight.name = `${order.name}`
+                newFlight.description = order.description
+            }
+
+            return newFlight
+    })
+)
+
+export const flightsOnTime = createSelector(
+    currentTimeSelector,
+    airportsSelector,
+    flightsDetailSelector,
+    ordersObjectSelector,
+    () => getFlightInTime,
+    (currentTime, airports, flights, orders, getFlightInTime) => 
+        flights.map(flight => getFlightInTime(flight, airports, orders, currentTime))            
+)
 
 export const tailCoordinates = createSelector(
     tailsSelector,
     airportsSelector,    
-    flightsSelector,
+    flightsOnTime,
     currentTimeSelector,
     (tails, airports, flights, currentTime) => {
         return tails.map((tail) => {
             const filteredFlight = 
-                flights.filter(flight => flight.status !== 'canceled' && flight.tailId === tail.id &&
+                flights.filter(flight => flight.status !== flightStatuses.CANCELED && flight.tailId === tail.id &&
                     flight.dateTakeOff &&
                     flight.dateTakeOff.isBefore(currentTime))
             let tailAirport = tail.airportId ? airports.find(value => value.id === tail.airportId) : null
@@ -65,15 +97,17 @@ export const tailCoordinates = createSelector(
     }
 )
 
-export const flightsDetailSelector = createSelector(
-    flightsSelector,
-    tailsSelector,
-    (flights, tails) => flights.map((value) => {
-            if (value.tailId) {
-                value.tail = tails.find(tail => tail.id === value.tailId)
-            }
-            return value
-        })
+export const filteredFlightsSelector = createSelector(
+    flightsOnTime,
+    currentTimeSelector,
+    (flights, currentTime) => {
+        const MAX_HOUR_DIFF = 2
+        const filteredFlights = 
+            flights.filter(flight =>  !flight.dateLanding || 
+                currentTime.diff(flight.dateLanding, 'hours') <= MAX_HOUR_DIFF)
+        
+        return filteredFlights
+    }
 )
 
 export const tailsDetalsSelector = createSelector(
@@ -94,34 +128,20 @@ export const flightByIdSelector = createSelector(
     airportsSelector,
     flightsObjectSelector,
     ordersObjectSelector,
-    tailCoordinates,
     (_, { id }) => id,
     () => getFlightInTime,
-    (currentTime, airports, flights, orders, tails, id, getFlightInTime) => {
-        return getFlightInTime({...flights[id]}, airports, orders, tails, currentTime)
+    (currentTime, airports, flights, orders, id, getFlightInTime) => {
+        return getFlightInTime({...flights[id]}, airports, orders, currentTime)
     }
-)
-
-export const flightsOnTime = createSelector(
-    currentTimeSelector,
-    airportsSelector,
-    flightsDetailSelector,
-    ordersObjectSelector,
-    tailCoordinates,
-    () => getFlightInTime,
-    // TODO - присоединять аэропорты в другом селекторе
-    (currentTime, airports, flights, orders, tails, getFlightInTime) => 
-        flights.map(flight => getFlightInTime(flight, airports, orders, tails, currentTime))            
 )
 
 export const orderByIdSelector = createSelector(
     currentTimeSelector,
     airportsSelector,
     ordersObjectSelector,
-    tailCoordinates,
     (_, { id }) => id,
-    (currentTime, airports, orders, tails, id) => {
-        return getFlightInTime({...orders[id]}, airports, orders, tails, currentTime) 
+    (currentTime, airports, orders, id) => {
+        return getFlightInTime({...orders[id]}, airports, orders, currentTime) 
     }
 )
 
@@ -130,7 +150,6 @@ export const ordersOnTime = createSelector(
     airportsSelector,
     ordersObjectSelector,
     () => getOrdersInTime,
-    // TODO - присоединять аэропорты в другом селекторе
     (currentTime, airports, orders, getOrdersInTime) => {
         return Object.values(orders).map(order => getOrdersInTime(order, airports, orders, currentTime)) 
     }
@@ -141,7 +160,6 @@ export const maxFlightIdSelector = createSelector(
     (ids) => ids.length > 0 ? Math.max(...ids) : 0
 )
 
-// TODO в часах
 export const distanceBetweenAirportsSelector = createSelector(
     airportObjectsSelector,
     (airports) => {
@@ -157,25 +175,11 @@ export const distanceBetweenAirportsSelector = createSelector(
     }
 )
 
-export const approachFlightBlancSelector = createSelector(
-    flightsSelector,
-    tailsSelector,
-    distanceBetweenAirportsSelector,
-    fuelCostSelector,
-    maxFlightIdSelector,
-    currentTimeSelector,
-    (flights, tails, airportDistances, fuelCost, maxFlightId, currentTime) => {
-        return (flightId) => {
-            return getApproachFlight(flightId, tails, flights, fuelCost, airportDistances, maxFlightId, currentTime)
-        }
-    }
-)
-
 export const budgetChainsElementsSelector = createSelector(
-    flightsSelector,
+    filteredFlightsSelector,
     budgetChainsSelector,
     (flights, budgetChains) => {
-        return budgetChains.map((chain, index) => getChainElement(chain, flights, index))
+        return budgetChains.map((chain, index) => getChainElement(chain, flights, index)).filter(chain => chain)
     }    
 )
 
@@ -197,18 +201,7 @@ export const licencedAirportsSelector = createSelector(
     }
 )
 
-export const filteredFlightsSelector = createSelector(
-    flightsOnTime,
-    currentTimeSelector,
-    (flights, currentTime) => {
-        const MAX_HOUR_DIFF = 2
-        const filteredFlights = 
-            flights.filter(flight =>  !flight.dateLanding || 
-                currentTime.diff(flight.dateLanding, 'hours') <= MAX_HOUR_DIFF)
-        
-        return filteredFlights
-    }
-)
+
 
 export const filteredFlightIdsSelector = createSelector(
     filteredFlightsSelector,
@@ -282,10 +275,24 @@ export const licencesSelector = createSelector(
 )
 
 export const stockingFlightCountsSelector = createSelector(
-    flightsSelector,
+    flightsOnTime,
     (flights) => {
         return flights.filter(flight => flight.progress >= 100 
             && flight.description 
             && flight.description.includes('чулок')).length
+    }
+)
+
+export const approachFlightBlancSelector = createSelector(
+    filteredFlightsSelector,
+    tailCoordinates,
+    distanceBetweenAirportsSelector,
+    fuelCostSelector,
+    maxFlightIdSelector,
+    currentTimeSelector,
+    (flights, tails, airportDistances, fuelCost, maxFlightId, currentTime) => {
+        return (flightId) => {
+            return getApproachFlight(flightId, tails, flights, fuelCost, airportDistances, maxFlightId, currentTime)
+        }
     }
 )

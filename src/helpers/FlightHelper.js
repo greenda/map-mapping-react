@@ -1,8 +1,9 @@
-// TODO сделать через inmutable
 import { MapActions } from '../constants/map-actions'
 import moment from 'moment'
+import { flightStatuses } from '../constants/flight-status'
 
-export function getFlightInTime(flight, airports, orders, tails, currentTime ) {
+export function getFlightInTime(originFlight, airports, orders, currentTime ) {
+    const flight = {...originFlight}
     if (flight.orderId) {
         const order = Object.values(orders).find(order => order.id === flight.orderId)
         flight.fromId = order.fromId
@@ -20,69 +21,69 @@ export function getFlightInTime(flight, airports, orders, tails, currentTime ) {
     const { dateTakeOff, dateLanding } = flight
     const oldProgress = flight.progress
     const oldStatus = flight.status
-    let linkTail
 
-    if (flight.tailId) {
-        linkTail = tails.find(tail => tail.id === flight.tailId)
-    }
-
-    // TODO статусы константами
     switch(true) {
-        case (oldStatus === 'canceled'):
+        case (oldStatus === flightStatuses.CANCELED):
             flight.progress = -1
             flight.prevProgress = -1
-            flight.status = 'canceled'
+            flight.status = flightStatuses.CANCELED
             break
         case (!dateTakeOff):
             flight.progress = -1
             flight.prevProgress = -1
-            flight.status = 'not takeOff'
+            flight.status = flightStatuses.NOT_TAKEOFF
             break
         case (!dateLanding):
             flight.progress = -1
             flight.prevProgress = -1
-            flight.status = 'not landing' 
+            flight.status = flightStatuses.NOT_LANDING
             break   
         case (currentTime < dateTakeOff):
             flight.progress = -1   
             flight.prevProgress = -1         
-            flight.status = 'planed'
+            flight.status = flightStatuses.PLANED
             break
         case (currentTime.isSame(dateTakeOff)):
-            if (linkTail && linkTail.airportId === flight.fromId) {
+            console.log('CANCELED')
+            // if (linkTail && linkTail.airportId === flight.fromId) {
+            //     flight.progress = 0
+            //     flight.prevProgress = 0
+            //     flight.status = flightStatuses.TAKE_OFF
+            // } else {
+            //     flight.progress = -1
+            //     flight.prevProgress = -1
+            //     flight.status = flightStatuses.CANCELED
+            // }
+            if (flight.status !== flightStatuses.CANCELED) {
                 flight.progress = 0
                 flight.prevProgress = 0
-                flight.status = 'takeOff'
+                flight.status = flightStatuses.TAKE_OFF
             } else {
                 flight.progress = -1
                 flight.prevProgress = -1
-                flight.status = 'canceled'
             }
             break  
         case (currentTime.isSame(dateLanding)):
             flight.progress = 100
             flight.prevProgress =  (currentTime.diff(dateTakeOff, 'hours') - 1) / 
                 dateLanding.diff(dateTakeOff, 'hours') * 100 
-            flight.status = 'landing'
+            flight.status = flightStatuses.LANDING
             break      
         case (currentTime > dateLanding):
                 flight.progress = 101
                 flight.prevProgress = 101
-                flight.status = 'done'
+                flight.status = flightStatuses.DONE
             break
         case (dateTakeOff < currentTime && currentTime < dateLanding):             
             flight.progress = currentTime.diff(dateTakeOff) / 
                 dateLanding.diff(dateTakeOff) * 100 
-            // TODO используется ли progressNext?
-            flight.progressNext = currentTime.clone().add(1, 'hour').diff(dateTakeOff) / 
-                dateLanding.diff(dateTakeOff) * 100    
             flight.prevProgress =  (currentTime.diff(dateTakeOff, 'hours') - 1) / 
                 dateLanding.diff(dateTakeOff, 'hours') * 100   
-            flight.status = 'in progress'           
+            flight.status = flightStatuses.IN_PROGRESS
             break
         default: break;
     }
-    flight.mapAction = getMapAction(oldProgress, flight.progress)
+    flight.mapAction = getMapAction(flight.prevProgress, flight.progress)
     flight.oldProgress = oldProgress
     return flight
 }
@@ -108,36 +109,33 @@ export function getOrdersInTime(flight, airports, orders, currentTime ) {
     switch(true) {
         case (!dateTakeOff):
             flight.progress = -1
-            flight.status = 'not takeOff'
+            flight.status = flightStatuses.NOT_TAKEOFF
             break
         case (!dateLanding):
             flight.progress = -1
             flight.progress = 0
-            flight.status = 'not landing' 
+            flight.status = flightStatuses.NOT_LANDING
             break   
         case (currentTime < dateTakeOff):
             flight.progress = -1
-            // TODO статусы константами
-            flight.status = 'planed'
+            flight.status = flightStatuses.PLANED
             break
         case (currentTime.isSame(dateTakeOff)):
             flight.progress = 0
-            flight.status = 'takeOff'
+            flight.status = flightStatuses.TAKE_OFF
             break  
         case (currentTime.isSame(dateLanding)):
             flight.progress = 100
-            flight.status = 'landing'
+            flight.status = flightStatuses.LANDING
             break      
         case (currentTime > dateLanding):
             flight.progress = 101
-            flight.status = 'done'
+            flight.status = flightStatuses.DONE
             break
         case (dateTakeOff < currentTime && currentTime < dateLanding):  
             flight.progress = currentTime.diff(dateTakeOff) / 
                 dateLanding.diff(dateTakeOff) * 100 
-            flight.progressNext = currentTime.clone().add(1, 'hour').diff(dateTakeOff) / 
-                dateLanding.diff(dateTakeOff) * 100      
-            flight.status = 'in progress'    
+            flight.status = flightStatuses.IN_PROGRESS 
             break
         default: break;
     }
@@ -145,23 +143,23 @@ export function getOrdersInTime(flight, airports, orders, currentTime ) {
     return flight
 }
 
-export function getMapAction(oldProgress, newProgress ) {
-    if (oldProgress !== newProgress) {
-        switch (true) {
-            case oldProgress === -1 && newProgress > -1:
-                return MapActions.ADD_FLIGHT
-            case oldProgress > -1 && newProgress > -1: 
-                return MapActions.CHANGE_PROGRESS       
-            default: return MapActions.NONE
-        }
-    }
+export function getMapAction(oldProgress, newProgress ) {    
+    switch (true) {
+        case oldProgress === 0 && newProgress === 0:
+            return MapActions.ADD_FLIGHT
+        case oldProgress > -1 && newProgress > -1: 
+            return MapActions.CHANGE_PROGRESS       
+        default: return MapActions.NONE
+    }    
 }
 
-export function getApproachFlight(flightId, tails, flights, fuelCost, airportDistances, maxFlightId, currentTime) {
+export function getApproachFlight(flightId, tails, flights, fuelCost, 
+    airportDistances, maxFlightId, currentTime) {
     const baseFlight = flights.find(flight => flight.id === flightId)
     const baseTail = tails.find(tail => tail.id === baseFlight.tailId)
     const tailFlights = 
-        flights.filter(flight => flight.status !== 'canceled' && flight.tailId === baseTail.id &&
+        flights.filter(flight => flight.status !== flightStatuses.CANCELED &&
+            flight.tailId === baseTail.id &&
             flight.dateTakeOff.isBefore(baseFlight.dateTakeOff))
             .sort(flightDateSortPredicatInvert)    
     const dateLanding = baseFlight.dateTakeOff.clone().add(-1, 'hours')
@@ -180,7 +178,8 @@ export function getApproachFlight(flightId, tails, flights, fuelCost, airportDis
         name: `Подлет ${maxFlightId + 1}`,
         tail: baseTail,
         tailId: baseTail.id,
-        status: dateTakeOff.isAfter(currentTime) || dateTakeOff.isSame(currentTime) ? 'planned' : 'canceled',
+        status: dateTakeOff.isAfter(currentTime) || dateTakeOff.isSame(currentTime) ? 
+            'planned' : 'canceled',
         progress: -1,
         orderId: null,
         pay: 0,
@@ -188,19 +187,19 @@ export function getApproachFlight(flightId, tails, flights, fuelCost, airportDis
       }
 }
 
-export function getEmptyFlight(flightId) {    
+export function getEmptyFlight(flightId, tailId, orderId) {    
     return {
         id: flightId,
         name: `Flight ${flightId}`,
         tail: null,
-        tailId: null,
+        tailId: tailId || null,
         fromId: null,
         toId: null,
         dateTakeOff: null,
         dateLanding: null,
         status: 'planned',
         progress: -1,
-        orderId: null,
+        orderId: orderId || null,
         pay: 0,
       }
 }

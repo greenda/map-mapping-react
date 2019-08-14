@@ -8,7 +8,6 @@ export function getChainElement(budgetChain, flights, newId) {
                     id: newId,
                     startDate: dateTakeOff.clone(),
                     endDate: dateLanding.clone(),
-                    // TODO Стоимость аэропорта
                     saldo: pay - cost,  
                     tailId: chainFlight.tailId,                      
                 }

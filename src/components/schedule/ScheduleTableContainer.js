@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import {
     tailCoordinates,
-    flightsSelector,
+    filteredFlightsSelector,
     currentTimeSelector,
     budgetChainsElementsSelector,
     approachFlightBlancSelector,
@@ -15,7 +15,7 @@ import ScheduleTableView from './ScheduleTableView'
 
 export function ScheduleTableContainer({ tails, flights, 
     currentTime, budgetChains,
-    addApproachFlight, blankApproachFlight }) { 
+    addApproachFlight, blankApproachFlight }) {
         return (
             <ScheduleTableView 
                 tails={tails}
@@ -59,7 +59,7 @@ ScheduleTableContainer.propTypes = {
 export default connect(
     (state) => ({
         tails: tailCoordinates(state),
-        flights: flightsSelector(state),
+        flights: filteredFlightsSelector(state),
         currentTime: currentTimeSelector(state),
         budgetChains: budgetChainsElementsSelector(state),  
         blankApproachFlight: approachFlightBlancSelector(state),  

@@ -15,4 +15,5 @@ export const pageActionTypes = {
     ADD_LICENCE: '[Licence] add licence',
     ADD_TAIL: '[Tail] add tail',
     ADD_ACHIEVEMENT: '[Achievement] add achievement',
+    CHECK_CANCELED: '[Flight] check canceled',
   } 

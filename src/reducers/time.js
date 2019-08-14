@@ -1,4 +1,3 @@
-// TODO чисто названия полей, без pageActionTypes
 import { pageActionTypes } from '../constants/action-types'
 import moment from 'moment'
 
@@ -12,7 +11,6 @@ const initialState = {
 export function timeReducer(state = initialState, action) {
     const { type, payload } = action
 
-    // TODO напрашивается inmuttable
     switch (type) {
         case pageActionTypes.INC_TIME: 
             const newCurrentTime = state.currentTime.add(payload, 'hour').clone()
@@ -40,7 +38,8 @@ export function timeReducer(state = initialState, action) {
                 currentTime: state.maxTime.clone()
             }
 
-        default: break;    }
+        default: break;    
+    }
 
     return state
 }

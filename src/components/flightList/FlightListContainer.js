@@ -22,7 +22,8 @@ export function FlightListContainer({
     fuelCost,
     addFlight,
     addEmptyFlight,
-    removeFlight}) { 
+    removeFlight
+    }) { 
         return (
             <FlightListView 
                 flightIds={flightIds}

@@ -3,6 +3,7 @@ import PropTypes, { number, string, object } from 'prop-types'
 import Tooltip from '@material-ui/core/Tooltip';
 import moment from 'moment'
 import { getCellProperties } from '../../../../helpers/ScheduleHelper'
+import { flightStatuses } from '../../../../constants/flight-status'
 import './FlightCell.scss'
 
 export function FlightCell({ flight, cellWidthScale, currentTime, timelineOffsetHours, addApproachFlight, blankApproachFlight}) {
@@ -12,7 +13,7 @@ export function FlightCell({ flight, cellWidthScale, currentTime, timelineOffset
     return (
         <div className={`order-flight-cell
                  ${flight.progress > 0 ? 'inactive' : ''} 
-                 ${(flight.progress === -1 && flight.status === 'canceled') ? 'canceled' : ''}`}
+                 ${(flight.progress === -1 && flight.status === flightStatuses.CANCELED) ? 'canceled' : ''}`}
             style={{left: leftOffset, width: cellWidth}}>                
             <div className="order-flight-cell__add-approach-flight"
                     onClick={() => addApproachFlight(blankApproachFlight(flight.id))}>&lt;</div>

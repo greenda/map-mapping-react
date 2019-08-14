@@ -3,10 +3,10 @@ import { getOrderDescription, getRandomFromToAirportIds, getCostAndPay } from '.
 
 const maxHourOffset = 48
 const minHourOffset = 2
-const randomCoeff = 0.8
-const maxFlightOnHour = 3
+const randomCoeff = 0.6
+const maxFlightOnHour = 6
 
-export function generateFlights(maxTime, maxFlightId, 
+export function generateOrders(maxTime, maxFlightId, 
     airports, airportDistances, fuelCost, isRequired) {
     if (isRequired || Math.random() > randomCoeff) {
         const flighOnHour = isRequired ? maxFlightOnHour : 
@@ -14,7 +14,7 @@ export function generateFlights(maxTime, maxFlightId,
         const flights = Array(flighOnHour).fill('')
             
         return flights.map((_, index) => 
-            generateFlight(maxTime, maxFlightId + index, 
+            generateOrder(maxTime, maxFlightId + index, 
                 airports, airportDistances, fuelCost)
         )
     }
@@ -22,7 +22,7 @@ export function generateFlights(maxTime, maxFlightId,
     return []    
 }
 
-function generateFlight(maxTime, maxFlightId, airports, airportDistances, fuelCost) {
+function generateOrder(maxTime, maxFlightId, airports, airportDistances, fuelCost) {
     const timeOffset = 
         Math.round((Math.random() * (maxHourOffset - minHourOffset)  + minHourOffset))  
     const { fromId, toId } = getRandomFromToAirportIds(airports.map(value => value.id))

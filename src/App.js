@@ -13,7 +13,12 @@ import OrderScheduleContainer from './components/order-schedule/OrderScheduleCon
 import StoreContainer from '../src/components/store/StoreContainer'
 import AchievementsContainer from '../src/components/achievements/AchievementsContainer'
 import CongratulationContainer from './components/achievements/congratulation/CongratulationContainer'
-import { addApproachFlight } from './actions/pageActions'
+import { addApproachFlight, checkCanceled } from './actions/pageActions'
+import {
+    maxTimeSelector,
+    tailCoordinates, 
+    ordersSelector,
+} from './selectors/index'
 import logo from '../src/assets/map-mapping-logo.svg'
 import './App.scss';
 import { useEffect } from 'react';
@@ -25,16 +30,20 @@ const tabNames = {
     ACHIEVEMENTS: 'achievements',
 }
 
-function App () {    
+function App ({ maxTime, tails, orders, checkCanceled }) {
     const [countries, setCountries] = useState();
     const [selectedOrder, setSelectedOrder] = useState();
     useEffect(() => {
-        if (!countries) {
+        if (!countries) {     
             d3.json('world_countries.json').then((countries) => {
                 setCountries(countries)
             }).catch(error => console.log(error))
         }
-    })
+    }, [maxTime])
+
+    useEffect(() => {
+        checkCanceled(tails, orders, maxTime)
+    }, [ maxTime ])
 
     const [tabName, setTabName] = useState(tabNames.SCHEDULE_TAB)
 
@@ -53,7 +62,6 @@ function App () {
                         <div className="section-container__header">
                             <span>Tails</span>
                         </div>
-                        {/* TODO tails передавать с этого уровня */}
                         <div className="section-container__content">
                             <TailListContainer />
                         </div>
@@ -117,6 +125,11 @@ function App () {
     }
 
     export default DragDropContext(HTML5Backend)(
-        connect(null, { addApproachFlight })(App)
+        connect((state) => ({
+            maxTime: maxTimeSelector(state),
+            tails: tailCoordinates(state),
+            orders: ordersSelector(state),
+        }), 
+        { addApproachFlight, checkCanceled })(App)
     );
 

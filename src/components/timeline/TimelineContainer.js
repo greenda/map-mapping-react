@@ -3,7 +3,7 @@ import PropTypes, { number, string } from 'prop-types'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import { currentTimeSelector, currentBudgetSelector,
-    maxTimeSelector, flightsSelector, tailCoordinates } from '../../selectors/index'
+    maxTimeSelector, filteredFlightsSelector, tailCoordinates } from '../../selectors/index'
 import { incrementTime, decrementTime, 
     setCurrentTime, setStartTime, checkMoney } from '../../actions/pageActions'
 import TimelineView from './TimelineView'
@@ -83,7 +83,7 @@ export default connect(
         currentTime: currentTimeSelector(state),
         currentBudget: currentBudgetSelector(state),
         maxTime: maxTimeSelector(state),
-        flights: flightsSelector(state),
+        flights: filteredFlightsSelector(state),
         tails: tailCoordinates(state),
     }),
     { incrementTime, decrementTime, setCurrentTime, setStartTime, checkMoney }
